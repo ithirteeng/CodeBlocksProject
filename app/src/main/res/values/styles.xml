@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="HeaderTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/drawerHeaderHeight</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/headerTextSize</item>
+        <item name="fontFamily">@font/courier_prime</item>
+    </style>
+    <style name="radioButtonsStyle">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/courier_prime</item>
+        <item name="android:textSize">@dimen/smallTextSize</item>
+    </style>
+    <style name="bottomButtonStyle">
+        <item name="fontFamily">@font/courier_prime</item>
+        <item name="android:textColor">@color/mainBackgroundColor</item>
+        <item name="android:textSize">@dimen/bottomButtonsTextSize</item>
+        <item name="android:padding">5dp</item>
+    </style>
+</resources>

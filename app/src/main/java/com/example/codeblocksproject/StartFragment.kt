@@ -1,14 +1,13 @@
 package com.example.codeblocksproject
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 
-class StartFragment : Fragment(R.layout.start_button_fragment) {
+class StartFragment : Fragment(R.layout.fragment_textfield) {
     var isClosedStart = true
-
-    lateinit var mainFragment: MainFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -22,9 +21,15 @@ class StartFragment : Fragment(R.layout.start_button_fragment) {
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(0, R.anim.bottom_panel_slide_in)
             this.onCreateAnimation(0, true, 1)
-            transaction.remove(this)
+            transaction.hide(this)
             transaction.commit()
             isClosedStart = true
+            Handler().postDelayed(Runnable {
+                kotlin.run {
+                    (parentFragment as MainFragment).displayButtons()
+                }
+            }, 650)
+
         }
     }
 

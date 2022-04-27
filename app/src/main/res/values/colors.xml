@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mainBackgroundColor">#F6E8C3</color>
-    <color name="workingPannelColor">#835F4B</color>
+    <color name="workingPanelColor">#835F4B</color>
     <color name="compilatorColor">#ADAF9F74</color>
+    <color name="drawerColor">#5A443D</color>
+    <color name="bottomButtonsColor">#905B49</color>
 </resources>

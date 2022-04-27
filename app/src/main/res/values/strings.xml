@@ -14,4 +14,9 @@
     <string name="startButtonText">START</string>
     <string name="blocksButtonText">BLOCKS</string>
     <string name="closeButtonText">CLOSE</string>
+    <string name="label">image</string>
+    <string name="themeText">themes</string>
+    <string name="chocolateThemeText">chocolate theme</string>
+    <string name="darkThemeText">dark theme</string>
+    <string name="spaceThemeText">space theme</string>
 </resources>

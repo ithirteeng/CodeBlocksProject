@@ -7,9 +7,22 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="mainBackgroundColor">#F6E8C3</color>
-    <color name="workingPanelColor">#835F4B</color>
-    <color name="compilatorColor">#ADAF9F74</color>
-    <color name="drawerColor">#5A443D</color>
-    <color name="bottomButtonsColor">#905B49</color>
+    <!-- chocolate colors -->
+    <color name="chocolateMainColor">#F6E8C3</color>
+    <color name="chocolateWorkingPanelColor">#835F4B</color>
+    <color name="chocolateTextFieldColor">#736B54</color>
+    <color name="chocolateDrawerColor">#5A443D</color>
+    <color name="chocolateBottomButtonsColor">#905B49</color>
+    <!-- pink colors -->
+    <color name="pinkMainColor">#FD408F</color>
+    <color name="pinkWorkingPanelColor">#EA84C1</color>
+    <color name="pinkTextFieldColor">#A52A5D</color>
+    <color name="pinkDrawerColor">#D019BE</color>
+    <color name="pinkBottomButtonsColor">#D61393</color>
+    <!-- space colors -->
+    <color name="spaceMainColor">#CF4EFD</color>
+    <color name="spaceWorkingPanelColor">#531493</color>
+    <color name="spaceTextFieldColor">#6C2D83</color>
+    <color name="spaceDrawerColor">#623AA4</color>
+    <color name="spaceBottomButtonsColor">#9C6CDA</color>
 </resources>

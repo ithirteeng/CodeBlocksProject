@@ -15,7 +15,7 @@
     </style>
     <style name="bottomButtonStyle">
         <item name="fontFamily">@font/courier_prime</item>
-        <item name="android:textColor">@color/mainBackgroundColor</item>
+        <item name="android:textColor">@color/chocolateMainColor</item>
         <item name="android:textSize">@dimen/bottomButtonsTextSize</item>
         <item name="android:padding">5dp</item>
     </style>

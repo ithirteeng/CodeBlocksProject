@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerInsides"
+    android:id="@+id/drawerInsidesLayout"
     android:layout_width="300dp"
     android:layout_height="match_parent"
-    android:background="@color/mainBackgroundColor">
+    android:background="@color/chocolateMainColor"
+    tools:visibility="visible">
 
     <ImageButton
         android:id="@+id/drawerButton"
@@ -20,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/drawer_button_image" />
+        app:srcCompat="@drawable/chocolate_drawer_button_image" />
 
     <TextView
         android:id="@+id/themesTextView"
@@ -37,39 +38,40 @@
         android:id="@+id/themesGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/background_wirth_bottom_border"
         android:checkedButton="@id/chocolateTheme"
+        android:weightSum="30"
         app:layout_constraintBottom_toTopOf="@+id/themesGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintStart_toStartOf="parent"
-        android:weightSum="30"
         app:layout_constraintTop_toBottomOf="@+id/themesTextView">
 
         <RadioButton
             android:id="@+id/chocolateTheme"
-            android:layout_weight="10"
             style="@style/radioButtonsStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:buttonTint="#1E1E1E"
             android:text="@string/chocolateThemeText"
             tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
-            android:layout_weight="10"
-            android:id="@+id/darkTheme"
+            android:id="@+id/pinkTheme"
             style="@style/radioButtonsStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:buttonTint="#1E1E1E"
-            android:text="@string/darkThemeText"
+            android:text="@string/pinkThemeText"
             tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
-            android:layout_weight="10"
             android:id="@+id/spaceTheme"
             style="@style/radioButtonsStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="10"
             android:buttonTint="#1E1E1E"
             android:text="@string/spaceThemeText"
             tools:ignore="TouchTargetSizeCheck" />
@@ -80,6 +82,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.27" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="134dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/themesGroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

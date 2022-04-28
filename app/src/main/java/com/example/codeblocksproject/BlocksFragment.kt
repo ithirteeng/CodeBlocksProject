@@ -1,9 +1,13 @@
 package com.example.codeblocksproject
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
@@ -23,12 +27,40 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
             transaction.hide(this)
             transaction.commit()
             isClosedBlocks = true
-            Handler().postDelayed(Runnable {
+            Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
                     (parentFragment as MainFragment).displayButtons()
                 }
-            }, 650)
+            }, 350)
         }
+    }
+
+    fun changeTheme(color: String, context: Context) {
+        when (color) {
+            MainFragment.SPACE_COLOR -> {
+                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
+                imageView?.setBackgroundColor(getColor(R.color.spaceTextFieldColor, context))
+                imageView = view?.findViewById(R.id.buttonBackground)
+                imageView?.setBackgroundColor(getColor(R.color.spaceBottomButtonsColor, context))
+            }
+            MainFragment.PINK_COLOR -> {
+                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
+                imageView?.setBackgroundColor(getColor(R.color.pinkTextFieldColor, context))
+                imageView = view?.findViewById(R.id.buttonBackground)
+                imageView?.setBackgroundColor(getColor(R.color.pinkBottomButtonsColor, context))
+            }
+            MainFragment.CHOCOLATE_COLOR -> {
+                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
+                imageView?.setBackgroundColor(getColor(R.color.chocolateTextFieldColor, context))
+                imageView = view?.findViewById(R.id.buttonBackground)
+                imageView?.setBackgroundColor(getColor(R.color.chocolateBottomButtonsColor, context))
+            }
+
+        }
+    }
+
+    private fun getColor(id: Int, context: Context): Int {
+        return ContextCompat.getColor(context, id)
     }
 
 }

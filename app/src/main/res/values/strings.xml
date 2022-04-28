@@ -17,6 +17,7 @@
     <string name="label">image</string>
     <string name="themeText">themes</string>
     <string name="chocolateThemeText">chocolate theme</string>
-    <string name="darkThemeText">dark theme</string>
+    <string name="pinkThemeText">pink theme</string>
     <string name="spaceThemeText">space theme</string>
+    <string name="textFieldText">waiting…</string>
 </resources>

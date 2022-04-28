@@ -11,8 +11,20 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mainBackgroundColor"
+        android:background="@color/chocolateMainColor"
         tools:context=".MainFragment">
+
+        <ImageView
+            android:id="@+id/workspaceBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/chocolateWorkingPanelColor"
+            android:contentDescription="@string/label"
+            app:layout_constraintBottom_toBottomOf="@+id/mainWorkfield"
+            app:layout_constraintEnd_toEndOf="@+id/mainWorkfield"
+            app:layout_constraintStart_toStartOf="@+id/mainWorkfield"
+            app:layout_constraintTop_toTopOf="@+id/mainWorkfield"
+            app:srcCompat="@android:color/transparent" />
 
         <ImageButton
             android:id="@+id/drawerOutsideButton"
@@ -27,14 +39,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/drawer_button_image" />
+            app:srcCompat="@drawable/chocolate_drawer_button_image" />
+
+        <ImageView
+            android:id="@+id/bottomButtonsBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/chocolateBottomButtonsColor"
+            android:contentDescription="@string/label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/blocksButton"
+            app:layout_constraintStart_toStartOf="@+id/startButton"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:srcCompat="@android:color/transparent" />
 
         <Button
             android:id="@+id/startButton"
+            style="@style/bottomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bottom_buttons"
-            style="@style/bottomButtonStyle"
+            android:fontFamily="@font/courier_prime"
             android:text="@string/startButtonText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/blocksButton"
@@ -45,10 +70,11 @@
 
         <Button
             android:id="@+id/blocksButton"
+            style="@style/bottomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bottom_buttons"
-            style="@style/bottomButtonStyle"
+            android:fontFamily="@font/courier_prime"
             android:text="@string/blocksButtonText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintGuide_end="@dimen/bottomButtonsSize" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -68,11 +95,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/workfieldMargin"
-            android:background="@drawable/workfield_background"
+            android:background="@drawable/workfield_borders"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.238"
             app:layout_constraintStart_toEndOf="@+id/drawerOutsideButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,7 +114,8 @@
         android:background="@color/white"
         android:fitsSystemWindows="true"
         android:padding="0dp">
-        <include layout="@layout/drawer_layout"/>
+
+        <include layout="@layout/drawer_layout" />
 
 
     </com.google.android.material.navigation.NavigationView>

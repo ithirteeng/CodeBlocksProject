@@ -59,7 +59,7 @@ class StartFragment : Fragment(R.layout.fragment_textfield) {
             }
             MainFragment.CHOCOLATE_COLOR -> {
                 val textView = view?.findViewById<TextView>(R.id.textFieldView)
-                textView?.setBackgroundColor(getColor(R.color.chocolateMainColor, context))
+                textView?.setBackgroundColor(getColor(R.color.chocolateTextFieldColor, context))
                 textView?.setTextColor(getColor(R.color.black, context))
                 val imageView = view?.findViewById<ImageView>(R.id.buttonBackground)
                 imageView?.setBackgroundColor(getColor(R.color.chocolateBottomButtonsColor, context))

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.res.ResourcesCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     companion object {
@@ -128,6 +129,16 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     override fun displayButtons() {
         view?.findViewById<Button>(R.id.startButton)?.visibility = View.VISIBLE
         view?.findViewById<Button>(R.id.blocksButton)?.visibility = View.VISIBLE
+    }
+
+    override fun addBlock() {
+        val imageView = view?.findViewById<ImageView>(R.id.workspaceBackground)
+        imageView?.setBackgroundColor(
+            getColor(
+                requireContext(),
+                R.color.pinkMainColor
+            )
+        )
     }
 
     private fun changeThemesEvent(view: View) {

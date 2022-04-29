@@ -8,4 +8,6 @@
     <dimen name="smallTextSize">20sp</dimen>
     <dimen name="workfieldMargin">10dp</dimen>
     <dimen name="bottomButtonsTextSize">30sp</dimen>
+    <dimen name="blocksSize">140dp</dimen>
+    <dimen name="blocksPadding">15dp</dimen>
 </resources>

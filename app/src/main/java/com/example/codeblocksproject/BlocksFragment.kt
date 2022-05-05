@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     var isClosedBlocks = true

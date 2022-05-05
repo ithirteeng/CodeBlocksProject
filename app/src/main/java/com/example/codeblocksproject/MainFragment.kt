@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
+import com.example.codeblocksproject.UI.UserInterfaceClass
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     companion object {
@@ -17,13 +18,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 //        const val SEPIA_COLOR = "sepia"
     }
 
-    private val startFragment = StartFragment()
+    private val consoleFragment = ConsoleFragment()
     private val blocksFragment = BlocksFragment()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val ui = UserInterfaceClass(view.context, startFragment, blocksFragment)
-        ui.setupAllClassFunctions(view)
+        val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
+        ui.setupAllUIFunctions(view)
         setupOtherFragmentsFunctions(view)
     }
 
@@ -36,9 +37,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private fun addingFragments() {
         val fragmentManager = childFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.container, startFragment)
+        transaction.add(R.id.container, consoleFragment)
         transaction.add(R.id.container, blocksFragment)
-        transaction.hide(startFragment)
+        transaction.hide(consoleFragment)
         transaction.hide(blocksFragment)
         transaction.commit()
     }
@@ -46,7 +47,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private fun blocksButtonEvent(view: View) {
         val button = view.findViewById<Button>(R.id.blocksButton)
         button.setOnClickListener {
-            if (startFragment.isClosedStart) {
+            if (consoleFragment.isClosedStart) {
                 if (blocksFragment.isClosedBlocks) {
                     blocksFragment.isClosedBlocks = false
                     val fragmentManager = childFragmentManager
@@ -71,13 +72,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         val button = view.findViewById<Button>(R.id.startButton)
         button.setOnClickListener {
             if (blocksFragment.isClosedBlocks) {
-                if (startFragment.isClosedStart) {
-                    startFragment.isClosedStart = false
+                if (consoleFragment.isClosedStart) {
+                    consoleFragment.isClosedStart = false
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
-                    startFragment.onCreateAnimation(0, true, 1)
-                    transaction.show(startFragment)
+                    consoleFragment.onCreateAnimation(0, true, 1)
+                    transaction.show(consoleFragment)
                     transaction.commit()
 
                     Handler(Looper.getMainLooper()).postDelayed({

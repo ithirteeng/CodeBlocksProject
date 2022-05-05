@@ -30,7 +30,7 @@
             style="@style/bottomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/bottomButtonsSize"
-            android:background="@drawable/bottom_buttons"
+            android:background="@drawable/close_button_background"
             android:text="@string/closeButtonText"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="parent"

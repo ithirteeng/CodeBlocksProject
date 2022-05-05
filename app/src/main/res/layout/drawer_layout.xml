@@ -38,7 +38,7 @@
         android:id="@+id/themesGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/background_wirth_bottom_border"
+        android:background="@drawable/background_with_bottom_border"
         android:checkedButton="@id/chocolateTheme"
         android:weightSum="40"
         app:layout_constraintBottom_toTopOf="@+id/themesGuideline"

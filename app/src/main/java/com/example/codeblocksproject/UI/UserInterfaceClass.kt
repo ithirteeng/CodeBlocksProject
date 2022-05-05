@@ -1,4 +1,4 @@
-package com.example.codeblocksproject
+package com.example.codeblocksproject.UI
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,14 +13,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.codeblocksproject.BlocksFragment
+import com.example.codeblocksproject.MainFragment
+import com.example.codeblocksproject.R
+import com.example.codeblocksproject.ConsoleFragment
 
 class UserInterfaceClass(
     private val context: Context,
-    private val startFragment: StartFragment,
+    private val consoleFragment: ConsoleFragment,
     private val blocksFragment: BlocksFragment
 ) {
 
-    fun setupAllClassFunctions(view: View) {
+    fun setupAllUIFunctions(view: View) {
         setupButtonsEvents(view)
 
         view.findViewById<DrawerLayout>(R.id.drawerLayout)
@@ -84,7 +88,7 @@ class UserInterfaceClass(
         changeDrawerButtonColor(view, color)
         changeDrawerBackgroundColor(view, color)
         changeBottomButtonsColor(view, color)
-        startFragment.changeTheme(color, context)
+        consoleFragment.changeTheme(color, context)
         blocksFragment.changeTheme(color, context)
     }
 

@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
-class StartFragment : Fragment(R.layout.fragment_textfield) {
+class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
 
     var isClosedStart = true

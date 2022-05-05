@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -15,6 +16,14 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment(view)
+        hui(view)
+    }
+
+    private fun hui(view: View){
+        val button=view.findViewById<ImageButton>(R.id.initializationBlock)
+        button.setOnClickListener {
+            (parentFragment as MainFragment).addBlock()
+        }
     }
 
     private fun closeSlidingFragment(view: View) {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="variable_type">
+        <item>Integer</item>
+        <item>Double</item>
+    </string-array>
+</resources>

@@ -20,5 +20,6 @@
     <string name="pinkThemeText">pink theme</string>
     <string name="spaceThemeText">space theme</string>
     <string name="sepiaThemeText">sepia theme</string>
+    <string name="shrekThemeText">shrek theme</string>
     <string name="textFieldText">waiting…</string>
 </resources>

@@ -21,7 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/chocolate_drawer_button_image" />
+        app:srcCompat="@drawable/chocolate_drawer_button_image"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/themesTextView"
@@ -85,6 +86,16 @@
             android:buttonTint="#1E1E1E"
             android:text="@string/sepiaThemeText"
             tools:ignore="TouchTargetSizeCheck" />
+
+        <RadioButton
+            android:id="@+id/shrekTheme"
+            style="@style/radioButtonsStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:buttonTint="#1E1E1E"
+            android:text="@string/shrekThemeText"
+            tools:ignore="TouchTargetSizeCheck" />
     </RadioGroup>
 
     <androidx.constraintlayout.widget.Guideline
@@ -93,5 +104,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.31" />
+
+    <ImageView
+        android:id="@+id/shrekImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/label"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintVertical_bias="0.333"
+        app:srcCompat="@drawable/shrek_image" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/shrekGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

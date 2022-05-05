@@ -16,6 +16,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         const val CHOCOLATE_COLOR = "chocolate"
         const val SPACE_COLOR = "space"
         const val SEPIA_COLOR = "sepia"
+        const val SHREK_COLOR = "shrek"
     }
 
     private val consoleFragment = ConsoleFragment()

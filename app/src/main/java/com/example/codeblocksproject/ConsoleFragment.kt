@@ -74,6 +74,13 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                 imageView?.setBackgroundColor(getColor(R.color.sepiaBottomButtonsColor, context))
                 closeButton?.setTextColor(getColor(R.color.white, context))
             }
+            MainFragment.SHREK_COLOR -> {
+                val textView = view?.findViewById<TextView>(R.id.textFieldView)
+                textView?.setBackgroundColor(getColor(R.color.shrekConsoleColor, context))
+                textView?.setTextColor(getColor(R.color.black, context))
+                val imageView = view?.findViewById<ImageView>(R.id.buttonBackground)
+                imageView?.setBackgroundColor(getColor(R.color.shrekBottomButtonsColor, context))
+            }
 
         }
     }

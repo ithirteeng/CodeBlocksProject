@@ -80,6 +80,9 @@ class UserInterfaceClass(
                     R.id.sepiaTheme -> {
                         setupChangeColorsFunctions(view, MainFragment.SEPIA_COLOR, this.context)
                     }
+                    R.id.shrekTheme -> {
+                        setupChangeColorsFunctions(view, MainFragment.SHREK_COLOR, this.context)
+                    }
                 }
             }
         }
@@ -97,6 +100,8 @@ class UserInterfaceClass(
 
     private fun changeDrawerBackgroundColor(view: View, color: String) {
         val background = view.findViewById<ConstraintLayout>(R.id.drawerInsidesLayout)
+        val shrekView = view.findViewById<ImageView>(R.id.shrekImage)
+        shrekView.visibility = View.GONE
         when (color) {
             MainFragment.SPACE_COLOR -> {
                 background.setBackgroundColor(
@@ -127,6 +132,15 @@ class UserInterfaceClass(
                     ContextCompat.getColor(
                         context,
                         R.color.sepiaMainColor
+                    )
+                )
+            }
+            MainFragment.SHREK_COLOR -> {
+                shrekView.visibility = View.VISIBLE
+                background.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.shrekMainColor
                     )
                 )
             }
@@ -168,6 +182,14 @@ class UserInterfaceClass(
                     )
                 )
             }
+            MainFragment.SHREK_COLOR -> {
+                background.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.shrekMainColor
+                    )
+                )
+            }
         }
     }
 
@@ -203,6 +225,14 @@ class UserInterfaceClass(
                     ContextCompat.getColor(
                         context,
                         R.color.sepiaWorkingPanelColor
+                    )
+                )
+            }
+            MainFragment.SHREK_COLOR -> {
+                imageView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.shrekWorkingPanelColor
                     )
                 )
             }
@@ -250,6 +280,14 @@ class UserInterfaceClass(
                 buttonStart.setTextColor(getColor(R.color.white, this.context))
                 buttonBlocks.setTextColor(getColor(R.color.white, this.context))
             }
+            MainFragment.SHREK_COLOR -> {
+                imageView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.shrekBottomButtonsColor
+                    )
+                )
+            }
         }
 
     }
@@ -285,6 +323,13 @@ class UserInterfaceClass(
                     null
                 )
             )
+            MainFragment.SHREK_COLOR -> button.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.shrek_drawer_button_image,
+                    null
+                )
+            )
         }
         button = view.findViewById(R.id.drawerOutsideButton)
         when (color) {
@@ -313,6 +358,13 @@ class UserInterfaceClass(
                 ResourcesCompat.getDrawable(
                     context.resources,
                     R.drawable.sepia_drawer_button_image,
+                    null
+                )
+            )
+            MainFragment.SHREK_COLOR -> button.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.shrek_drawer_button_image,
                     null
                 )
             )

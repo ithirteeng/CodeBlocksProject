@@ -32,4 +32,10 @@
     <color name="sepiaConsoleColor">#888888</color>
     <color name="sepiaDrawerColor">#434343</color>
     <color name="sepiaBottomButtonsColor">#2D2D2D</color>
+    <!--  shrek colors  -->
+    <color name="shrekMainColor">#B0B235</color>
+    <color name="shrekWorkingPanelColor">#67832D</color>
+    <color name="shrekConsoleColor">#6E7023</color>
+    <color name="shrekDrawerColor">#606A38</color>
+    <color name="shrekBottomButtonsColor">#64730B</color>
 </resources>

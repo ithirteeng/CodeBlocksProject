@@ -64,6 +64,13 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
                 imageView?.setBackgroundColor(getColor(R.color.sepiaBottomButtonsColor, context))
                 closeButton?.setTextColor(getColor(R.color.white, context))
             }
+            MainFragment.SHREK_COLOR -> {
+                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
+                imageView?.setBackgroundColor(getColor(R.color.shrekConsoleColor, context))
+                imageView = view?.findViewById(R.id.buttonBackground)
+                imageView?.setBackgroundColor(getColor(R.color.shrekBottomButtonsColor, context))
+                closeButton?.setTextColor(getColor(R.color.black, context))
+            }
         }
     }
 

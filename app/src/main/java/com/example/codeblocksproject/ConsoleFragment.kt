@@ -42,27 +42,37 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     }
 
     fun changeTheme(color: String, context: Context) {
+        val closeButton = view?.findViewById<Button>(R.id.closeButton)
+        closeButton?.setTextColor(getColor(R.color.chocolateMainColor, context))
         when (color) {
             MainFragment.SPACE_COLOR -> {
                 val textView = view?.findViewById<TextView>(R.id.textFieldView)
-                textView?.setBackgroundColor(getColor(R.color.spaceTextFieldColor, context))
+                textView?.setBackgroundColor(getColor(R.color.spaceConsoleColor, context))
                 textView?.setTextColor(getColor(R.color.chocolateMainColor, context))
                 val imageView = view?.findViewById<ImageView>(R.id.buttonBackground)
                 imageView?.setBackgroundColor(getColor(R.color.spaceBottomButtonsColor, context))
             }
             MainFragment.PINK_COLOR -> {
                 val textView = view?.findViewById<TextView>(R.id.textFieldView)
-                textView?.setBackgroundColor(getColor(R.color.pinkTextFieldColor, context))
-                textView?.setTextColor(getColor(R.color.black, context))
+                textView?.setBackgroundColor(getColor(R.color.pinkConsoleColor, context))
+                textView?.setTextColor(getColor(R.color.chocolateMainColor, context))
                 val imageView = view?.findViewById<ImageView>(R.id.buttonBackground)
                 imageView?.setBackgroundColor(getColor(R.color.pinkBottomButtonsColor, context))
             }
             MainFragment.CHOCOLATE_COLOR -> {
                 val textView = view?.findViewById<TextView>(R.id.textFieldView)
-                textView?.setBackgroundColor(getColor(R.color.chocolateTextFieldColor, context))
+                textView?.setBackgroundColor(getColor(R.color.chocolateConsoleColor, context))
                 textView?.setTextColor(getColor(R.color.black, context))
                 val imageView = view?.findViewById<ImageView>(R.id.buttonBackground)
                 imageView?.setBackgroundColor(getColor(R.color.chocolateBottomButtonsColor, context))
+            }
+            MainFragment.SEPIA_COLOR -> {
+                val textView = view?.findViewById<TextView>(R.id.textFieldView)
+                textView?.setBackgroundColor(getColor(R.color.sepiaConsoleColor, context))
+                textView?.setTextColor(getColor(R.color.white, context))
+                val imageView = view?.findViewById<ImageView>(R.id.buttonBackground)
+                imageView?.setBackgroundColor(getColor(R.color.sepiaBottomButtonsColor, context))
+                closeButton?.setTextColor(getColor(R.color.white, context))
             }
 
         }

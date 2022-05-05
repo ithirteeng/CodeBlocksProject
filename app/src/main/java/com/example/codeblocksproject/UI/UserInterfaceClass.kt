@@ -5,10 +5,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -23,6 +20,9 @@ class UserInterfaceClass(
     private val consoleFragment: ConsoleFragment,
     private val blocksFragment: BlocksFragment
 ) {
+    private fun getColor(id: Int, context: Context): Int {
+        return ContextCompat.getColor(context, id)
+    }
 
     fun setupAllUIFunctions(view: View) {
         setupButtonsEvents(view)
@@ -77,6 +77,9 @@ class UserInterfaceClass(
                     R.id.chocolateTheme -> {
                         setupChangeColorsFunctions(view, MainFragment.CHOCOLATE_COLOR, this.context)
                     }
+                    R.id.sepiaTheme -> {
+                        setupChangeColorsFunctions(view, MainFragment.SEPIA_COLOR, this.context)
+                    }
                 }
             }
         }
@@ -119,6 +122,14 @@ class UserInterfaceClass(
                     )
                 )
             }
+            MainFragment.SEPIA_COLOR -> {
+                background.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.sepiaMainColor
+                    )
+                )
+            }
         }
     }
 
@@ -146,6 +157,14 @@ class UserInterfaceClass(
                     ContextCompat.getColor(
                         context,
                         R.color.chocolateMainColor
+                    )
+                )
+            }
+            MainFragment.SEPIA_COLOR -> {
+                background.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.sepiaMainColor
                     )
                 )
             }
@@ -179,11 +198,23 @@ class UserInterfaceClass(
                     )
                 )
             }
+            MainFragment.SEPIA_COLOR -> {
+                imageView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.sepiaWorkingPanelColor
+                    )
+                )
+            }
         }
     }
 
     private fun changeBottomButtonsColor(view: View, color: String) {
         val imageView = view.findViewById<ImageView>(R.id.bottomButtonsBackground)
+        val buttonStart = view.findViewById<Button>(R.id.startButton)
+        val buttonBlocks = view.findViewById<Button>(R.id.blocksButton)
+        buttonStart.setTextColor(getColor(R.color.chocolateMainColor, this.context))
+        buttonBlocks.setTextColor(getColor(R.color.chocolateMainColor, this.context))
         when (color) {
             MainFragment.SPACE_COLOR -> {
                 imageView.setBackgroundColor(
@@ -208,6 +239,16 @@ class UserInterfaceClass(
                         R.color.chocolateBottomButtonsColor
                     )
                 )
+            }
+            MainFragment.SEPIA_COLOR -> {
+                imageView.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.sepiaBottomButtonsColor
+                    )
+                )
+                buttonStart.setTextColor(getColor(R.color.white, this.context))
+                buttonBlocks.setTextColor(getColor(R.color.white, this.context))
             }
         }
 
@@ -237,6 +278,13 @@ class UserInterfaceClass(
                     null
                 )
             )
+            MainFragment.SEPIA_COLOR -> button.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.sepia_drawer_button_image,
+                    null
+                )
+            )
         }
         button = view.findViewById(R.id.drawerOutsideButton)
         when (color) {
@@ -258,6 +306,13 @@ class UserInterfaceClass(
                 ResourcesCompat.getDrawable(
                     context.resources,
                     R.drawable.space_drawer_button_image,
+                    null
+                )
+            )
+            MainFragment.SEPIA_COLOR -> button.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.sepia_drawer_button_image,
                     null
                 )
             )

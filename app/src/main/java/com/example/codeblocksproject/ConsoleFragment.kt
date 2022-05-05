@@ -70,11 +70,11 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                     context
                 )
             }
-            MainFragment.SEPIA_COLOR -> {
+            MainFragment.MONOCHROME_COLOR -> {
                 changeColor(
-                    R.color.sepiaConsoleColor,
+                    R.color.monochromeConsoleColor,
                     R.color.white,
-                    R.color.sepiaBottomButtonsColor,
+                    R.color.monochromeBottomButtonsColor,
                     context
                 )
                 closeButton?.setTextColor(getColor(R.color.white, context))

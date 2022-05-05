@@ -61,10 +61,10 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
                     context
                 )
             }
-            MainFragment.SEPIA_COLOR -> {
+            MainFragment.MONOCHROME_COLOR -> {
                 changeColor(
-                    R.color.sepiaConsoleColor,
-                    R.color.sepiaBottomButtonsColor,
+                    R.color.monochromeConsoleColor,
+                    R.color.monochromeBottomButtonsColor,
                     context
                 )
                 closeButton?.setTextColor(getColor(R.color.white, context))

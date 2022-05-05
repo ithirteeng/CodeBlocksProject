@@ -26,12 +26,12 @@
     <color name="spaceConsoleColor">#6C2D83</color>
     <color name="spaceDrawerColor">#623AA4</color>
     <color name="spaceBottomButtonsColor">#9C6CDA</color>
-    <!--  sepia colors  -->
-    <color name="sepiaMainColor">#DEDEDE</color>
-    <color name="sepiaWorkingPanelColor">#595859</color>
-    <color name="sepiaConsoleColor">#888888</color>
-    <color name="sepiaDrawerColor">#434343</color>
-    <color name="sepiaBottomButtonsColor">#2D2D2D</color>
+    <!--  monochrome colors  -->
+    <color name="monochromeMainColor">#DEDEDE</color>
+    <color name="monochromeWorkingPanelColor">#595859</color>
+    <color name="monochromeConsoleColor">#888888</color>
+    <color name="monochromeDrawerColor">#434343</color>
+    <color name="monochromeBottomButtonsColor">#2D2D2D</color>
     <!--  shrek colors  -->
     <color name="shrekMainColor">#B0B235</color>
     <color name="shrekWorkingPanelColor">#67832D</color>

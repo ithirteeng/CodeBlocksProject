@@ -78,7 +78,7 @@ class UserInterfaceClass(
                         setupChangeColorsFunctions(view, MainFragment.CHOCOLATE_COLOR, this.context)
                     }
                     R.id.sepiaTheme -> {
-                        setupChangeColorsFunctions(view, MainFragment.SEPIA_COLOR, this.context)
+                        setupChangeColorsFunctions(view, MainFragment.MONOCHROME_COLOR, this.context)
                     }
                     R.id.shrekTheme -> {
                         setupChangeColorsFunctions(view, MainFragment.SHREK_COLOR, this.context)
@@ -112,8 +112,8 @@ class UserInterfaceClass(
             MainFragment.CHOCOLATE_COLOR -> {
                 changeColor(background, R.color.chocolateMainColor)
             }
-            MainFragment.SEPIA_COLOR -> {
-                changeColor(background, R.color.sepiaMainColor)
+            MainFragment.MONOCHROME_COLOR -> {
+                changeColor(background, R.color.monochromeMainColor)
             }
             MainFragment.SHREK_COLOR -> {
                 shrekView.visibility = View.VISIBLE
@@ -134,8 +134,8 @@ class UserInterfaceClass(
             MainFragment.CHOCOLATE_COLOR -> {
                 changeColor(background, R.color.chocolateMainColor)
             }
-            MainFragment.SEPIA_COLOR -> {
-                changeColor(background, R.color.sepiaMainColor)
+            MainFragment.MONOCHROME_COLOR -> {
+                changeColor(background, R.color.monochromeMainColor)
             }
             MainFragment.SHREK_COLOR -> {
                 changeColor(background, R.color.shrekConsoleColor)
@@ -155,8 +155,8 @@ class UserInterfaceClass(
             MainFragment.CHOCOLATE_COLOR -> {
                 changeColor(imageView, R.color.chocolateWorkingPanelColor)
             }
-            MainFragment.SEPIA_COLOR -> {
-                changeColor(imageView, R.color.sepiaWorkingPanelColor)
+            MainFragment.MONOCHROME_COLOR -> {
+                changeColor(imageView, R.color.monochromeWorkingPanelColor)
             }
             MainFragment.SHREK_COLOR -> {
                 changeColor(imageView, R.color.shrekWorkingPanelColor)
@@ -182,8 +182,8 @@ class UserInterfaceClass(
             MainFragment.CHOCOLATE_COLOR -> {
                 changeColor(imageView, R.color.chocolateBottomButtonsColor)
             }
-            MainFragment.SEPIA_COLOR -> {
-                changeColor(imageView, R.color.sepiaBottomButtonsColor)
+            MainFragment.MONOCHROME_COLOR -> {
+                changeColor(imageView, R.color.monochromeBottomButtonsColor)
                 buttonStart.setTextColor(getColor(R.color.white, this.context))
                 buttonBlocks.setTextColor(getColor(R.color.white, this.context))
             }
@@ -206,7 +206,7 @@ class UserInterfaceClass(
             MainFragment.SPACE_COLOR -> {
                 changeDrawerImage(button, R.drawable.space_drawer_button_image)
             }
-            MainFragment.SEPIA_COLOR -> {
+            MainFragment.MONOCHROME_COLOR -> {
                 changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
             }
             MainFragment.SHREK_COLOR -> {
@@ -224,7 +224,7 @@ class UserInterfaceClass(
             MainFragment.SPACE_COLOR -> {
                 changeDrawerImage(button, R.drawable.space_drawer_button_image)
             }
-            MainFragment.SEPIA_COLOR -> {
+            MainFragment.MONOCHROME_COLOR -> {
                 changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
             }
             MainFragment.SHREK_COLOR -> {

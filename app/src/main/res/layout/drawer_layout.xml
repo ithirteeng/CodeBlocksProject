@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="10"
             android:buttonTint="#1E1E1E"
-            android:text="@string/sepiaThemeText"
+            android:text="@string/monochromeThemeText"
             tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton

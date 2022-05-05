@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
-import com.example.codeblocksproject.UI.UserInterfaceClass
+import com.example.codeblocksproject.ui.UserInterfaceClass
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     companion object {

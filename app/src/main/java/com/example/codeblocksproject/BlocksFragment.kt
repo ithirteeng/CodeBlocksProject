@@ -38,40 +38,53 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     fun changeTheme(color: String, context: Context) {
         val closeButton = view?.findViewById<Button>(R.id.closeButton)
         closeButton?.setTextColor(getColor(R.color.chocolateMainColor, context))
+
         when (color) {
             MainFragment.SPACE_COLOR -> {
-                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
-                imageView?.setBackgroundColor(getColor(R.color.spaceConsoleColor, context))
-                imageView = view?.findViewById(R.id.buttonBackground)
-                imageView?.setBackgroundColor(getColor(R.color.spaceBottomButtonsColor, context))
+                changeColor(
+                    R.color.spaceConsoleColor,
+                    R.color.spaceBottomButtonsColor,
+                    context
+                )
             }
             MainFragment.PINK_COLOR -> {
-                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
-                imageView?.setBackgroundColor(getColor(R.color.pinkConsoleColor, context))
-                imageView = view?.findViewById(R.id.buttonBackground)
-                imageView?.setBackgroundColor(getColor(R.color.pinkBottomButtonsColor, context))
+                changeColor(
+                    R.color.pinkConsoleColor,
+                    R.color.pinkBottomButtonsColor,
+                    context
+                )
             }
             MainFragment.CHOCOLATE_COLOR -> {
-                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
-                imageView?.setBackgroundColor(getColor(R.color.chocolateConsoleColor, context))
-                imageView = view?.findViewById(R.id.buttonBackground)
-                imageView?.setBackgroundColor(getColor(R.color.chocolateBottomButtonsColor, context))
+                changeColor(
+                    R.color.chocolateConsoleColor,
+                    R.color.chocolateBottomButtonsColor,
+                    context
+                )
             }
             MainFragment.SEPIA_COLOR -> {
-                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
-                imageView?.setBackgroundColor(getColor(R.color.sepiaConsoleColor, context))
-                imageView = view?.findViewById(R.id.buttonBackground)
-                imageView?.setBackgroundColor(getColor(R.color.sepiaBottomButtonsColor, context))
+                changeColor(
+                    R.color.sepiaConsoleColor,
+                    R.color.sepiaBottomButtonsColor,
+                    context
+                )
                 closeButton?.setTextColor(getColor(R.color.white, context))
             }
             MainFragment.SHREK_COLOR -> {
-                var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
-                imageView?.setBackgroundColor(getColor(R.color.shrekConsoleColor, context))
-                imageView = view?.findViewById(R.id.buttonBackground)
-                imageView?.setBackgroundColor(getColor(R.color.shrekBottomButtonsColor, context))
-                closeButton?.setTextColor(getColor(R.color.black, context))
+                changeColor(
+                    R.color.shrekConsoleColor,
+                    R.color.shrekBottomButtonsColor,
+                    context
+                )
             }
         }
+    }
+
+    private fun changeColor(backgroundColor: Int, buttonColor: Int, context: Context) {
+        var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
+        imageView?.setBackgroundColor(getColor(backgroundColor, context))
+
+        imageView = view?.findViewById(R.id.buttonBackground)
+        imageView?.setBackgroundColor(getColor(buttonColor, context))
     }
 
     private fun getColor(id: Int, context: Context): Int {

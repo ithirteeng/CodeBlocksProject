@@ -2,10 +2,9 @@ package com.example.codeblocksproject
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.myapplication.CustomView
+import com.example.codeblocksproject.model.CustomView
 
 const val START_PROGRAM_BLOCK_TYPE = "programStart"
 const val START_PROGRAM_BLOCK_ID = 0

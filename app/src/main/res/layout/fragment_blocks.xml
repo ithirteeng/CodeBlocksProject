@@ -97,18 +97,6 @@
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <ImageButton
-                    android:id="@+id/inputBlock"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/blocksSize"
-                    android:layout_margin="@dimen/blocksPadding"
-                    android:layout_marginTop="0dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/label"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/input_block_image" />
-
-                <ImageButton
                     android:id="@+id/outputBlock"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/blocksSize"
@@ -118,6 +106,30 @@
                     android:contentDescription="@string/label"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/output_block_image" />
+
+                <ImageButton
+                    android:id="@+id/whileBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/blocksSize"
+                    android:layout_margin="@dimen/blocksPadding"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/label"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/while_block_image" />
+
+                <ImageButton
+                    android:id="@+id/ifBlock"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/blocksSize"
+                    android:layout_margin="@dimen/blocksPadding"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/label"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/if_block_image" />
             </LinearLayout>
         </ScrollView>
 

@@ -10,12 +10,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
+import com.example.codeblocksproject.model.CustomView
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import com.example.myapplication.CustomView
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     companion object {
@@ -32,8 +30,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private val blocksFragment = BlocksFragment()
     private lateinit var binding: FragmentMainBinding
     private val workFieldRect = Rect()
-    private var startBlockID=0
-    private var endBlockID=0
+    private var startBlockID = 0
+    private var endBlockID = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,18 +48,18 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.mainWorkfield.getHitRect(workFieldRect)
 
-        val startBlock=StartProgramBlock(binding.start,requireContext())
-        startBlockID=binding.start.id
+        val startBlock = StartProgramBlock(binding.start, requireContext())
+        startBlockID = binding.start.id
         blockList.add(startBlock)
-        blockMap[startBlockID]=startBlock
+        blockMap[startBlockID] = startBlock
 
-        val endBlock=EndProgramBlock(binding.end,requireContext())
-        endBlockID=binding.end.id
+        val endBlock = EndProgramBlock(binding.end, requireContext())
+        endBlockID = binding.end.id
         blockList.add(endBlock)
-        blockMap[endBlockID]=endBlock
+        blockMap[endBlockID] = endBlock
 
-        startBlock.nextId=endBlockID
-        endBlock.previousId=startBlockID
+        startBlock.nextId = endBlockID
+        endBlock.previousId = startBlockID
 
         return binding.root
     }
@@ -144,14 +142,17 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         val newBlock = InitializationBlock(requireContext())
 
 
-        val lastBlock=blockMap[blockMap[endBlockID]!!.previousId]!!
-        newBlock.setDefault(lastBlock.blockView.x, lastBlock.blockView.y+lastBlock.blockView.height)
+        val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
+        newBlock.setDefault(
+            lastBlock.blockView.x,
+            lastBlock.blockView.y + lastBlock.blockView.height
+        )
 
-        lastBlock.nextId=newBlock.blockView.id
-        newBlock.previousId=lastBlock.blockView.id
+        lastBlock.nextId = newBlock.blockView.id
+        newBlock.previousId = lastBlock.blockView.id
 
-        blockMap[endBlockID]!!.previousId=newBlock.blockView.id
-        newBlock.nextId=endBlockID
+        blockMap[endBlockID]!!.previousId = newBlock.blockView.id
+        newBlock.nextId = endBlockID
 
         binding.mainWorkfield.addView(newBlock)
 
@@ -164,8 +165,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         q(newBlock.blockView)
     }
 
-    private fun q(view: View){
-        blockMap[endBlockID]!!.blockView.y+=view.height
+    private fun q(view: View) {
+        blockMap[endBlockID]!!.blockView.y += view.height
     }
 
     private fun View.setDefault(x: Float, y: Float) {
@@ -208,8 +209,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     val temp = block.nextId
                     block.nextId = currentBlock.blockView.id
                     currentBlock.previousId = block.blockView.id
-                    currentBlock.nextId =temp
-                    blockMap[temp]!!.previousId=currentBlock.blockView.id
+                    currentBlock.nextId = temp
+                    blockMap[temp]!!.previousId = currentBlock.blockView.id
 
                     break
                 }
@@ -225,9 +226,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     block.nextId = currentBlock!!.blockView.id
                     currentBlock.nextId = temp
                     currentBlock.previousId = block.blockView.id
-
                     alignBlock(block)
-
                     break
                 }
             }

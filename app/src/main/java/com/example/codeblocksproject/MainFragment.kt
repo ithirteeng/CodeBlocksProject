@@ -43,9 +43,12 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         setupOtherFragmentsFunctions(view)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-
         binding.mainWorkfield.getHitRect(workFieldRect)
 
         val startBlock = StartProgramBlock(binding.start, requireContext())
@@ -134,13 +137,15 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     override fun addBlock() {
-        createBlock()
+        createView()
+
     }
-//  work with blocks
+
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBlock() {
+    private fun createView() {
         val newBlock = InitializationBlock(requireContext())
-        
+
+
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.setDefault(
             lastBlock.blockView.x,
@@ -154,6 +159,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         newBlock.nextId = endBlockID
 
         binding.mainWorkfield.addView(newBlock)
+
+        blockMap[endBlockID]!!.blockView.y+=lastBlock.blockView.height
 
         newBlock.setOnTouchListener { view, event ->
             moveBlock(view, event)
@@ -186,12 +193,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             }
 
             view.z = 2F
+            view.alpha=0.6F
         }
         if (event.action == MotionEvent.ACTION_MOVE) {
             view.x += event.x - x
             view.y += event.y - y
         }
         if (event.action == MotionEvent.ACTION_UP) {
+            view.alpha=1F
             view.z = 1F
 
             val currentBlock = blockMap[view.id]
@@ -230,6 +239,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun alignBlock(block: CustomView) {
+
         var childBlock = block
         var parentBlock = block
 

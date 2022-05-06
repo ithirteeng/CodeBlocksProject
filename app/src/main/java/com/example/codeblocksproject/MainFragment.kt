@@ -138,6 +138,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     override fun addBlock() {
         createView()
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -158,6 +159,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         newBlock.nextId = endBlockID
 
         binding.mainWorkfield.addView(newBlock)
+
+        blockMap[endBlockID]!!.blockView.y+=lastBlock.blockView.height
 
         newBlock.setOnTouchListener { view, event ->
             moveBlock(view, event)
@@ -190,12 +193,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             }
 
             view.z = 2F
+            view.alpha=0.6F
         }
         if (event.action == MotionEvent.ACTION_MOVE) {
             view.x += event.x - x
             view.y += event.y - y
         }
         if (event.action == MotionEvent.ACTION_UP) {
+            view.alpha=1F
             view.z = 1F
 
             val currentBlock = blockMap[view.id]

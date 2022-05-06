@@ -13,8 +13,8 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import com.example.myapplication.CustomView
-import com.example.myapplication.InitializationBlock
+import com.example.codeblocksproject.model.CustomView
+import com.example.codeblocksproject.model.InitializationBlock
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     companion object {

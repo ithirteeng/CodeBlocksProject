@@ -21,5 +21,10 @@
     <string name="spaceThemeText">space theme</string>
     <string name="monochromeThemeText">monochrome theme</string>
     <string name="shrekThemeText">shrek theme</string>
-    <string name="textFieldText">waiting…</string>
+    <string name="consoleText">waiting…</string>
+
+    <string name="varText">var</string>
+    <string name="nameTextHint">name</string>
+    <string name="valueTextHint">value</string>
+    <string name="equalText">=</string>
 </resources>

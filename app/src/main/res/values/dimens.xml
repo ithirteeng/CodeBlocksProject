@@ -10,4 +10,8 @@
     <dimen name="bottomButtonsTextSize">30sp</dimen>
     <dimen name="blocksSize">140dp</dimen>
     <dimen name="blocksPadding">15dp</dimen>
+    <!-- blocks dimensions -->
+    <dimen name="topAndBottomBlockPadding">20dp</dimen>
+    <dimen name="startAndEndBlockPadding">10dp</dimen>
+    <dimen name="blocksTextSize">18dp</dimen>
 </resources>

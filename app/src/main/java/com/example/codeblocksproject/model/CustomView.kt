@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.codeblocksproject.model
 
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout

@@ -51,7 +51,7 @@
             android:background="@color/chocolateConsoleColor"
             android:fontFamily="@font/courier_prime"
             android:padding="10dp"
-            android:text="@string/textFieldText"
+            android:text="@string/consoleText"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"

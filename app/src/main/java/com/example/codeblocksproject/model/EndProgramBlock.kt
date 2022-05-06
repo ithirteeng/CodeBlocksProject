@@ -1,9 +1,8 @@
-package com.example.codeblocksproject
+package com.example.codeblocksproject.model
 
 import android.view.View
-import com.example.myapplication.CustomView
 
-class StartProgramBlock:CustomView {
+class EndProgramBlock: CustomView {
     override val isNestingPossible: Boolean
         get() = TODO("Not yet implemented")
     override var previousId: Int

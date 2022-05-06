@@ -203,6 +203,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             val currentBlock = blockMap[view.id]
 
             var block = blockMap[startBlockID]
+            var isBlockNested=false
 
             while (block!!.blockView.id != endBlockID) {
                 if (cross(block, currentBlock!!)) {
@@ -212,32 +213,16 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     currentBlock.nextId = temp
                     blockMap[temp]!!.previousId = currentBlock.blockView.id
 
+                    isBlockNested=true
                     break
                 }
                 block = blockMap[block.nextId]!!
             }
 
-            /*for (block in blockList) {
-                if (currentBlock != block && cross(block, view)) {
-                    if (block.nextId != -1) {
-                        blockMap[block.nextId]!!.previousId = currentBlock!!.blockView.id
-                    }
-                    val temp = block.nextId
-                    block.nextId = currentBlock!!.blockView.id
-                    currentBlock.nextId = temp
-                    currentBlock.previousId = block.blockView.id
-                    alignBlock(block)
-                    break
-                }
-            }
-             */
-
             val blockRect = Rect()
             view.getHitRect(blockRect)
-            if (!workFieldRect.intersect(blockRect)) {
-                if (currentBlock != null) {
-                    //deleteView(currentBlock)
-                }
+            if (!isBlockNested) {
+                deleteView(currentBlock!!)
             }
         }
         alignBlock(blockMap[startBlockID]!!)

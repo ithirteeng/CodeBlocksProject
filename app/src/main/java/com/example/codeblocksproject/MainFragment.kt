@@ -43,12 +43,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         setupOtherFragmentsFunctions(view)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
         binding.mainWorkfield.getHitRect(workFieldRect)
 
         val startBlock = StartProgramBlock(binding.start, requireContext())
@@ -137,14 +134,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     override fun addBlock() {
-        createView()
+        createBlock()
     }
-
+//  work with blocks
     @SuppressLint("ClickableViewAccessibility")
-    private fun createView() {
+    private fun createBlock() {
         val newBlock = InitializationBlock(requireContext())
-
-
+        
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.setDefault(
             lastBlock.blockView.x,
@@ -234,7 +230,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun alignBlock(block: CustomView) {
-
         var childBlock = block
         var parentBlock = block
 

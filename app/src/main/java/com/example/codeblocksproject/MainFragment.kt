@@ -165,11 +165,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         blockList.add(newBlock)
         blockMap[newBlock.blockView.id] = newBlock
-        q(newBlock.blockView)
-    }
-
-    private fun q(view: View) {
-        blockMap[endBlockID]!!.blockView.y += view.height
     }
 
     private fun View.setDefault(x: Float, y: Float) {

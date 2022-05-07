@@ -17,6 +17,7 @@ class EndBlock: CustomView {
         get() = TODO("Not yet implemented")
     override val pattern: String
         get() = TODO("Not yet implemented")
+    override var position=0
 
     override fun blockToCode(): String {
         TODO("Not yet implemented")

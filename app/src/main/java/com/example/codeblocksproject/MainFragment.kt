@@ -10,7 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
@@ -37,6 +37,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private val workFieldRect = Rect()
     private var startBlockID = 0
     private var endBlockID = 0
+    private var freeId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,11 +58,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         startBlockID = binding.start.id
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
+        startBlock.position = 0
 
         val endBlock = EndProgramBlock(binding.end, requireContext())
         endBlockID = binding.end.id
         blockList.add(endBlock)
         blockMap[endBlockID] = endBlock
+        endBlock.position = 1
 
         startBlock.nextId = endBlockID
         endBlock.previousId = startBlockID
@@ -139,29 +142,30 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     override fun addBlock() {
-        createView()
+        createBlock()
+
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
-    private fun createView() {
+    private fun createBlock() {
         val newBlock = InitializationBlock(requireContext())
+
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.setDefault(
-            lastBlock.blockView.x - resources.getDimension(R.dimen.workfieldPadding),
-            lastBlock.blockView.y + lastBlock.blockView.height - resources.getDimension(R.dimen.workfieldPadding)
+            lastBlock.blockView.x - resources.getDimension(R.dimen.workfieldPadding)
         )
 
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id
 
-
         blockMap[endBlockID]!!.previousId = newBlock.blockView.id
         newBlock.nextId = endBlockID
 
-        binding.mainWorkfield.addView(newBlock)
+        binding.mainWorkfield.addView(newBlock, lastBlock.position + 1)
+        newBlock.position = lastBlock.position + 1
+        blockMap[endBlockID]!!.position++
 
-        blockMap[endBlockID]!!.blockView.y += lastBlock.blockView.height
+        //blockMap[endBlockID]!!.blockView.y += lastBlock.blockView.height
 
         newBlock.setOnTouchListener { view, event ->
             moveBlock(view, event)
@@ -171,11 +175,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[newBlock.blockView.id] = newBlock
     }
 
-    private fun View.setDefault(x: Float, y: Float) {
+    private fun View.setDefault(x: Float) {
         this.x = x
-        this.y = y
         this.z = 1F
-        this.id = (2..1000000000).random()
+        this.id = freeId
+        freeId++
+        if (freeId == startBlockID || freeId == endBlockID) {
+            freeId++
+        }
     }
 
     private var x = 0F
@@ -193,6 +200,19 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 blockMap[currentBlock.nextId]!!.previousId = currentBlock.previousId
             }
 
+            var block = currentBlock
+            while (block!!.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                block.position--
+                binding.mainWorkfield.removeView(block.blockView)
+            }
+
+            block = currentBlock
+            while (block!!.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                binding.mainWorkfield.addView(block.blockView, block.position)
+            }
+
             view.z = 2F
             view.alpha = 0.6F
         }
@@ -204,7 +224,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             view.alpha = 1F
             view.z = 1F
 
-            val currentBlock = blockMap[view.id]
+            var currentBlock = blockMap[view.id]
 
             var block = blockMap[startBlockID]
             var isBlockNested = false
@@ -218,18 +238,25 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     blockMap[temp]!!.previousId = currentBlock.blockView.id
 
                     isBlockNested = true
+                    currentBlock.position = block.position + 1
+
+                    binding.mainWorkfield.removeView(currentBlock.blockView)
+                    binding.mainWorkfield.addView(currentBlock.blockView, currentBlock.position)
+
+                    while (currentBlock!!.blockView.id != endBlockID) {
+                        currentBlock = blockMap[currentBlock.nextId]
+                        currentBlock!!.position++
+                    }
+
                     break
                 }
                 block = blockMap[block.nextId]!!
             }
 
-            val blockRect = Rect()
-            view.getHitRect(blockRect)
             if (!isBlockNested) {
                 deleteView(currentBlock!!)
             }
         }
-        alignBlock(blockMap[startBlockID]!!)
         return true
     }
 
@@ -241,16 +268,22 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     private fun alignBlock(block: CustomView) {
 
-        var childBlock = block
-        var parentBlock = block
+        var currentBlock = block
 
-        while (childBlock.blockView.id != endBlockID) {
-            childBlock = blockMap[childBlock.nextId]!!
-            childBlock.blockView.x = parentBlock.blockView.x
-            childBlock.blockView.y = parentBlock.blockView.y + parentBlock.blockView.height
-
-            parentBlock = childBlock
+        while (currentBlock.blockView.id != endBlockID) {
+            binding.mainWorkfield.removeView(currentBlock.blockView)
+            binding.mainWorkfield.addView(
+                currentBlock.blockView,
+                currentBlock.blockView.verticalScrollbarPosition + 1
+            )
+            currentBlock = blockMap[currentBlock.nextId]!!
         }
+        /*binding.mainWorkfield.addView(
+            currentBlock.blockView,
+            currentBlock.blockView.verticalScrollbarPosition + 1
+        )
+
+         */
     }
 
     private fun cross(parent: CustomView, child: CustomView): Boolean {
@@ -275,5 +308,4 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         code += "}"
         return code
     }
-
 }

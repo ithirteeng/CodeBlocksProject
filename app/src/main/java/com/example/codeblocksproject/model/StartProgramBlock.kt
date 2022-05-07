@@ -19,6 +19,7 @@ class StartProgramBlock @JvmOverloads constructor(
     override val blockView = view
 
     override val pattern = ""
+    override var position=0
 
     override fun blockToCode(): String {
         return ""

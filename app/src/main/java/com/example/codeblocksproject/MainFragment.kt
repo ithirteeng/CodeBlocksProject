@@ -160,6 +160,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[endBlockID]!!.previousId = newBlock.blockView.id
         newBlock.nextId = endBlockID
 
+        connect(newBlock.blockView,lastBlock.blockView,binding.end)
+
         binding.mainWorkfield.addView(newBlock)
 
         blockMap[endBlockID]!!.blockView.y += lastBlock.blockView.height
@@ -193,9 +195,32 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             val currentBlock = blockMap[view.id]
             if (currentBlock!!.previousId != -1) {
                 blockMap[currentBlock.previousId]!!.nextId = currentBlock.nextId
+
+                val block=blockMap[currentBlock.previousId]!!.blockView
+
+                val set = ConstraintSet()
+                set.clone(binding.mainWorkfield)
+
+                set.clear(block.id, ConstraintSet.BOTTOM)
+                set.connect(block.id,ConstraintSet.BOTTOM,blockMap[currentBlock.nextId]!!.blockView.id,ConstraintSet.TOP)
+
+
+                set.applyTo(binding.mainWorkfield)
             }
             if (currentBlock.nextId != -1) {
                 blockMap[currentBlock.nextId]!!.previousId = currentBlock.previousId
+
+
+                val block=blockMap[currentBlock.nextId]!!.blockView
+
+                val set = ConstraintSet()
+                set.clone(binding.mainWorkfield)
+
+                set.clear(block.id, ConstraintSet.TOP)
+                set.connect(block.id,ConstraintSet.TOP,blockMap[currentBlock.previousId]!!.blockView.id,ConstraintSet.BOTTOM)
+
+
+                set.applyTo(binding.mainWorkfield)
             }
 
             disconnect(view)
@@ -289,8 +314,11 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private fun disconnect(currentView: View) {
         val set = ConstraintSet()
         set.clone(binding.mainWorkfield)
+
         set.clear(currentView.id, ConstraintSet.TOP)
         set.clear(currentView.id, ConstraintSet.BOTTOM)
+
+
         set.applyTo(binding.mainWorkfield)
     }
 
@@ -300,6 +328,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         set.connect(currentView.id, ConstraintSet.TOP, topView.id, ConstraintSet.BOTTOM)
         set.connect(currentView.id, ConstraintSet.BOTTOM, bottomView.id, ConstraintSet.TOP)
+        set.connect(topView.id,ConstraintSet.BOTTOM,currentView.id,ConstraintSet.TOP)
+        set.connect(bottomView.id, ConstraintSet.TOP, currentView.id, ConstraintSet.BOTTOM)
 
         set.applyTo(binding.mainWorkfield)
     }

@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.CustomView
@@ -35,6 +36,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private val workFieldRect = Rect()
     private var startBlockID = 0
     private var endBlockID = 0
+    private var freeId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -137,12 +139,12 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     override fun addBlock() {
-        createView()
+        createBlock()
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createView() {
+    private fun createBlock() {
         val newBlock = InitializationBlock(requireContext())
 
 
@@ -160,7 +162,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         binding.mainWorkfield.addView(newBlock)
 
-        blockMap[endBlockID]!!.blockView.y+=lastBlock.blockView.height
+        blockMap[endBlockID]!!.blockView.y += lastBlock.blockView.height
 
         newBlock.setOnTouchListener { view, event ->
             moveBlock(view, event)
@@ -174,7 +176,11 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         this.x = x
         this.y = y
         this.z = 1F
-        this.id = (2..1000000000).random()
+        this.id = freeId
+        freeId++
+        if (freeId == startBlockID || freeId == endBlockID) {
+            freeId++
+        }
     }
 
     private var x = 0F
@@ -192,21 +198,22 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 blockMap[currentBlock.nextId]!!.previousId = currentBlock.previousId
             }
 
+            disconnect(view)
             view.z = 2F
-            view.alpha=0.6F
+            view.alpha = 0.6F
         }
         if (event.action == MotionEvent.ACTION_MOVE) {
             view.x += event.x - x
             view.y += event.y - y
         }
         if (event.action == MotionEvent.ACTION_UP) {
-            view.alpha=1F
+            view.alpha = 1F
             view.z = 1F
 
             val currentBlock = blockMap[view.id]
 
             var block = blockMap[startBlockID]
-            var isBlockNested=false
+            var isBlockNested = false
 
             while (block!!.blockView.id != endBlockID) {
                 if (cross(block, currentBlock!!)) {
@@ -215,19 +222,23 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     currentBlock.previousId = block.blockView.id
                     currentBlock.nextId = temp
                     blockMap[temp]!!.previousId = currentBlock.blockView.id
+                    connect(
+                        view,
+                        blockMap[currentBlock.previousId]!!.blockView,
+                        blockMap[currentBlock.nextId]!!.blockView
+                    )
 
-                    isBlockNested=true
+                    isBlockNested = true
                     break
                 }
                 block = blockMap[block.nextId]!!
             }
 
-            val blockRect = Rect()
-            view.getHitRect(blockRect)
             if (!isBlockNested) {
                 deleteView(currentBlock!!)
             }
         }
+
         alignBlock(blockMap[startBlockID]!!)
         return true
     }
@@ -275,4 +286,21 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         return code
     }
 
+    private fun disconnect(currentView: View) {
+        val set = ConstraintSet()
+        set.clone(binding.mainWorkfield)
+        set.clear(currentView.id, ConstraintSet.TOP)
+        set.clear(currentView.id, ConstraintSet.BOTTOM)
+        set.applyTo(binding.mainWorkfield)
+    }
+
+    private fun connect(currentView: View, topView: View, bottomView: View) {
+        val set = ConstraintSet()
+        set.clone(binding.mainWorkfield)
+
+        set.connect(currentView.id, ConstraintSet.TOP, topView.id, ConstraintSet.BOTTOM)
+        set.connect(currentView.id, ConstraintSet.BOTTOM, bottomView.id, ConstraintSet.TOP)
+
+        set.applyTo(binding.mainWorkfield)
+    }
 }

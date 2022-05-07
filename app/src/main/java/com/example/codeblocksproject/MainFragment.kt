@@ -10,6 +10,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.CustomView
@@ -138,35 +140,45 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     override fun addBlock() {
         createView()
+    }
+
+    private fun makeConstraints(newBlock: CustomView) {
+        val nextId = blockMap[newBlock.nextId]?.blockView?.id
+        val previousId = blockMap[newBlock.previousId]?.blockView?.id
+
+        val set = ConstraintSet()
+        set.clone(ConstraintLayout(requireContext()))
+        set.connect(newBlock.blockView.id, ConstraintSet.TOP, previousId!!, ConstraintSet.TOP, 0)
+        set.connect(newBlock.blockView.id, ConstraintSet.BOTTOM, nextId!!, ConstraintSet.BOTTOM, 0)
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun createView() {
         val newBlock = InitializationBlock(requireContext())
-
-
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.setDefault(
-            lastBlock.blockView.x,
-            lastBlock.blockView.y + lastBlock.blockView.height
+            lastBlock.blockView.x - resources.getDimension(R.dimen.workfieldPadding),
+            lastBlock.blockView.y + lastBlock.blockView.height - resources.getDimension(R.dimen.workfieldPadding)
         )
 
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id
+
 
         blockMap[endBlockID]!!.previousId = newBlock.blockView.id
         newBlock.nextId = endBlockID
 
         binding.mainWorkfield.addView(newBlock)
 
-        blockMap[endBlockID]!!.blockView.y+=lastBlock.blockView.height
+        blockMap[endBlockID]!!.blockView.y += lastBlock.blockView.height
 
         newBlock.setOnTouchListener { view, event ->
             moveBlock(view, event)
         }
 
         blockList.add(newBlock)
+        //makeConstraints(newBlock)
         blockMap[newBlock.blockView.id] = newBlock
     }
 
@@ -174,7 +186,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         this.x = x
         this.y = y
         this.z = 1F
-        this.id = (2..1000000000).random()
+        this.id = (2..Int.MAX_VALUE).random()
     }
 
     private var x = 0F
@@ -193,20 +205,20 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             }
 
             view.z = 2F
-            view.alpha=0.6F
+            view.alpha = 0.6F
         }
         if (event.action == MotionEvent.ACTION_MOVE) {
             view.x += event.x - x
             view.y += event.y - y
         }
         if (event.action == MotionEvent.ACTION_UP) {
-            view.alpha=1F
+            view.alpha = 1F
             view.z = 1F
 
             val currentBlock = blockMap[view.id]
 
             var block = blockMap[startBlockID]
-            var isBlockNested=false
+            var isBlockNested = false
 
             while (block!!.blockView.id != endBlockID) {
                 if (cross(block, currentBlock!!)) {
@@ -216,7 +228,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     currentBlock.nextId = temp
                     blockMap[temp]!!.previousId = currentBlock.blockView.id
 
-                    isBlockNested=true
+                    isBlockNested = true
                     break
                 }
                 block = blockMap[block.nextId]!!

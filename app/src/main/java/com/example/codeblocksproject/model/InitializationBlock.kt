@@ -20,6 +20,7 @@ class InitializationBlock @JvmOverloads constructor(
 
     override val blockType = BlockTypes.INIT_BLOCK_TYPE
     override val pattern = "var <name> : <type> = <value>;"
+    override var position=0
     override fun blockToCode(): String {
         val varName = blockView.findViewById<EditText>(R.id.varName).text.toString()
         val varValue = blockView.findViewById<EditText>(R.id.varValue).text.toString()

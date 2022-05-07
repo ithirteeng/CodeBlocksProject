@@ -19,6 +19,7 @@ class EndProgramBlock @JvmOverloads constructor(
     override val blockView: View = view
     //TODO(change to end program layout)
 
+    override var position=0
     override val pattern = ""
 
     override fun blockToCode(): String {

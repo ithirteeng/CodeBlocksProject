@@ -21,6 +21,7 @@ class WhileBlock @JvmOverloads constructor(
     override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
     override val pattern = "var <name> : <type> = <value>;"
     //TODO():Change to output pattern
+    override var position=0
     override fun blockToCode(): String {
         return ""
     }

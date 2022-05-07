@@ -10,5 +10,6 @@ interface CustomView {
     val blockType: String
     val blockView:View
     val pattern:String
+    var position:Int
     fun blockToCode():String
 }

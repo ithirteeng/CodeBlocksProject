@@ -18,10 +18,10 @@ class StartProgramBlock @JvmOverloads constructor(
     override val blockType = BlockTypes.START_PROGRAM_BLOCK_TYPE
     override val blockView = view
 
-    override val pattern = ""
+    override val pattern = "{"
     override var position=0
 
     override fun blockToCode(): String {
-        return ""
+        return pattern
     }
 }

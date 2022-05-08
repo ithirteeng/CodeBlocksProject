@@ -256,7 +256,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             DragEvent.ACTION_DRAG_STARTED -> {
                 binding.mainWorkfield.removeView(draggingBlock.blockView)
                 removedBlocks.add(draggingBlock)
-                removeNestedView(draggingBlock)
+                if(draggingBlock.isNestingPossible)
+                    removeNestedView(draggingBlock)
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
                 if (view == binding.mainWorkfield) {
@@ -351,9 +352,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun blocksToCode(): String {
-        var code = "{\n"
+        var code=""
         var currentBlock = blockMap[startBlockID]
-
         while (currentBlock!!.blockView.id != endBlockID) {
             code += currentBlock.blockToCode() + "\n"
             currentBlock = blockMap[currentBlock.nextId]!!

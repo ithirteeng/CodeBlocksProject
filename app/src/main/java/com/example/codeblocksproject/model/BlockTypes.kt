@@ -10,5 +10,7 @@ class BlockTypes {
         const val INPUT_BLOCK_TYPE = "input"
         const val IF_BLOCK_TYPE = "if"
         const val ELSE_BLOCK_TYPE = "else"
+        const val BEGIN_BLOCK_TYPE = "begin"
+        const val END_BLOCK_TYPE = "end"
     }
 }

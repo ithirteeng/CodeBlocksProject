@@ -30,5 +30,4 @@ class InitializationBlock @JvmOverloads constructor(
         return pattern.replace("<name>", varName).replace("<value>", varValue)
     }
 
-
 }

@@ -1,26 +1,29 @@
 package com.example.codeblocksproject.model
 
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.codeblocksproject.R
 
-class BeginBlock: CustomView {
-    override val isNestingPossible: Boolean
-        get() = TODO("Not yet implemented")
-    override var previousId: Int
-        get() = TODO("Not yet implemented")
-        set(value) {}
-    override var nextId: Int
-        get() = TODO("Not yet implemented")
-        set(value) {}
-    override val blockType: String
-        get() = TODO("Not yet implemented")
-    override val blockView: View
-        get() = TODO("Not yet implemented")
-    override val pattern: String
-        get() = TODO("Not yet implemented")
-    override var position=0
+class BeginBlock @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : CustomView, ConstraintLayout(context, attrs) {
+    override val isNestingPossible = false
+    override var previousId = -1
+    override var nextId = -1
+    override val blockType = BlockTypes.BEGIN_BLOCK_TYPE
+    override val blockView: View =
+        LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
+
+    //TODO(Change view to begin)
+    override val pattern = "{"
+    override var position = 0
 
     override fun blockToCode(): String {
-        TODO("Not yet implemented")
+        return pattern
     }
 
 }

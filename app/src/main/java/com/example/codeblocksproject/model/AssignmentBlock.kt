@@ -18,7 +18,7 @@ class AssignmentBlock @JvmOverloads constructor(
     override var nextId: Int = -1
     override val blockView: View =
         LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-    //TODO(Change view)
+    //TODO(Change view to assign)
 
     override val blockType = BlockTypes.ASSIGN_BLOCK_TYPE
     override val pattern = "<name> = <value>;"

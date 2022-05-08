@@ -224,10 +224,39 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private lateinit var draggingBlock: CustomView
     private var location = MyPoint(0f, 0f)
 
+    private fun removeNestedView(parentBlock: CustomView) {
+        var block = blockMap[parentBlock.nextId]
+        binding.mainWorkfield.removeView(block!!.blockView)
+        removedBlocks.add(block)
+        var operatorBracketsCount = 0
+        if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+            operatorBracketsCount++
+        }
+        while (operatorBracketsCount != 0) {
+            block = blockMap[block!!.nextId]
+            binding.mainWorkfield.removeView(block!!.blockView)
+            removedBlocks.add(block)
+            if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE)
+                operatorBracketsCount++
+            if (block.blockType == BlockTypes.END_BLOCK_TYPE)
+                operatorBracketsCount--
+        }
+        if (blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            block = blockMap[block.nextId]!!
+            binding.mainWorkfield.removeView(block.blockView)
+            removedBlocks.add(block)
+            removeNestedView(block)
+        }
+    }
+
+    private var removedBlocks: MutableList<CustomView> = mutableListOf()
+
     private fun choiceDragListener() = View.OnDragListener { view, event ->
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 binding.mainWorkfield.removeView(draggingBlock.blockView)
+                removedBlocks.add(draggingBlock)
+                removeNestedView(draggingBlock)
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
                 if (view == binding.mainWorkfield) {
@@ -239,7 +268,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 if (view == binding.mainWorkfield) {
                     draggingBlock.blockView.z = 1F
 
-                    val currentBlock = blockMap[draggingBlock.blockView.id]!!
+                    val currentBlock = draggingBlock
                     var block = blockMap[startBlockID]
 
                     var isBlockNested = false
@@ -249,20 +278,25 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             val temp = block.nextId
                             block.nextId = currentBlock.blockView.id
                             currentBlock.previousId = block.blockView.id
-                            currentBlock.nextId = temp
-                            blockMap[temp]!!.previousId = currentBlock.blockView.id
+                            removedBlocks[removedBlocks.size-1].nextId=temp
+                            blockMap[temp]!!.previousId = removedBlocks[removedBlocks.size-1].blockView.id
 
                             isBlockNested = true
                             currentBlock.position = block.position + 1
+                            for (i in 1 until removedBlocks.size){
+                                removedBlocks[i].position=removedBlocks[i-1].position+1
+                            }
 
-                            binding.mainWorkfield.removeView(currentBlock.blockView)
-                            binding.mainWorkfield.addView(
-                                currentBlock.blockView,
-                                currentBlock.position
-                            )
+                            for (removedBlock in removedBlocks) {
+                                binding.mainWorkfield.removeView(removedBlock.blockView)
+                                binding.mainWorkfield.addView(
+                                    removedBlock.blockView,
+                                    removedBlock.position
+                                )
+                            }
 
                             var counter = 1
-                            var tempBlock = currentBlock
+                            var tempBlock = removedBlocks[removedBlocks.size-1]
                             while (tempBlock.blockView.id != endBlockID) {
                                 tempBlock = blockMap[tempBlock.nextId]!!
                                 tempBlock.position++
@@ -283,14 +317,24 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                         block = blockMap[block.nextId]!!
                     }
                     if (!isBlockNested || draggingBlock.position > blockMap[endBlockID]!!.position) {
-                        deleteView(currentBlock)
+                        for (removedBlock in removedBlocks) {
+                            deleteView(removedBlock)
+                        }
                     }
 
                 } else {
-                    deleteView(draggingBlock)
+                    for (block in removedBlocks) {
+                        deleteView(block)
+                    }
                 }
             }
-            DragEvent.ACTION_DRAG_ENDED -> draggingBlock.blockView.visibility = View.VISIBLE
+            DragEvent.ACTION_DRAG_ENDED -> {
+                for (block in removedBlocks) {
+                    block.blockView.visibility = View.VISIBLE
+                }
+
+                removedBlocks.clear()
+            }
         }
         true
     }

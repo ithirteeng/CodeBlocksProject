@@ -6,9 +6,11 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.view.View.DragShadowBuilder
 import android.view.View.OnTouchListener
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
@@ -246,6 +248,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
                     while (block!!.blockView.id != endBlockID) {
                         if (isCrossed(location, block)) {
+
                             val temp = block.nextId
                             block.nextId = currentBlock.blockView.id
                             currentBlock.previousId = block.blockView.id
@@ -290,7 +293,12 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     deleteView(draggingBlock)
                 }
             }
-            DragEvent.ACTION_DRAG_ENDED -> draggingBlock.blockView.visibility = View.VISIBLE
+            DragEvent.ACTION_DRAG_ENDED -> {
+                draggingBlock.blockView.visibility = View.VISIBLE
+            }
+            DragEvent.ACTION_DRAG_EXITED -> {
+                Log.e("####", "exited")
+            }
         }
         true
     }
@@ -306,6 +314,15 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
     }
 
+    private fun checked(view: View): Int {
+        for (block in blockList) {
+            if (block.blockView == view) {
+                return block.blockView.id
+            }
+        }
+        return -1
+    }
+
     private fun blocksToCode(): String {
         var code = "{\n"
         var currentBlock = blockMap[startBlockID]
@@ -317,4 +334,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         code += "}"
         return code
     }
+
+
+
 }

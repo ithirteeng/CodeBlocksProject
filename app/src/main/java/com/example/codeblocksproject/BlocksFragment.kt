@@ -105,6 +105,4 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     private fun getColor(id: Int, context: Context): Int {
         return ContextCompat.getColor(context, id)
     }
-
-
 }

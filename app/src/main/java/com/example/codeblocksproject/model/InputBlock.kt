@@ -7,7 +7,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
-class OutputBlock @JvmOverloads constructor(
+class InputBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : CustomView, ConstraintLayout(context, attrs) {
@@ -16,11 +16,11 @@ class OutputBlock @JvmOverloads constructor(
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View = LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-    //TODO:Change to output block
+    //TODO: Change to input block
 
-    override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
+    override val blockType = BlockTypes.INPUT_BLOCK_TYPE
     override val pattern = "var <name> : <type> = <value>;"
-    //TODO:Change to output pattern
+    //TODO: Change to input pattern
     override var position=0
     override fun blockToCode(): String {
         return ""

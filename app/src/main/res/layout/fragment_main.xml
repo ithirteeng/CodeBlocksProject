@@ -99,7 +99,8 @@
             app:layout_constraintBottom_toTopOf="@+id/bottomButtonsBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/drawerOutsideButton"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingEnd="20dp">
 
             <LinearLayout
                 android:background="@drawable/workfield_borders"

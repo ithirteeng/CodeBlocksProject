@@ -15,14 +15,16 @@ class OutputBlock @JvmOverloads constructor(
     override val isNestingPossible = false
     override var previousId: Int = -1
     override var nextId: Int = -1
-    override val blockView: View = LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
+    override val blockView: View =
+        LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
     //TODO:Change to output block
 
     override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
-    override val pattern = "var <name> : <type> = <value>;"
+    override val pattern = ""
+
     //TODO:Change to output pattern
-    override var position=0
+    override var position = 0
     override fun blockToCode(): String {
-        return ""
+        return pattern
     }
 }

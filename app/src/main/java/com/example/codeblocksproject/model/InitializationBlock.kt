@@ -1,11 +1,9 @@
 package com.example.codeblocksproject.model
 
 import android.content.Context
-import android.opengl.Visibility
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
 import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R

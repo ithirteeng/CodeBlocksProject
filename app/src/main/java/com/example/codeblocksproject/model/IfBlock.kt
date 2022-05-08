@@ -23,6 +23,6 @@ class IfBlock @JvmOverloads constructor(
     //TODO: Change to if pattern
     override var position=0
     override fun blockToCode(): String {
-        return ""
+        return pattern
     }
 }

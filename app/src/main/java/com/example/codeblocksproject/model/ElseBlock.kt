@@ -19,10 +19,9 @@ class ElseBlock @JvmOverloads constructor(
     //TODO: Change to else block
 
     override val blockType = BlockTypes.ELSE_BLOCK_TYPE
-    override val pattern = ""
-    //TODO: Change to else pattern
+    override val pattern = "else"
     override var position=0
     override fun blockToCode(): String {
-        return ""
+        return pattern
     }
 }

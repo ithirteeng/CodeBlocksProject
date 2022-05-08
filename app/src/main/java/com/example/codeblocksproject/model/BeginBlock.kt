@@ -18,7 +18,7 @@ class BeginBlock @JvmOverloads constructor(
     override val blockView: View =
         LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
 
-    //TODO(Change view to begin)
+    //TODO: Change view to begin
     override val pattern = "{"
     override var position = 0
 

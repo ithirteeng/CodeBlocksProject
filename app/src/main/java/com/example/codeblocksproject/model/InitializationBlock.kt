@@ -21,7 +21,7 @@ class InitializationBlock @JvmOverloads constructor(
     override val blockView: View = LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
 
     override val blockType = BlockTypes.INIT_BLOCK_TYPE
-    override val pattern = "var <name> : <type> = <value>;"
+    override val pattern = "var <name> : Int = <value>;"
     override var position=0
     override fun blockToCode(): String {
         val varName = blockView.findViewById<EditText>(R.id.varName).text.toString()

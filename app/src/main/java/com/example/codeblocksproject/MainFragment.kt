@@ -87,8 +87,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun blocksButtonEvent(view: View) {
-        val button = view.findViewById<Button>(R.id.blocksButton)
-        button.setOnClickListener {
+        binding.blocksButton.setOnClickListener {
             if (consoleFragment.isClosedStart) {
                 if (blocksFragment.isClosedBlocks) {
                     blocksFragment.isClosedBlocks = false
@@ -101,8 +100,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         kotlin.run {
-                            button.visibility = View.GONE
-                            view.findViewById<Button>(R.id.startButton).visibility = View.GONE
+                            binding.blocksButton.visibility = View.GONE
+                            binding.startButton.visibility = View.GONE
                         }
                     }, 350)
                 }
@@ -111,8 +110,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun startButtonEvent(view: View) {
-        val button = view.findViewById<Button>(R.id.startButton)
-        button.setOnClickListener {
+        binding.startButton.setOnClickListener {
             if (blocksFragment.isClosedBlocks) {
                 if (consoleFragment.isClosedStart) {
                     consoleFragment.isClosedStart = false
@@ -125,18 +123,19 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         kotlin.run {
-                            button.visibility = View.GONE
-                            view.findViewById<Button>(R.id.blocksButton).visibility = View.GONE
+                            binding.startButton.visibility = View.GONE
+                            binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
+                    consoleFragment.checkCode(blocksToCode())
                 }
             }
         }
     }
 
     override fun displayButtons() {
-        view?.findViewById<Button>(R.id.startButton)?.visibility = View.VISIBLE
-        view?.findViewById<Button>(R.id.blocksButton)?.visibility = View.VISIBLE
+        binding.startButton.visibility = View.VISIBLE
+        binding.blocksButton.visibility = View.VISIBLE
     }
 
     override fun addBlock() {
@@ -310,12 +309,12 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
     }
 
-    fun blocksToCode(): String {
-        var code = "{"
+    private fun blocksToCode(): String {
+        var code = "{\n"
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
-            code += currentBlock.blockToCode()
+            code += currentBlock.blockToCode()+"\n"
             currentBlock = blockMap[currentBlock.nextId]!!
         }
         code += "}"

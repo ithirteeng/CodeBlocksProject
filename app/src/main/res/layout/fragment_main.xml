@@ -92,6 +92,7 @@
 
         <ScrollView
             android:id="@+id/scrollView"
+            android:background="@drawable/workfield_borders"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/workfieldMargin"
@@ -100,15 +101,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/drawerOutsideButton"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingEnd="20dp">
+            android:paddingStart="@dimen/workfieldPadding"
+            android:paddingTop="@dimen/workfieldPadding"
+            android:paddingEnd="20dp"
+            android:paddingBottom="5dp"
+            tools:ignore="RtlSymmetry">
 
             <LinearLayout
-                android:background="@drawable/workfield_borders"
                 android:id="@+id/mainWorkfield"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/workfieldPadding">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/start"

@@ -148,9 +148,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         val newBlock = InitializationBlock(requireContext())
 
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
-        newBlock.setDefault(
-            lastBlock.blockView.x - resources.getDimension(R.dimen.workfieldPadding),
-        )
+        newBlock.setDefault(lastBlock.blockView.x)
 
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id

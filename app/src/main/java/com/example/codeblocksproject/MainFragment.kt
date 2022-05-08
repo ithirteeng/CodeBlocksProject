@@ -9,7 +9,6 @@ import android.os.Looper
 import android.view.*
 import android.view.View.DragShadowBuilder
 import android.view.View.OnTouchListener
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
@@ -40,7 +39,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         super.onViewCreated(view, savedInstanceState)
         val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
         ui.setupAllUIFunctions(view)
-        setupOtherFragmentsFunctions(view)
+        setupOtherFragmentsFunctions()
         binding.mainWorkfield.setOnDragListener(choiceDragListener())
     }
 
@@ -70,10 +69,10 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         return binding.root
     }
 
-    private fun setupOtherFragmentsFunctions(view: View) {
+    private fun setupOtherFragmentsFunctions() {
         addingFragments()
-        blocksButtonEvent(view)
-        startButtonEvent(view)
+        blocksButtonEvent()
+        startButtonEvent()
     }
 
     private fun addingFragments() {
@@ -86,7 +85,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         transaction.commit()
     }
 
-    private fun blocksButtonEvent(view: View) {
+    private fun blocksButtonEvent() {
         binding.blocksButton.setOnClickListener {
             if (consoleFragment.isClosedStart) {
                 if (blocksFragment.isClosedBlocks) {
@@ -109,7 +108,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
     }
 
-    private fun startButtonEvent(view: View) {
+    private fun startButtonEvent() {
         binding.startButton.setOnClickListener {
             if (blocksFragment.isClosedBlocks) {
                 if (consoleFragment.isClosedStart) {
@@ -214,8 +213,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             view.visibility = View.INVISIBLE
             val data = ClipData.newPlainText("", "")
             val shadowBuilder = DragShadowBuilder(view)
-            view.startDrag(data, shadowBuilder, view, 0)
-            draggingBlock = view as CustomView
+            view.startDragAndDrop(data, shadowBuilder, view, 0)
+            draggingBlock = blockMap[view.id]!!
             true
         } else {
             false
@@ -312,7 +311,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
-            code += currentBlock.blockToCode()+"\n"
+            code += currentBlock.blockToCode() + "\n"
             currentBlock = blockMap[currentBlock.nextId]!!
         }
         code += "}"

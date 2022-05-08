@@ -7,12 +7,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.codeblocksproject.databinding.FragmentBlocksBinding
 import com.example.codeblocksproject.databinding.FragmentConsoleBinding
 
 class ConsoleFragment : Fragment(R.layout.fragment_console) {
@@ -23,12 +19,12 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        closeSlidingFragment(view)
+        closeSlidingFragment()
 
     }
 
-    fun checkCode(s:String){
-        binding.textFieldView.text=s
+    fun checkCode(s: String) {
+        binding.textFieldView.text = s
     }
 
     override fun onCreateView(
@@ -40,7 +36,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         return binding.root
     }
 
-    private fun closeSlidingFragment(view: View) {
+    private fun closeSlidingFragment() {
         binding.closeButton.setOnClickListener {
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
@@ -107,7 +103,12 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         }
     }
 
-    private fun changeColor(backgroundColor: Int, textColor: Int, buttonsColor: Int, context: Context) {
+    private fun changeColor(
+        backgroundColor: Int,
+        textColor: Int,
+        buttonsColor: Int,
+        context: Context
+    ) {
         binding.textFieldView.setBackgroundColor(getColor(backgroundColor, context))
         binding.textFieldView.setTextColor(getColor(textColor, context))
 

@@ -7,26 +7,21 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentBlocksBinding
-import com.example.codeblocksproject.databinding.FragmentMainBinding
-import com.example.codeblocksproject.model.EndProgramBlock
-import com.example.codeblocksproject.model.StartProgramBlock
 
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     var isClosedBlocks = true
     private lateinit var binding: FragmentBlocksBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        closeSlidingFragment(view)
-        hui(view)
+        closeSlidingFragment()
+        hui()
     }
 
-    private fun hui(view: View){
+    private fun hui() {
+        //TODO():Rename
         binding.initializationBlock.setOnClickListener {
             (parentFragment as MainFragment).addBlock()
         }
@@ -41,7 +36,7 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
         return binding.root
     }
 
-    private fun closeSlidingFragment(view: View) {
+    private fun closeSlidingFragment() {
         binding.closeButton.setOnClickListener {
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()

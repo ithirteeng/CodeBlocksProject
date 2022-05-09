@@ -30,5 +30,9 @@ class AssignmentBlock @JvmOverloads constructor(
         return pattern.replace("<name>", varName).replace("<value>", varValue)
     }
 
+    override fun makeEditTextsDisabled() {
+        TODO("Not yet implemented")
+    }
+
 
 }

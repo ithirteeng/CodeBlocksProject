@@ -25,5 +25,8 @@ class BeginBlock @JvmOverloads constructor(
     override fun blockToCode(): String {
         return pattern
     }
+    override fun makeEditTextsDisabled() {
+        TODO("Not yet implemented")
+    }
 
 }

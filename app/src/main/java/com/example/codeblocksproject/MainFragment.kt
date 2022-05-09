@@ -2,13 +2,18 @@ package com.example.codeblocksproject
 
 import android.annotation.SuppressLint
 import android.content.ClipData
+import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.view.View.DragShadowBuilder
 import android.view.View.OnTouchListener
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
@@ -139,6 +144,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     override fun addBlock() {
         createBlock()
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -160,6 +166,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
 
         newBlock.setOnTouchListener(choiceTouchListener())
+        newBlock.setOnDragListener(choiceDragListener())
 
         blockList.add(newBlock)
         blockMap[newBlock.blockView.id] = newBlock
@@ -187,6 +194,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceTouchListener() = OnTouchListener { view, event ->
         if (event.action == MotionEvent.ACTION_DOWN) {
+            makeAllEditTextsDisabled()
             x = event.x
             y = event.y
             val currentBlock = blockMap[view.id]
@@ -223,40 +231,12 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private lateinit var draggingBlock: CustomView
     private var location = MyPoint(0f, 0f)
 
-    private fun removeNestedView(parentBlock: CustomView) {
-        var block = blockMap[parentBlock.nextId]
-        binding.mainWorkfield.removeView(block!!.blockView)
-        removedBlocks.add(block)
-        var operatorBracketsCount = 0
-        if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
-            operatorBracketsCount++
-        }
-        while (operatorBracketsCount != 0) {
-            block = blockMap[block!!.nextId]
-            binding.mainWorkfield.removeView(block!!.blockView)
-            removedBlocks.add(block)
-            if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE)
-                operatorBracketsCount++
-            if (block.blockType == BlockTypes.END_BLOCK_TYPE)
-                operatorBracketsCount--
-        }
-        if (blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
-            block = blockMap[block.nextId]!!
-            binding.mainWorkfield.removeView(block.blockView)
-            removedBlocks.add(block)
-            removeNestedView(block)
-        }
-    }
-
-    private var removedBlocks: MutableList<CustomView> = mutableListOf()
-
     private fun choiceDragListener() = View.OnDragListener { view, event ->
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-                binding.mainWorkfield.removeView(draggingBlock.blockView)
-                removedBlocks.add(draggingBlock)
-                if (draggingBlock.isNestingPossible)
-                    removeNestedView(draggingBlock)
+                val imm: InputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(draggingBlock.blockView.windowToken, 0)
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
                 if (view == binding.mainWorkfield) {
@@ -265,80 +245,64 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DROP -> {
-                if (view == binding.mainWorkfield) {
-                    draggingBlock.blockView.z = 1F
+                if (blockMap[view.id] != null) {
+                    if (view.id != endBlockID) {
+                        draggingBlock.blockView.z = 1F
+                        val currentBlock = draggingBlock
+                        var block = view as CustomView
 
-                    val currentBlock = draggingBlock
-                    var block = blockMap[startBlockID]
+                        val temp = block.nextId
+                        block.nextId = currentBlock.blockView.id
+                        currentBlock.previousId = block.blockView.id
+                        currentBlock.nextId = temp
+                        blockMap[temp]!!.previousId = currentBlock.blockView.id
 
-                    var isBlockNested = false
+                        currentBlock.position = block.position + 1
 
-                    while (block!!.blockView.id != endBlockID) {
-                        if (isCrossed(location, block)) {
-                            val temp = block.nextId
-                            block.nextId = currentBlock.blockView.id
-                            currentBlock.previousId = block.blockView.id
-                            removedBlocks[removedBlocks.size - 1].nextId = temp
-                            blockMap[temp]!!.previousId =
-                                removedBlocks[removedBlocks.size - 1].blockView.id
+                        binding.mainWorkfield.removeView(currentBlock.blockView)
+                        binding.mainWorkfield.addView(
+                            currentBlock.blockView,
+                            currentBlock.position
+                        )
 
-                            isBlockNested = true
-                            currentBlock.position = block.position + 1
-                            for (i in 1 until removedBlocks.size) {
-                                removedBlocks[i].position = removedBlocks[i - 1].position + 1
-                            }
-
-                            for (removedBlock in removedBlocks) {
-                                binding.mainWorkfield.removeView(removedBlock.blockView)
-                                binding.mainWorkfield.addView(
-                                    removedBlock.blockView,
-                                    removedBlock.position
-                                )
-                            }
-
-                            var counter = 1
-                            var tempBlock = removedBlocks[removedBlocks.size - 1]
-                            while (tempBlock.blockView.id != endBlockID) {
-                                tempBlock = blockMap[tempBlock.nextId]!!
-                                tempBlock.position++
-                                counter++
-                            }
-
-                            val v = blockMap[currentBlock.previousId]!!.blockView
-                            val diff = abs(currentBlock.blockView.height - v.height)
-
-
-                            counter--
-                            draggingBlock.blockView.y =
-                                v.y + currentBlock.blockView.height * counter + binding.end.height + diff
-                            draggingBlock.blockView.x = v.x
-
-                            break
+                        var counter = 1
+                        var tempBlock = currentBlock
+                        while (tempBlock.blockView.id != endBlockID) {
+                            tempBlock = blockMap[tempBlock.nextId]!!
+                            tempBlock.position++
+                            counter++
                         }
-                        block = blockMap[block.nextId]!!
-                    }
-                    if (!isBlockNested || draggingBlock.position > blockMap[endBlockID]!!.position) {
-                        for (removedBlock in removedBlocks) {
-                            deleteView(removedBlock)
-                        }
-                    }
 
-                } else {
-                    for (block in removedBlocks) {
-                        deleteView(block)
+                        val v = block.blockView
+                        val diff = abs(currentBlock.blockView.height - v.height)
+
+
+                        counter--
+                        draggingBlock.blockView.y =
+                            v.y + currentBlock.blockView.height * counter + binding.end.height + diff
+                        draggingBlock.blockView.x = v.x
+
+
+                    } else {
+                        deleteView(draggingBlock)
                     }
+                } else if (view == binding.mainWorkfield) {
+                    deleteView(draggingBlock)
                 }
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                for (block in removedBlocks) {
-                    block.blockView.visibility = View.VISIBLE
+                draggingBlock.blockView.post {
+                    draggingBlock.blockView.visibility = View.VISIBLE
                 }
-
-                removedBlocks.clear()
+            }
+            DragEvent.ACTION_DRAG_EXITED -> {
+                Log.e("####", "exited")
+                binding.mainWorkfield.removeView(draggingBlock.blockView)
             }
         }
         true
     }
+
 
     private fun isCrossed(point: MyPoint, parent: CustomView): Boolean {
         val x = parent.blockView.x
@@ -351,9 +315,17 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
     }
 
+    private fun makeAllEditTextsDisabled() {
+        for (block in blockList) {
+            if (block.blockView.id != endBlockID && block.blockView.id != startBlockID)
+                block.makeEditTextsDisabled()
+        }
+    }
+
     private fun blocksToCode(): String {
-        var code = ""
+        var code = "{\n"
         var currentBlock = blockMap[startBlockID]
+
         while (currentBlock!!.blockView.id != endBlockID) {
             code += currentBlock.blockToCode() + "\n"
             currentBlock = blockMap[currentBlock.nextId]!!
@@ -361,4 +333,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         code += "}"
         return code
     }
+
+
 }

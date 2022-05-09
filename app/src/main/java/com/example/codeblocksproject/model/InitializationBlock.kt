@@ -17,7 +17,6 @@ class InitializationBlock @JvmOverloads constructor(
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View = LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-
     override val blockType = BlockTypes.INIT_BLOCK_TYPE
     override val pattern = "var <name> : Int = <value>;"
     override var position=0

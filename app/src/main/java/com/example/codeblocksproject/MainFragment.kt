@@ -139,7 +139,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     override fun addBlock() {
         createBlock()
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -256,7 +255,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             DragEvent.ACTION_DRAG_STARTED -> {
                 binding.mainWorkfield.removeView(draggingBlock.blockView)
                 removedBlocks.add(draggingBlock)
-                if(draggingBlock.isNestingPossible)
+                if (draggingBlock.isNestingPossible)
                     removeNestedView(draggingBlock)
             }
             DragEvent.ACTION_DRAG_LOCATION -> {
@@ -279,13 +278,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             val temp = block.nextId
                             block.nextId = currentBlock.blockView.id
                             currentBlock.previousId = block.blockView.id
-                            removedBlocks[removedBlocks.size-1].nextId=temp
-                            blockMap[temp]!!.previousId = removedBlocks[removedBlocks.size-1].blockView.id
+                            removedBlocks[removedBlocks.size - 1].nextId = temp
+                            blockMap[temp]!!.previousId =
+                                removedBlocks[removedBlocks.size - 1].blockView.id
 
                             isBlockNested = true
                             currentBlock.position = block.position + 1
-                            for (i in 1 until removedBlocks.size){
-                                removedBlocks[i].position=removedBlocks[i-1].position+1
+                            for (i in 1 until removedBlocks.size) {
+                                removedBlocks[i].position = removedBlocks[i - 1].position + 1
                             }
 
                             for (removedBlock in removedBlocks) {
@@ -297,7 +297,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             }
 
                             var counter = 1
-                            var tempBlock = removedBlocks[removedBlocks.size-1]
+                            var tempBlock = removedBlocks[removedBlocks.size - 1]
                             while (tempBlock.blockView.id != endBlockID) {
                                 tempBlock = blockMap[tempBlock.nextId]!!
                                 tempBlock.position++
@@ -352,7 +352,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun blocksToCode(): String {
-        var code=""
+        var code = ""
         var currentBlock = blockMap[startBlockID]
         while (currentBlock!!.blockView.id != endBlockID) {
             code += currentBlock.blockToCode() + "\n"

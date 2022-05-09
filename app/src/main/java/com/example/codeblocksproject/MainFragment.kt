@@ -11,9 +11,8 @@ import android.util.Log
 import android.view.*
 import android.view.View.DragShadowBuilder
 import android.view.View.OnTouchListener
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
@@ -46,6 +45,21 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         ui.setupAllUIFunctions(view)
         setupOtherFragmentsFunctions()
         binding.mainWorkfield.setOnDragListener(choiceDragListener())
+        binding.drawerOutsideButton.setOnDragListener(choiceDragListener())
+        binding.blocksButton.setOnDragListener(choiceDragListener())
+        binding.startButton.setOnDragListener(choiceDragListener())
+        binding.container.setOnDragListener(choiceDragListener())
+
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            binding.root.getWindowVisibleDisplayFrame(r)
+            val screenHeight: Int = binding.root.rootView.height
+
+            val keypadHeight = screenHeight - r.bottom
+            if (keypadHeight > screenHeight * 0.15) {
+                Log.i("keyboard", "open")
+            }
+        }
     }
 
     override fun onCreateView(
@@ -61,6 +75,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
         startBlock.position = 0
+        startBlock.blockView.setOnDragListener(choiceDragListener())
 
         val endBlock = EndProgramBlock(binding.end, requireContext())
         endBlockID = binding.end.id
@@ -286,7 +301,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     } else {
                         deleteView(draggingBlock)
                     }
-                } else if (view == binding.mainWorkfield) {
+                } else {
                     deleteView(draggingBlock)
                 }
             }
@@ -296,7 +311,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DRAG_EXITED -> {
-                Log.e("####", "exited")
                 binding.mainWorkfield.removeView(draggingBlock.blockView)
             }
         }

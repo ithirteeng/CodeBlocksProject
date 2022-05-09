@@ -22,4 +22,7 @@ class EndBlock: CustomView {
     override fun blockToCode(): String {
         TODO("Not yet implemented")
     }
+    override fun makeEditTextsDisabled() {
+        TODO("Not yet implemented")
+    }
 }

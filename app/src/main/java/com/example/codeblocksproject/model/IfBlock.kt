@@ -25,4 +25,7 @@ class IfBlock @JvmOverloads constructor(
     override fun blockToCode(): String {
         return ""
     }
+    override fun makeEditTextsDisabled() {
+        TODO("Not yet implemented")
+    }
 }

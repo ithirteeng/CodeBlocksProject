@@ -17,11 +17,30 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:text="@string/varText"
-        app:layout_constraintBottom_toBottomOf="@+id/varName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
+
+
+    <TextView
+        android:id="@+id/nameText"
+        style="@style/blocksTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:background="@drawable/textfields_background"
+        android:hint="@string/nameTextHint"
+        android:padding="2dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <EditText
         android:id="@+id/varName"
@@ -31,15 +50,18 @@
         android:autofillHints=""
         android:background="@drawable/textfields_background"
         android:hint="@string/nameTextHint"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:padding="2dp"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/equalTextView"
@@ -56,6 +78,25 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
+    <TextView
+        android:id="@+id/valueText"
+        style="@style/blocksTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:background="@drawable/textfields_background"
+        android:hint="@string/valueTextHint"
+        android:padding="2dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+
     <EditText
         android:id="@+id/varValue"
         style="@style/blocksTextStyle"
@@ -64,8 +105,10 @@
         android:autofillHints=""
         android:background="@drawable/textfields_background"
         android:hint="@string/valueTextHint"
+        android:imeOptions="actionDone"
         android:inputType="number"
         android:padding="2dp"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"

@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.*
+import android.view.DragEvent
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.View.OnTouchListener
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
@@ -43,11 +46,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
         ui.setupAllUIFunctions(view)
         setupOtherFragmentsFunctions()
-        binding.mainWorkfield.setOnDragListener(choiceDragListener())
-        binding.drawerOutsideButton.setOnDragListener(choiceDragListener())
-        binding.blocksButton.setOnDragListener(choiceDragListener())
-        binding.startButton.setOnDragListener(choiceDragListener())
-        binding.container.setOnDragListener(choiceDragListener())
+        setupAllDragListeners()
+        binding.zoomLayout.zoomTo(4f, true)
 
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()
@@ -86,6 +86,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         endBlock.previousId = startBlockID
 
         return binding.root
+    }
+
+    private fun setupAllDragListeners() {
+        binding.mainWorkfield.setOnDragListener(choiceDragListener())
+        binding.drawerOutsideButton.setOnDragListener(choiceDragListener())
+        binding.blocksButton.setOnDragListener(choiceDragListener())
+        binding.startButton.setOnDragListener(choiceDragListener())
+        binding.container.setOnDragListener(choiceDragListener())
     }
 
     private fun setupOtherFragmentsFunctions() {
@@ -179,7 +187,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[endBlockID]!!.position++
 
 
-        newBlock.setOnTouchListener(choiceTouchListener())
+        newBlock.setOnLongClickListener(choiceTouchListener())
         newBlock.setOnDragListener(choiceDragListener())
 
         blockList.add(newBlock)
@@ -195,9 +203,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             freeId++
         }
     }
-
-    private var x = 0F
-    private var y = 0F
 
     private fun deleteView(block: CustomView) {
         binding.mainWorkfield.removeView(block.blockView)
@@ -281,12 +286,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
     }
 
+
     private lateinit var draggingBlock: CustomView
     private var location = MyPoint(0f, 0f)
 
     private fun choiceDragListener() = View.OnDragListener { view, event ->
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
+                binding.mainWorkfield.invalidate()
                 val imm: InputMethodManager =
                     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(draggingBlock.blockView.windowToken, 0)
@@ -298,7 +305,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DROP -> {
-                if (blockMap[view.id] != null) {
+                if (blockMap[view.id] != null || view == binding.start) {
                     if (view.id != endBlockID) {
                         draggingBlock.blockView.z = 1F
                         val currentBlock = draggingBlock
@@ -370,16 +377,16 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
 
-    private fun isCrossed(point: MyPoint, parent: CustomView): Boolean {
-        val x = parent.blockView.x
-        val y = parent.blockView.y
-
-        return if (point.x >= x && point.x <= x + parent.blockView.width) {
-            point.y >= y && point.y <= y + parent.blockView.height
-        } else {
-            false
-        }
-    }
+//    private fun isCrossed(point: MyPoint, parent: CustomView): Boolean {
+//        val x = parent.blockView.x
+//        val y = parent.blockView.y
+//
+//        return if (point.x >= x && point.x <= x + parent.blockView.width) {
+//            point.y >= y && point.y <= y + parent.blockView.height
+//        } else {
+//            false
+//        }
+//    }
 
     private fun makeAllEditTextsDisabled() {
         for (block in blockList) {

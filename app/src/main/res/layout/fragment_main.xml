@@ -20,10 +20,10 @@
             android:layout_height="0dp"
             android:background="@color/chocolateWorkingPanelColor"
             android:contentDescription="@string/label"
-            app:layout_constraintBottom_toBottomOf="@+id/scrollView"
-            app:layout_constraintEnd_toEndOf="@+id/scrollView"
-            app:layout_constraintStart_toStartOf="@+id/scrollView"
-            app:layout_constraintTop_toTopOf="@+id/scrollView"
+            app:layout_constraintBottom_toBottomOf="@+id/zoomLayout"
+            app:layout_constraintEnd_toEndOf="@+id/zoomLayout"
+            app:layout_constraintStart_toStartOf="@+id/zoomLayout"
+            app:layout_constraintTop_toTopOf="@+id/zoomLayout"
             app:srcCompat="@android:color/transparent" />
 
         <ImageButton
@@ -90,49 +90,79 @@
             android:visibility="visible"
             app:layout_constraintGuide_end="@dimen/bottomButtonsSize" />
 
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:background="@drawable/workfield_borders"
+        <com.otaliastudios.zoom.ZoomLayout
+            android:id="@+id/zoomLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/workfieldMargin"
-            android:fillViewport="true"
+            android:background="@drawable/workfield_borders"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:scrollbars="none"
+            app:alignment="center"
+            app:animationDuration="280"
+            app:flingEnabled="true"
+            app:hasClickableChildren="true"
+            app:horizontalPanEnabled="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomButtonsBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/drawerOutsideButton"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingStart="@dimen/workfieldPadding"
-            android:paddingTop="@dimen/workfieldPadding"
-            android:paddingEnd="20dp"
-            android:paddingBottom="5dp"
-            tools:ignore="RtlSymmetry">
-
-            <LinearLayout
-                android:id="@+id/mainWorkfield"
-                android:layout_width="match_parent"
+            app:maxZoom="6"
+            app:maxZoomType="zoom"
+            app:minZoom="2"
+            app:minZoomType="zoom"
+            app:oneFingerScrollEnabled="true"
+            app:overPinchable="true"
+            app:overScrollHorizontal="true"
+            app:overScrollVertical="true"
+            app:scrollEnabled="true"
+            app:threeFingersScrollEnabled="true"
+            app:transformation="centerInside"
+            app:transformationGravity="auto"
+            app:twoFingersScrollEnabled="true"
+            app:verticalPanEnabled="true"
+            app:zoomEnabled="true">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:padding="500dp">
 
-                <TextView
-                    android:id="@+id/start"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/mainWorkfield"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/start_end_program_block_background"
-                    android:padding="@dimen/blocksPadding"
-                    android:text="Start program"
-                    android:textSize="34sp" />
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/start_end_program_block_background"
-                    android:padding="@dimen/blocksPadding"
-                    android:text="end"
-                    android:textSize="34sp" />
+                    <TextView
+                        android:id="@+id/start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/start_end_program_block_background"
+                        android:padding="@dimen/blocksPadding"
+                        android:text="Start program"
+                        android:textSize="34sp" />
 
-            </LinearLayout>
-        </ScrollView>
+                    <TextView
+                        android:id="@+id/end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/start_end_program_block_background"
+                        android:padding="@dimen/blocksPadding"
+                        android:text="end"
+                        android:textSize="34sp" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </com.otaliastudios.zoom.ZoomLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

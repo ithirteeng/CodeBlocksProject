@@ -15,4 +15,5 @@
     <dimen name="topAndBottomBlockPadding">20dp</dimen>
     <dimen name="startAndEndBlockPadding">10dp</dimen>
     <dimen name="blocksTextSize">18dp</dimen>
+    <dimen name="blocksMargin">5dp</dimen>
 </resources>

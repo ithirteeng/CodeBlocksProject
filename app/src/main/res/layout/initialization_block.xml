@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="0dp"
     android:background="@drawable/init_block_background"
     android:paddingStart="@dimen/startAndEndBlockPadding"
     android:paddingTop="@dimen/topAndBottomBlockPadding"
@@ -15,7 +14,6 @@
         android:id="@+id/initText"
         style="@style/blocksTextStyle"
         android:layout_height="wrap_content"
-        android:layout_margin="0dp"
         android:layout_marginStart="@dimen/blocksMargin"
         android:background="@color/transparent"
         android:text="@string/varText"
@@ -32,7 +30,6 @@
         style="@style/blocksTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="0dp"
 
         android:layout_marginStart="@dimen/blocksMargin"
         android:autofillHints=""

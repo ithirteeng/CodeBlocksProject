@@ -14,6 +14,7 @@ import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
@@ -174,14 +175,19 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.setDefault(lastBlock.blockView.x)
-
+        Log.e("TOUCH", "${newBlock.blockView.width}")
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id
 
         blockMap[endBlockID]!!.previousId = newBlock.blockView.id
         newBlock.nextId = endBlockID
 
+        blockList.add(newBlock)
+        blockMap[newBlock.blockView.id] = newBlock
+
         binding.mainWorkfield.addView(newBlock, lastBlock.position + 1)
+
+        newBlock.blockView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         newBlock.position = lastBlock.position + 1
         blockMap[endBlockID]!!.position++
 
@@ -189,8 +195,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         newBlock.setOnLongClickListener(choiceTouchListener())
         newBlock.setOnDragListener(choiceDragListener())
 
-        blockList.add(newBlock)
-        blockMap[newBlock.blockView.id] = newBlock
+
     }
 
     private fun View.setDefault(x: Float) {
@@ -212,6 +217,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceTouchListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
+        Log.e("TOUCH", "${blockMap[view.id]!!.blockView.width}")
         val currentBlock = blockMap[view.id]
         if (currentBlock!!.previousId != -1) {
             blockMap[currentBlock.previousId]!!.nextId = currentBlock.nextId
@@ -233,8 +239,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             binding.mainWorkfield.addView(block.blockView, block.position)
         }
         view.visibility = View.INVISIBLE
+
         val data = ClipData.newPlainText("", "")
-        val shadowBuilder = DragShadowBuilder(view)
+        val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
         view.startDragAndDrop(data, shadowBuilder, view, 0)
         draggingBlock = blockMap[view.id]!!
         true

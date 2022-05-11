@@ -15,11 +15,11 @@
         tools:context=".MainFragment">
 
         <ImageView
+            android:contentDescription="@string/contentDescription"
             android:id="@+id/workspaceBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/chocolateWorkingPanelColor"
-            android:contentDescription="@string/label"
             app:layout_constraintBottom_toBottomOf="@+id/zoomLayout"
             app:layout_constraintEnd_toEndOf="@+id/zoomLayout"
             app:layout_constraintStart_toStartOf="@+id/zoomLayout"
@@ -27,11 +27,11 @@
             app:srcCompat="@android:color/transparent" />
 
         <ImageButton
+            android:contentDescription="@string/contentDescription"
             android:id="@+id/drawerOutsideButton"
             android:layout_width="@dimen/drawerButtonWidth"
             android:layout_height="0dp"
             android:background="#00FFFFFF"
-            android:contentDescription="@string/label"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,11 +42,11 @@
             app:srcCompat="@drawable/chocolate_drawer_button_image" />
 
         <ImageView
+            android:contentDescription="@string/contentDescription"
             android:id="@+id/bottomButtonsBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/chocolateBottomButtonsColor"
-            android:contentDescription="@string/label"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/blocksButton"
             app:layout_constraintStart_toStartOf="@+id/startButton"
@@ -124,13 +124,14 @@
             app:verticalPanEnabled="true"
             app:zoomEnabled="true">
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/upperWorkspace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="500dp">
 
                 <LinearLayout
                     android:id="@+id/mainWorkfield"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -145,7 +146,10 @@
                         android:background="@drawable/start_end_program_block_background"
                         android:padding="@dimen/blocksPadding"
                         android:text="Start program"
-                        android:textSize="34sp" />
+                        android:textSize="34sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/end"
@@ -154,13 +158,15 @@
                         android:background="@drawable/start_end_program_block_background"
                         android:padding="@dimen/blocksPadding"
                         android:text="end"
-                        android:textSize="34sp" />
+                        android:textSize="34sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
         </com.otaliastudios.zoom.ZoomLayout>
 

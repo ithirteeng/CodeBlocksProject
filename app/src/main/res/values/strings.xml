@@ -14,7 +14,7 @@
     <string name="startButtonText">START</string>
     <string name="blocksButtonText">BLOCKS</string>
     <string name="closeButtonText">CLOSE</string>
-    <string name="label">image</string>
+    <string name="contentDescription">image</string>
     <string name="themeText">themes</string>
     <string name="chocolateThemeText">chocolate theme</string>
     <string name="pinkThemeText">pink theme</string>
@@ -27,4 +27,5 @@
     <string name="nameTextHint">name</string>
     <string name="valueTextHint">value</string>
     <string name="equalText">=</string>
+    <string name="transparentString"> </string>
 </resources>

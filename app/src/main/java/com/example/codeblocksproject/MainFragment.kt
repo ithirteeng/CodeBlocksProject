@@ -15,6 +15,7 @@ import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
@@ -38,6 +39,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private lateinit var binding: FragmentMainBinding
     private var startBlockID = 0
     private var endBlockID = 0
+    private var freeId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -186,7 +188,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
 
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
-        setDefault(lastBlock.blockView, lastBlock.blockView.x)
+        newBlock.blockView.setDefault(lastBlock.blockView.x)
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id
 
@@ -208,11 +210,19 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         newBlock.blockView.setOnLongClickListener(choiceTouchListener())
         newBlock.blockView.setOnDragListener(choiceDragListener())
+
+        Toast.makeText(requireContext(), newBlock.blockView.id.toString(), Toast.LENGTH_SHORT)
+            .show()
     }
 
-    private fun setDefault(view: View, x: Float) {
-        view.x = x
-        view.z = 1F
+    private fun View.setDefault(x: Float) {
+        this.x = x
+        this.z = 1F
+        this.id = freeId
+
+        freeId++
+        if (freeId == startBlockID || freeId == endBlockID)
+            freeId++
     }
 
     private fun deleteView(block: CustomView) {

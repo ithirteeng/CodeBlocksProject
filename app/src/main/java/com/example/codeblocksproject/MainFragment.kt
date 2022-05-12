@@ -38,7 +38,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private lateinit var binding: FragmentMainBinding
     private var startBlockID = 0
     private var endBlockID = 0
-    private var freeId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +67,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
         val startBlock: StartProgramBlock = binding.startProgram
-        startBlockID = binding.startProgram.blockView.id
+        startBlockID = binding.startProgram.id
 
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
@@ -76,7 +75,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         startBlock.blockView.setOnDragListener(choiceDragListener())
 
         val endBlock = binding.endProgram
-        endBlockID = binding.endProgram.blockView.id
+        endBlockID = binding.endProgram.id
 
         blockList.add(endBlock)
         blockMap[endBlockID] = endBlock
@@ -214,11 +213,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private fun setDefault(view: View, x: Float) {
         view.x = x
         view.z = 1F
-        view.id = freeId
-        freeId++
-        if (freeId == startBlockID || freeId == endBlockID) {
-            freeId++
-        }
     }
 
     private fun deleteView(block: CustomView) {

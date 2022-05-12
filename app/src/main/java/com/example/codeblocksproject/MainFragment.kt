@@ -242,9 +242,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 brackets--
             }
         }
-
-        block = blockMap[parentBlock.nextId]!!
-        if (block.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+        if (block!!.nextId!=-1)
+            block = blockMap[block.nextId]
+        if (block!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
             draggingList.add(block)
             binding.mainWorkfield.removeView(block.blockView)
             removeNestedBlocks(block)
@@ -254,21 +254,31 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
+        draggingList.clear()
         val currentBlock = blockMap[view.id]
         draggingList.add(currentBlock!!)
-        Log.i("ListSize", draggingList.size.toString())
         removeNestedBlocks(currentBlock)
         var block = draggingList[draggingList.size - 1]
         if (currentBlock.previousId != -1) {
             blockMap[currentBlock.previousId]!!.nextId = block.nextId
         }
-        if (currentBlock.nextId != -1) {
-            blockMap[currentBlock.nextId]!!.previousId = currentBlock.previousId
+        if (block.nextId != -1) {
+            blockMap[block.nextId]!!.previousId = currentBlock.previousId
         }
+        view.visibility = View.INVISIBLE
 
-        while (block.blockView.id != endBlockID) {
+        block=blockMap[startBlockID]!!
+        block.position=0
+        var ind=1
+        while (block.blockView.id!=endBlockID){
+            block=blockMap[block.nextId]!!
+            block.position=ind
+            ind++
+        }
+        /*while (block.blockView.id != endBlockID) {
             block = blockMap[block.nextId]!!
             block.position -= draggingList.size
+            block.position++
             binding.mainWorkfield.removeView(block.blockView)
         }
 
@@ -277,13 +287,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             block = blockMap[block.nextId]!!
             binding.mainWorkfield.addView(block.blockView, block.position)
         }
-        view.visibility = View.INVISIBLE
+
+         */
 
         val data = ClipData.newPlainText("", "")
         val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
         view.startDragAndDrop(data, shadowBuilder, view, 0)
         draggingBlock = blockMap[view.id]!!
-        Log.i("ListSize", draggingList.size.toString())
         true
     }
 
@@ -307,7 +317,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DROP -> {
-                Log.i("ListSize", draggingList.size.toString())
                 if (blockMap[view.id] != null) {
                     draggingBlock.blockView.z = 1F
                     val currentBlock = draggingBlock
@@ -320,7 +329,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     block.nextId = currentBlock.blockView.id
                     currentBlock.previousId = block.blockView.id
 
-                    Log.i("ListSize", draggingList.size.toString())
                     val lastBlock = draggingList[draggingList.size - 1]
                     lastBlock.nextId = temp
                     blockMap[temp]!!.previousId = lastBlock.blockView.id
@@ -341,16 +349,24 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     for (block in draggingList) {
                         deleteView(block)
                     }
+                    for(block in blockList){
+                        binding.mainWorkfield.removeView(block.blockView)
+                    }
+                    var block=blockMap[startBlockID]
+                    binding.mainWorkfield.addView(block!!.blockView,0)
+                    var ind=1
+                    while(block!!.blockView.id!=endBlockID){
+                        block=blockMap[block.nextId]
+                        binding.mainWorkfield.addView(block!!.blockView,ind)
+                        ind++
+                    }
                 }
             }
             DragEvent.ACTION_DRAG_ENDED -> {
                 draggingBlock.blockView.post {
                     draggingBlock.blockView.visibility = View.VISIBLE
                 }
-                draggingList.clear()
                 alignX()
-            }
-            DragEvent.ACTION_DRAG_EXITED -> {
             }
         }
         true

@@ -32,6 +32,13 @@ interface CustomView {
     }
 
     fun toTextView(editText: EditText, textView: TextView) {
+        editText.setOnFocusChangeListener { _, focus ->
+            if (!focus) {
+                textView.text = editText.text
+                editText.visibility = View.GONE
+                textView.visibility = View.VISIBLE
+            }
+        }
         editText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 actionId == EditorInfo.IME_ACTION_DONE ||

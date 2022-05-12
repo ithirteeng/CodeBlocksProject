@@ -21,8 +21,8 @@ class InitializationBlock @JvmOverloads constructor(
             val valueText: TextView = findViewById(R.id.valueText)
             val nameText: TextView = findViewById(R.id.nameText)
 
-            toEditText(valueText, valueEdit, context, nameText, nameEdit)
-            toEditText(nameText, nameEdit, context, valueText, valueEdit)
+            toEditText(valueText, valueEdit, context)
+            toEditText(nameText, nameEdit, context)
             toTextView(valueEdit, valueText)
             toTextView(nameEdit, nameText)
 
@@ -49,26 +49,6 @@ class InitializationBlock @JvmOverloads constructor(
         val nameText: TextView = view.findViewById(R.id.nameText)
         convertEditTextToTextView(valueText, valueEdit)
         convertEditTextToTextView(nameText, nameEdit)
-    }
-
-    private fun toEditText(
-        textView: TextView,
-        editText: EditText,
-        context: Context,
-        otherTextView: TextView,
-        otherText: EditText
-    ) {
-        textView.setOnClickListener {
-            editText.visibility = View.VISIBLE
-            textView.visibility = View.INVISIBLE
-
-            editText.requestFocus()
-            editText.isFocusableInTouchMode = true
-            val imm: InputMethodManager =
-                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
-            convertEditTextToTextView(otherTextView, otherText)
-        }
     }
 }
 

@@ -224,7 +224,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun choiceTouchListener() = View.OnLongClickListener { view ->
+    private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
         val currentBlock = blockMap[view.id]
         if (currentBlock!!.previousId != -1) {

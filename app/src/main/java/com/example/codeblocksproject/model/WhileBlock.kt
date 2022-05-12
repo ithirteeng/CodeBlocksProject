@@ -38,7 +38,7 @@ class WhileBlock @JvmOverloads constructor(
 
     override fun makeEditTextsDisabled() {
         val conditionTextView = findViewById<TextView>(R.id.conditionText)
-        val conditionEditText = findViewById<EditText>(R.id.varName)
+        val conditionEditText = findViewById<EditText>(R.id.condition)
         convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 

@@ -165,25 +165,22 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     override fun addBlock(type: String) {
         when (type) {
-            BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()), type)
-            BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()), type)
-            BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()), type)
-            BlockTypes.WHILE_BLOCK_TYPE -> createBlock(WhileBlock(requireContext()), type)
+            BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
+            BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
+            BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
+            BlockTypes.WHILE_BLOCK_TYPE -> {
+                createBlock(WhileBlock(requireContext()))
+                createBlock(BeginBlock(requireContext()))
+                createBlock(EndBlock(requireContext()))
+            }
         }
 
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBlock(block: CustomView, type: String) {
-        var newBlock = block
-        when (type) {
-            BlockTypes.INIT_BLOCK_TYPE -> newBlock = block as InitializationBlock
-            BlockTypes.ASSIGN_BLOCK_TYPE -> newBlock = block as AssignmentBlock
-            BlockTypes.OUTPUT_BLOCK_TYPE -> newBlock = block as OutputBlock
-            BlockTypes.WHILE_BLOCK_TYPE -> newBlock = block as WhileBlock
-        }
-
+    private fun createBlock(block: CustomView) {
+        val newBlock = block
 
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.blockView.setDefault(lastBlock.blockView.x)
@@ -309,7 +306,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                         val v = block.blockView
                         val diff = currentBlock.blockView.height - v.height
 
-                        draggingBlock.blockView.y = v.y + height + blockMap[endBlockID]!!.blockView.height - diff
+                        draggingBlock.blockView.y =
+                            v.y + height + blockMap[endBlockID]!!.blockView.height - diff
                         draggingBlock.blockView.x = v.x
 
 

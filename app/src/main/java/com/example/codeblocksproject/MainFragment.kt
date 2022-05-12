@@ -28,7 +28,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         const val SPACE_COLOR = "space"
         const val MONOCHROME_COLOR = "monochrome"
         const val SHREK_COLOR = "shrek"
-        const val INDENT = 25
+        const val INDENT = 100
     }
 
     private val blockList: MutableList<CustomView> = mutableListOf()
@@ -175,8 +175,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 createBlock(EndBlock(requireContext()))
             }
         }
-
-
+        alignX()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -223,26 +222,58 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockList.remove(block)
     }
 
+    private fun removeNestedBlocks(parentBlock: CustomView) {
+        var brackets = 0
+        var block = blockMap[parentBlock.nextId]
+        if (block!!.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+            brackets++
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+        }
+        while (brackets != 0) {
+            block = blockMap[block!!.nextId]!!
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+
+            if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+                brackets++
+            }
+            if (block.blockType == BlockTypes.END_BLOCK_TYPE) {
+                brackets--
+            }
+        }
+
+        block = blockMap[parentBlock.nextId]!!
+        if (block.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+            removeNestedBlocks(block)
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
         val currentBlock = blockMap[view.id]
-        if (currentBlock!!.previousId != -1) {
-            blockMap[currentBlock.previousId]!!.nextId = currentBlock.nextId
+        draggingList.add(currentBlock!!)
+        Log.i("ListSize", draggingList.size.toString())
+        removeNestedBlocks(currentBlock)
+        var block = draggingList[draggingList.size - 1]
+        if (currentBlock.previousId != -1) {
+            blockMap[currentBlock.previousId]!!.nextId = block.nextId
         }
         if (currentBlock.nextId != -1) {
             blockMap[currentBlock.nextId]!!.previousId = currentBlock.previousId
         }
 
-        var block = currentBlock
-        while (block!!.blockView.id != endBlockID) {
+        while (block.blockView.id != endBlockID) {
             block = blockMap[block.nextId]!!
-            block.position--
+            block.position -= draggingList.size
             binding.mainWorkfield.removeView(block.blockView)
         }
 
-        block = currentBlock
-        while (block!!.blockView.id != endBlockID) {
+        block = draggingList[draggingList.size - 1]
+        while (block.blockView.id != endBlockID) {
             block = blockMap[block.nextId]!!
             binding.mainWorkfield.addView(block.blockView, block.position)
         }
@@ -252,11 +283,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
         view.startDragAndDrop(data, shadowBuilder, view, 0)
         draggingBlock = blockMap[view.id]!!
+        Log.i("ListSize", draggingList.size.toString())
         true
     }
 
 
     private lateinit var draggingBlock: CustomView
+    private var draggingList = mutableListOf<CustomView>()
     private var location = MyPoint(0f, 0f)
 
     private fun choiceDragListener() = View.OnDragListener { view, event ->
@@ -274,56 +307,52 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DROP -> {
+                Log.i("ListSize", draggingList.size.toString())
                 if (blockMap[view.id] != null) {
                     draggingBlock.blockView.z = 1F
                     val currentBlock = draggingBlock
-                    var block=blockMap[view.id]
-                    if(blockMap[view.id]!!.isNestingPossible) {
+                    var block = blockMap[view.id]
+                    if (blockMap[view.id]!!.isNestingPossible) {
                         block = blockMap[blockMap[view.id]!!.nextId]!!
                     }
 
                     val temp = block!!.nextId
                     block.nextId = currentBlock.blockView.id
                     currentBlock.previousId = block.blockView.id
-                    currentBlock.nextId = temp
-                    blockMap[temp]!!.previousId = currentBlock.blockView.id
+
+                    Log.i("ListSize", draggingList.size.toString())
+                    val lastBlock = draggingList[draggingList.size - 1]
+                    lastBlock.nextId = temp
+                    blockMap[temp]!!.previousId = lastBlock.blockView.id
 
                     currentBlock.position = block.position + 1
-
-                    binding.mainWorkfield.removeView(currentBlock.blockView)
-                    binding.mainWorkfield.addView(
-                        currentBlock.blockView,
-                        currentBlock.position
-                    )
-
-                    var height = 0
-                    var tempBlock = currentBlock
-                    while (tempBlock.blockView.id != endBlockID) {
-                        height += tempBlock.blockView.height
-                        tempBlock = blockMap[tempBlock.nextId]!!
-                        tempBlock.position++
+                    for (i in 1 until draggingList.size) {
+                        draggingList[i].position = draggingList[i - 1].position + 1
                     }
 
-                    val v = block.blockView
-                    val diff = currentBlock.blockView.height - v.height
-
-                    draggingBlock.blockView.y =
-                        v.y + height + blockMap[endBlockID]!!.blockView.height - diff
-                    draggingBlock.blockView.x = v.x
+                    binding.mainWorkfield.removeView(currentBlock.blockView)
+                    for (dragBlock in draggingList) {
+                        binding.mainWorkfield.addView(
+                            dragBlock.blockView,
+                            dragBlock.position
+                        )
+                    }
                 } else {
-                    deleteView(draggingBlock)
+                    for (block in draggingList) {
+                        deleteView(block)
+                    }
                 }
             }
             DragEvent.ACTION_DRAG_ENDED -> {
                 draggingBlock.blockView.post {
                     draggingBlock.blockView.visibility = View.VISIBLE
                 }
+                draggingList.clear()
+                alignX()
             }
             DragEvent.ACTION_DRAG_EXITED -> {
-                binding.mainWorkfield.removeView(draggingBlock.blockView)
             }
         }
-        alignX()
         true
     }
 
@@ -358,6 +387,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 currentBlock.blockView.x += INDENT
             }
             if (prevBlock.blockType == BlockTypes.END_BLOCK_TYPE) {
+                Log.i("-INDENT", "true")
                 currentBlock.blockView.x -= INDENT
             }
 

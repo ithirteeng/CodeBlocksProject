@@ -11,6 +11,7 @@
         android:background="@drawable/start_end_program_block_background"
         android:padding="@dimen/blocksPadding"
         style="@style/borderBlocksTextStyle"
+        android:textSize="@dimen/startEndProgramTextSize"
         android:text="@string/endProgramText">
     </TextView>
 </merge>

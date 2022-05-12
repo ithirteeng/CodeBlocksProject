@@ -17,14 +17,16 @@ class StartProgramBlock @JvmOverloads constructor(
     override var previousId = -1
     override var nextId = 0
     override val blockType = BlockTypes.START_PROGRAM_BLOCK_TYPE
-    override val blockView : View = LayoutInflater.from(context).inflate(R.layout.start_program_block, this)
+    override val blockView: View =
+        LayoutInflater.from(context).inflate(R.layout.start_program_block, this)
 
     override val pattern = "{"
-    override var position=0
+    override var position = 0
 
     override fun blockToCode(): String {
         return pattern
     }
+
     override fun makeEditTextsDisabled() {
     }
 }

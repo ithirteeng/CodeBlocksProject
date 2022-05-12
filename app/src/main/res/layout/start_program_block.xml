@@ -11,5 +11,6 @@
         style="@style/borderBlocksTextStyle"
         android:background="@drawable/start_end_program_block_background"
         android:padding="@dimen/blocksPadding"
+        android:textSize="@dimen/startEndProgramTextSize"
         android:text="@string/startProgramText" />
 </merge>

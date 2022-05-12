@@ -15,12 +15,10 @@ import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import kotlin.math.abs
 
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
@@ -69,7 +67,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
         val startBlock: StartProgramBlock = binding.startProgram
-        startBlockID = binding.startProgram.id
+        startBlockID = binding.startProgram.blockView.id
 
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
@@ -77,7 +75,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         startBlock.blockView.setOnDragListener(choiceDragListener())
 
         val endBlock = binding.endProgram
-        endBlockID = binding.endProgram.id
+        endBlockID = binding.endProgram.blockView.id
 
         blockList.add(endBlock)
         blockMap[endBlockID] = endBlock
@@ -211,8 +209,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         newBlock.blockView.setOnLongClickListener(choiceTouchListener())
         newBlock.blockView.setOnDragListener(choiceDragListener())
 
-        Toast.makeText(requireContext(), newBlock.blockView.id.toString(), Toast.LENGTH_SHORT)
-            .show()
     }
 
     private fun View.setDefault(x: Float) {
@@ -302,21 +298,18 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             currentBlock.position
                         )
 
-                        var counter = 1
+                        var height = 0
                         var tempBlock = currentBlock
                         while (tempBlock.blockView.id != endBlockID) {
+                            height += tempBlock.blockView.height
                             tempBlock = blockMap[tempBlock.nextId]!!
                             tempBlock.position++
-                            counter++
                         }
 
                         val v = block.blockView
-                        val diff = abs(currentBlock.blockView.height - v.height)
+                        val diff = currentBlock.blockView.height - v.height
 
-
-                        counter--
-                        draggingBlock.blockView.y =
-                            v.y + currentBlock.blockView.height * counter + blockMap[endBlockID]!!.blockView.height + diff
+                        draggingBlock.blockView.y = v.y + height + blockMap[endBlockID]!!.blockView.height - diff
                         draggingBlock.blockView.x = v.x
 
 

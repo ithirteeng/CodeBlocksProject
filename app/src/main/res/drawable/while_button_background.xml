@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid android:color="@color/whileBlockColor"/>
-    <stroke android:width="5dp"/>
+    <stroke android:width="@dimen/addingBlocksButtonsBordersSize"/>
 
 </shape>

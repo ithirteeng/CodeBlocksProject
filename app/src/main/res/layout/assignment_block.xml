@@ -5,27 +5,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="0dp"
-    android:background="@drawable/init_block_background"
+    android:background="@drawable/assignment_block_background"
     android:paddingStart="@dimen/startAndEndBlockPadding"
     android:paddingTop="@dimen/topAndBottomBlockPadding"
     android:paddingEnd="15dp"
     android:paddingBottom="@dimen/topAndBottomBlockPadding">
-
-    <TextView
-        android:id="@+id/initText"
-        style="@style/blocksTextStyle"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:layout_marginStart="@dimen/blocksMargin"
-        android:background="@color/transparent"
-        android:text="@string/varText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/nameText"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextContrastCheck" />
-
 
     <TextView
         android:id="@+id/nameText"
@@ -33,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
-
         android:layout_marginStart="@dimen/blocksMargin"
         android:autofillHints=""
         android:background="@drawable/textfields_background"
@@ -42,7 +25,7 @@
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/equalTextView"
-        app:layout_constraintStart_toEndOf="@+id/initText"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
@@ -75,7 +58,7 @@
         android:layout_height="0dp"
         android:layout_margin="0dp"
         android:layout_marginStart="@dimen/blocksMargin"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="5dp"
         android:padding="2dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"

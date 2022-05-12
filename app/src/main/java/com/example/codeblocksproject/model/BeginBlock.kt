@@ -15,18 +15,15 @@ class BeginBlock @JvmOverloads constructor(
     override var previousId = -1
     override var nextId = -1
     override val blockType = BlockTypes.BEGIN_BLOCK_TYPE
-    override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-
-    //TODO: Change view to begin
+    override val blockView: View = LayoutInflater.from(context).inflate(R.layout.begin_cycle_block, this)
     override val pattern = "{"
     override var position = 0
 
     override fun blockToCode(): String {
         return pattern
     }
+
     override fun makeEditTextsDisabled() {
-        TODO("Not yet implemented")
     }
 
 }

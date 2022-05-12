@@ -8,8 +8,9 @@
 
     <TextView
         android:id="@+id/textView"
-        style="@style/borderBlocksTextStyle"
-        android:background="@drawable/start_end_program_block_background"
+        android:background="@drawable/begin_end_cycle_block_background"
         android:padding="@dimen/blocksPadding"
-        android:text="@string/startProgramText" />
+        style="@style/borderBlocksTextStyle"
+        android:text="@string/endCycleText">
+    </TextView>
 </merge>

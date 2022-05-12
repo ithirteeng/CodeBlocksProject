@@ -36,7 +36,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private val consoleFragment = ConsoleFragment()
     private val blocksFragment = BlocksFragment()
     private lateinit var binding: FragmentMainBinding
-    private val workFieldRect = Rect()
     private var startBlockID = 0
     private var endBlockID = 0
     private var freeId = 0
@@ -67,17 +66,18 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        binding.mainWorkfield.getHitRect(workFieldRect)
 
-        val startBlock = StartProgramBlock(binding.start, requireContext())
-        startBlockID = binding.start.id
+        val startBlock: StartProgramBlock = binding.startProgram
+        startBlockID = binding.startProgram.blockView.id
+
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
         startBlock.position = 0
         startBlock.blockView.setOnDragListener(choiceDragListener())
 
-        val endBlock = EndProgramBlock(binding.end, requireContext())
-        endBlockID = binding.end.id
+        val endBlock = binding.endProgram
+        endBlockID = binding.endProgram.blockView.id
+
         blockList.add(endBlock)
         blockMap[endBlockID] = endBlock
         endBlock.position = 1
@@ -267,7 +267,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DROP -> {
-                if (blockMap[view.id] != null || view == binding.start) {
+                if (blockMap[view.id] != null) {
                     if (view.id != endBlockID) {
                         draggingBlock.blockView.z = 1F
                         val currentBlock = draggingBlock
@@ -301,7 +301,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
                         counter--
                         draggingBlock.blockView.y =
-                            v.y + currentBlock.blockView.height * counter + binding.end.height + diff
+                            v.y + currentBlock.blockView.height * counter + blockMap[endBlockID]!!.blockView.height + diff
                         draggingBlock.blockView.x = v.x
 
 

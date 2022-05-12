@@ -179,9 +179,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBlock(block: CustomView) {
-        val newBlock = block
-
+    private fun createBlock(newBlock: CustomView) {
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.blockView.setDefault(lastBlock.blockView.x)
         lastBlock.nextId = newBlock.blockView.id
@@ -203,7 +201,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[endBlockID]!!.position++
 
 
-        newBlock.blockView.setOnLongClickListener(choiceTouchListener())
+        newBlock.blockView.setOnLongClickListener(choiceLongClickListener())
         newBlock.blockView.setOnDragListener(choiceDragListener())
 
     }
@@ -225,7 +223,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun choiceTouchListener() = View.OnLongClickListener { view ->
+    private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
         val currentBlock = blockMap[view.id]
         if (currentBlock!!.previousId != -1) {

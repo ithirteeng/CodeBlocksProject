@@ -4,22 +4,40 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.codeblocksproject.databinding.FragmentBlocksBinding
 
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     var isClosedBlocks = true
+    private lateinit var binding: FragmentBlocksBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        closeSlidingFragment(view)
+        closeSlidingFragment()
+        hui()
     }
 
-    private fun closeSlidingFragment(view: View) {
-        val button = view.findViewById<Button>(R.id.closeButton)
-        button.setOnClickListener {
+    private fun hui() {
+        //TODO():Rename
+        binding.initializationBlock.setOnClickListener {
+            (parentFragment as MainFragment).addBlock()
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentBlocksBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    private fun closeSlidingFragment() {
+        binding.closeButton.setOnClickListener {
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(0, R.anim.bottom_panel_slide_in)
@@ -36,8 +54,7 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     }
 
     fun changeTheme(color: String, context: Context) {
-        val closeButton = view?.findViewById<Button>(R.id.closeButton)
-        closeButton?.setTextColor(getColor(R.color.chocolateMainColor, context))
+        binding.closeButton.setTextColor(getColor(R.color.chocolateMainColor, context))
 
         when (color) {
             MainFragment.SPACE_COLOR -> {
@@ -67,7 +84,7 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
                     R.color.monochromeBottomButtonsColor,
                     context
                 )
-                closeButton?.setTextColor(getColor(R.color.white, context))
+                binding.closeButton.setTextColor(getColor(R.color.white, context))
             }
             MainFragment.SHREK_COLOR -> {
                 changeColor(
@@ -80,16 +97,12 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     }
 
     private fun changeColor(backgroundColor: Int, buttonColor: Int, context: Context) {
-        var imageView = view?.findViewById<ImageView>(R.id.blocksBackground)
-        imageView?.setBackgroundColor(getColor(backgroundColor, context))
+        binding.blocksBackground.setBackgroundColor(getColor(backgroundColor, context))
 
-        imageView = view?.findViewById(R.id.buttonBackground)
-        imageView?.setBackgroundColor(getColor(buttonColor, context))
+        binding.buttonBackground.setBackgroundColor(getColor(buttonColor, context))
     }
 
     private fun getColor(id: Int, context: Context): Int {
         return ContextCompat.getColor(context, id)
     }
-
-
 }

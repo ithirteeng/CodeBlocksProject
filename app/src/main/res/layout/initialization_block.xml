@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    android:background="@drawable/init_block_background"
+    android:paddingStart="@dimen/startAndEndBlockPadding"
+    android:paddingTop="@dimen/topAndBottomBlockPadding"
+    android:paddingEnd="15dp"
+    android:paddingBottom="@dimen/topAndBottomBlockPadding">
+
+    <TextView
+        android:id="@+id/initText"
+        style="@style/blocksTextStyle"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:layout_marginStart="@dimen/blocksMargin"
+        android:background="@color/transparent"
+        android:text="@string/varText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nameText"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
+
+    <TextView
+        android:id="@+id/nameText"
+        style="@style/blocksTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+
+        android:layout_marginStart="@dimen/blocksMargin"
+        android:autofillHints=""
+        android:background="@drawable/textfields_background"
+        android:hint="@string/nameTextHint"
+        android:padding="2dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/equalTextView"
+        app:layout_constraintStart_toEndOf="@+id/initText"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/varName"
+        style="@style/blocksTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:autofillHints=""
+        android:background="@drawable/textfields_background"
+        android:hint="@string/nameTextHint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:padding="2dp"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/nameText"
+        app:layout_constraintEnd_toEndOf="@+id/nameText"
+        app:layout_constraintStart_toStartOf="@+id/nameText"
+        app:layout_constraintTop_toTopOf="@+id/nameText"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/equalTextView"
+        style="@style/blocksTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="0dp"
+        android:layout_marginStart="@dimen/blocksMargin"
+        android:layout_marginEnd="4dp"
+        android:padding="2dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="@string/equalText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/valueText"
+        app:layout_constraintStart_toEndOf="@+id/nameText"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/valueText"
+        style="@style/blocksTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:layout_marginStart="@dimen/blocksMargin"
+        android:layout_marginEnd="@dimen/blocksMargin"
+        android:autofillHints=""
+        android:background="@drawable/textfields_background"
+        android:hint="@string/valueTextHint"
+        android:padding="2dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/equalTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+
+    <EditText
+        android:id="@+id/varValue"
+        style="@style/blocksTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:autofillHints=""
+        android:background="@drawable/textfields_background"
+        android:hint="@string/valueTextHint"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:padding="2dp"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/valueText"
+        app:layout_constraintEnd_toEndOf="@+id/valueText"
+        app:layout_constraintStart_toStartOf="@+id/valueText"
+        app:layout_constraintTop_toTopOf="@+id/valueText"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

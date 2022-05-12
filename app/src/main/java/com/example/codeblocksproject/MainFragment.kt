@@ -275,20 +275,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             block.position=ind
             ind++
         }
-        /*while (block.blockView.id != endBlockID) {
-            block = blockMap[block.nextId]!!
-            block.position -= draggingList.size
-            block.position++
-            binding.mainWorkfield.removeView(block.blockView)
-        }
-
-        block = draggingList[draggingList.size - 1]
-        while (block.blockView.id != endBlockID) {
-            block = blockMap[block.nextId]!!
-            binding.mainWorkfield.addView(block.blockView, block.position)
-        }
-
-         */
 
         val data = ClipData.newPlainText("", "")
         val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
@@ -338,6 +324,11 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                         draggingList[i].position = draggingList[i - 1].position + 1
                     }
 
+                    while(block!!.blockView.id!=endBlockID){
+                        block=blockMap[block.nextId]
+                        block!!.position=blockMap[block.previousId]!!.position+1
+                    }
+
                     binding.mainWorkfield.removeView(currentBlock.blockView)
                     for (dragBlock in draggingList) {
                         binding.mainWorkfield.addView(
@@ -348,17 +339,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 } else {
                     for (block in draggingList) {
                         deleteView(block)
-                    }
-                    for(block in blockList){
-                        binding.mainWorkfield.removeView(block.blockView)
-                    }
-                    var block=blockMap[startBlockID]
-                    binding.mainWorkfield.addView(block!!.blockView,0)
-                    var ind=1
-                    while(block!!.blockView.id!=endBlockID){
-                        block=blockMap[block.nextId]
-                        binding.mainWorkfield.addView(block!!.blockView,ind)
-                        ind++
                     }
                 }
             }

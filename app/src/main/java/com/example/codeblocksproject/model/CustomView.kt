@@ -50,6 +50,7 @@ interface CustomView {
         }
     }
     fun blockToCode(): String
+
     fun convertEditTextToTextView(textView: TextView, editText: EditText) {
         textView.text = editText.text
         editText.visibility = View.GONE

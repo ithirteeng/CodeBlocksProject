@@ -175,7 +175,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
         newBlock.setDefault(lastBlock.blockView.x)
-        Log.e("TOUCH", "${newBlock.blockView.width}")
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id
 
@@ -187,7 +186,10 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
         binding.mainWorkfield.addView(newBlock, lastBlock.position + 1)
 
-        newBlock.blockView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        newBlock.blockView.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         newBlock.position = lastBlock.position + 1
         blockMap[endBlockID]!!.position++
 
@@ -217,7 +219,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceTouchListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
-        Log.e("TOUCH", "${blockMap[view.id]!!.blockView.width}")
         val currentBlock = blockMap[view.id]
         if (currentBlock!!.previousId != -1) {
             blockMap[currentBlock.previousId]!!.nextId = currentBlock.nextId
@@ -322,18 +323,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
         true
     }
-
-
-//    private fun isCrossed(point: MyPoint, parent: CustomView): Boolean {
-//        val x = parent.blockView.x
-//        val y = parent.blockView.y
-//
-//        return if (point.x >= x && point.x <= x + parent.blockView.width) {
-//            point.y >= y && point.y <= y + parent.blockView.height
-//        } else {
-//            false
-//        }
-//    }
 
     private fun makeAllEditTextsDisabled() {
         for (block in blockList) {

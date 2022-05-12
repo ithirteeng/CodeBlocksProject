@@ -2,8 +2,11 @@ package com.example.codeblocksproject.model
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -20,8 +23,8 @@ class InitializationBlock @JvmOverloads constructor(
             val valueText: TextView = findViewById(R.id.valueText)
             val nameText: TextView = findViewById(R.id.nameText)
 
-            toEditText(valueText, valueEdit, context)
-            toEditText(nameText, nameEdit, context)
+            toEditText(valueText, valueEdit, context, nameText, nameEdit)
+            toEditText(nameText, nameEdit, context, valueText, valueEdit)
             toTextView(valueEdit, valueText)
             toTextView(nameEdit, nameText)
 
@@ -51,5 +54,25 @@ class InitializationBlock @JvmOverloads constructor(
         convertEditTextToTextView(nameText, nameEdit)
     }
 
+    private fun toEditText(
+        textView: TextView,
+        editText: EditText,
+        context: Context,
+        otherTextView: TextView,
+        otherText: EditText
+    ) {
+        textView.setOnClickListener {
+            editText.visibility = View.VISIBLE
+            textView.visibility = View.INVISIBLE
 
+            editText.requestFocus()
+            editText.isFocusableInTouchMode = true
+            val imm: InputMethodManager =
+                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
+            convertEditTextToTextView(otherTextView, otherText)
+        }
+    }
 }
+
+

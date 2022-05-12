@@ -7,7 +7,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 
 interface CustomView {
 
@@ -43,7 +42,6 @@ interface CustomView {
                     textView.text = editText.text
                     editText.visibility = View.GONE
                     textView.visibility = View.VISIBLE
-                    true
                 }
             }
             false

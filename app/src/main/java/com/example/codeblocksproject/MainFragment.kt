@@ -164,17 +164,30 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         binding.blocksButton.visibility = View.VISIBLE
     }
 
-    override fun addBlock() {
-        createBlock()
+    override fun addBlock(type: String) {
+        when (type) {
+            BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()), type)
+            BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()), type)
+            BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()), type)
+            BlockTypes.WHILE_BLOCK_TYPE -> createBlock(WhileBlock(requireContext()), type)
+        }
+
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBlock() {
-        val newBlock = InitializationBlock(requireContext())
+    private fun createBlock(block: CustomView, type: String) {
+        var newBlock = block
+        when (type) {
+            BlockTypes.INIT_BLOCK_TYPE -> newBlock = block as InitializationBlock
+            BlockTypes.ASSIGN_BLOCK_TYPE -> newBlock = block as AssignmentBlock
+            BlockTypes.OUTPUT_BLOCK_TYPE -> newBlock = block as OutputBlock
+            BlockTypes.WHILE_BLOCK_TYPE -> newBlock = block as WhileBlock
+        }
+
 
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
-        newBlock.setDefault(lastBlock.blockView.x)
+        setDefault(lastBlock.blockView, lastBlock.blockView.x)
         lastBlock.nextId = newBlock.blockView.id
         newBlock.previousId = lastBlock.blockView.id
 
@@ -184,7 +197,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockList.add(newBlock)
         blockMap[newBlock.blockView.id] = newBlock
 
-        binding.mainWorkfield.addView(newBlock, lastBlock.position + 1)
+        binding.mainWorkfield.addView(newBlock.blockView, lastBlock.position + 1)
 
         newBlock.blockView.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -194,16 +207,14 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[endBlockID]!!.position++
 
 
-        newBlock.setOnLongClickListener(choiceTouchListener())
-        newBlock.setOnDragListener(choiceDragListener())
-
-
+        newBlock.blockView.setOnLongClickListener(choiceTouchListener())
+        newBlock.blockView.setOnDragListener(choiceDragListener())
     }
 
-    private fun View.setDefault(x: Float) {
-        this.x = x
-        this.z = 1F
-        this.id = freeId
+    private fun setDefault(view: View, x: Float) {
+        view.x = x
+        view.z = 1F
+        view.id = freeId
         freeId++
         if (freeId == startBlockID || freeId == endBlockID) {
             freeId++

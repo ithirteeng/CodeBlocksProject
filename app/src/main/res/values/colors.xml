@@ -45,4 +45,5 @@
     <color name="initializationBlockColor">#FF03DAC5</color>
     <color name="assignmentBlockColor">#2BA2F1</color>
     <color name="outputBlockColor">#FB649C</color>
+    <color name="ifBlockColor">#76E862</color>
 </resources>

@@ -57,4 +57,5 @@ interface CustomView {
         textView.visibility = View.VISIBLE
     }
     fun makeEditTextsDisabled()
+
 }

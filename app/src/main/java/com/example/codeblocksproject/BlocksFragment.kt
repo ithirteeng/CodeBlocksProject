@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentBlocksBinding
+import com.example.codeblocksproject.model.BlockTypes
 
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     var isClosedBlocks = true
@@ -17,13 +18,24 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
-        hui()
+        addingBlocks()
     }
 
-    private fun hui() {
-        //TODO():Rename
+    private fun addingBlocks() {
         binding.initializationBlock.setOnClickListener {
-            (parentFragment as MainFragment).addBlock()
+            (parentFragment as MainFragment).addBlock(BlockTypes.INIT_BLOCK_TYPE)
+        }
+        binding.assignmentBlock.setOnClickListener {
+            (parentFragment as MainFragment).addBlock(BlockTypes.ASSIGN_BLOCK_TYPE)
+        }
+        binding.outputBlock.setOnClickListener {
+            (parentFragment as MainFragment).addBlock(BlockTypes.OUTPUT_BLOCK_TYPE)
+        }
+        binding.whileBlock.setOnClickListener {
+            (parentFragment as MainFragment).addBlock(BlockTypes.WHILE_BLOCK_TYPE)
+        }
+        binding.ifBlock.setOnClickListener {
+            (parentFragment as MainFragment).addBlock(BlockTypes.IF_BLOCK_TYPE)
         }
     }
 

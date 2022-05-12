@@ -17,4 +17,5 @@
     <dimen name="blocksTextSize">18dp</dimen>
     <dimen name="blocksMargin">5dp</dimen>
     <dimen name="startBeginTextSize">34sp</dimen>
+    <dimen name="addingBlocksButtonsTextSize">25sp</dimen>
 </resources>

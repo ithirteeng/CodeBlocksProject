@@ -36,4 +36,10 @@
     <string name="whileBlockText">while</string>
     <string name="ifBlockText">if</string>
     <string name="printBlockText">print</string>
+
+    <string name="initializationButton">INITIALIZATION</string>
+    <string name="whileButton">WHILE</string>
+    <string name="ifButton">IF</string>
+    <string name="outputButton">OUTPUT</string>
+    <string name="assignmentButton">ASSIGNMENT</string>
 </resources>

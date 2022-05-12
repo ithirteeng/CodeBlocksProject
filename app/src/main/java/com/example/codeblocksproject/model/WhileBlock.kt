@@ -14,7 +14,7 @@ class WhileBlock @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : CustomView, ConstraintLayout(context, attrs) {
     private val view =
-        LayoutInflater.from(context).inflate(R.layout.output_block, this).apply {
+        LayoutInflater.from(context).inflate(R.layout.while_block, this).apply {
             val conditionTextView = findViewById<TextView>(R.id.conditionText)
             val conditionEditText = findViewById<EditText>(R.id.condition)
 
@@ -27,8 +27,8 @@ class WhileBlock @JvmOverloads constructor(
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View = view
-    override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
-    override val pattern = "print(<condition>);"
+    override val blockType = BlockTypes.WHILE_BLOCK_TYPE
+    override val pattern = "while(<condition>);"
     override var position = 0
 
     override fun blockToCode(): String {

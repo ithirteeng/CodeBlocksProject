@@ -202,7 +202,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[endBlockID]!!.position++
 
         if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE)
-            block.blockView.setOnLongClickListener(choiceTouchListener())
+            block.blockView.setOnLongClickListener(choiceLongClickListener())
         block.blockView.setOnDragListener(choiceDragListener())
 
     }

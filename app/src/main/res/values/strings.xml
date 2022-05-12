@@ -28,4 +28,12 @@
     <string name="valueTextHint">value</string>
     <string name="equalText">=</string>
     <string name="transparentString"> </string>
+    <string name="endProgramText">End</string>
+    <string name="startProgramText">Start program</string>
+    <string name="beginCycleText">begin</string>
+    <string name="endCycleText">end</string>
+    <string name="conditionHint">condition</string>
+    <string name="whileBlockText">while</string>
+    <string name="ifBlockText">if</string>
+    <string name="printBlockText">print</string>
 </resources>

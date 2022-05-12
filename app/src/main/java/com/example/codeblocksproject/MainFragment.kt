@@ -28,6 +28,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         const val SPACE_COLOR = "space"
         const val MONOCHROME_COLOR = "monochrome"
         const val SHREK_COLOR = "shrek"
+        const val INDET = 25
     }
 
     private val blockList: MutableList<CustomView> = mutableListOf()
@@ -180,31 +181,29 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(block: CustomView) {
-        val newBlock = block
-
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
-        newBlock.blockView.setDefault(lastBlock.blockView.x)
-        lastBlock.nextId = newBlock.blockView.id
-        newBlock.previousId = lastBlock.blockView.id
+        block.blockView.setDefault(lastBlock.blockView.x)
+        lastBlock.nextId = block.blockView.id
+        block.previousId = lastBlock.blockView.id
 
-        blockMap[endBlockID]!!.previousId = newBlock.blockView.id
-        newBlock.nextId = endBlockID
+        blockMap[endBlockID]!!.previousId = block.blockView.id
+        block.nextId = endBlockID
 
-        blockList.add(newBlock)
-        blockMap[newBlock.blockView.id] = newBlock
+        blockList.add(block)
+        blockMap[block.blockView.id] = block
 
-        binding.mainWorkfield.addView(newBlock.blockView, lastBlock.position + 1)
+        binding.mainWorkfield.addView(block.blockView, lastBlock.position + 1)
 
-        newBlock.blockView.layoutParams = LinearLayout.LayoutParams(
+        block.blockView.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        newBlock.position = lastBlock.position + 1
+        block.position = lastBlock.position + 1
         blockMap[endBlockID]!!.position++
 
-
-        newBlock.blockView.setOnLongClickListener(choiceTouchListener())
-        newBlock.blockView.setOnDragListener(choiceDragListener())
+        if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE)
+            block.blockView.setOnLongClickListener(choiceTouchListener())
+        block.blockView.setOnDragListener(choiceDragListener())
 
     }
 
@@ -327,6 +326,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 binding.mainWorkfield.removeView(draggingBlock.blockView)
             }
         }
+        alignX()
         true
     }
 
@@ -349,5 +349,22 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         return code
     }
 
+    private fun alignX() {
+        var prevBlock = blockMap[startBlockID]
+        var currentBlock = prevBlock
 
+        while (currentBlock!!.blockView.id != endBlockID) {
+            currentBlock = blockMap[prevBlock!!.nextId]!!
+            currentBlock.blockView.x = prevBlock.blockView.x
+
+            if (prevBlock.isNestingPossible) {
+                currentBlock.blockView.x += INDET
+            }
+            if (prevBlock.blockType==BlockTypes.END_BLOCK_TYPE) {
+                currentBlock.blockView.x -= INDET
+            }
+
+            prevBlock=currentBlock
+        }
+    }
 }

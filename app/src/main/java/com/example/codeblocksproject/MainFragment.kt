@@ -28,7 +28,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         const val SPACE_COLOR = "space"
         const val MONOCHROME_COLOR = "monochrome"
         const val SHREK_COLOR = "shrek"
-        const val INDET = 25
+        const val INDENT = 25
     }
 
     private val blockList: MutableList<CustomView> = mutableListOf()
@@ -275,44 +275,41 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             }
             DragEvent.ACTION_DROP -> {
                 if (blockMap[view.id] != null) {
-                    if (view.id != endBlockID) {
-                        draggingBlock.blockView.z = 1F
-                        val currentBlock = draggingBlock
-                        val block = view as CustomView
-
-                        val temp = block.nextId
-                        block.nextId = currentBlock.blockView.id
-                        currentBlock.previousId = block.blockView.id
-                        currentBlock.nextId = temp
-                        blockMap[temp]!!.previousId = currentBlock.blockView.id
-
-                        currentBlock.position = block.position + 1
-
-                        binding.mainWorkfield.removeView(currentBlock.blockView)
-                        binding.mainWorkfield.addView(
-                            currentBlock.blockView,
-                            currentBlock.position
-                        )
-
-                        var height = 0
-                        var tempBlock = currentBlock
-                        while (tempBlock.blockView.id != endBlockID) {
-                            height += tempBlock.blockView.height
-                            tempBlock = blockMap[tempBlock.nextId]!!
-                            tempBlock.position++
-                        }
-
-                        val v = block.blockView
-                        val diff = currentBlock.blockView.height - v.height
-
-                        draggingBlock.blockView.y =
-                            v.y + height + blockMap[endBlockID]!!.blockView.height - diff
-                        draggingBlock.blockView.x = v.x
-
-
-                    } else {
-                        deleteView(draggingBlock)
+                    draggingBlock.blockView.z = 1F
+                    val currentBlock = draggingBlock
+                    var block=blockMap[view.id]
+                    if(blockMap[view.id]!!.isNestingPossible) {
+                        block = blockMap[blockMap[view.id]!!.nextId]!!
                     }
+
+                    val temp = block!!.nextId
+                    block.nextId = currentBlock.blockView.id
+                    currentBlock.previousId = block.blockView.id
+                    currentBlock.nextId = temp
+                    blockMap[temp]!!.previousId = currentBlock.blockView.id
+
+                    currentBlock.position = block.position + 1
+
+                    binding.mainWorkfield.removeView(currentBlock.blockView)
+                    binding.mainWorkfield.addView(
+                        currentBlock.blockView,
+                        currentBlock.position
+                    )
+
+                    var height = 0
+                    var tempBlock = currentBlock
+                    while (tempBlock.blockView.id != endBlockID) {
+                        height += tempBlock.blockView.height
+                        tempBlock = blockMap[tempBlock.nextId]!!
+                        tempBlock.position++
+                    }
+
+                    val v = block.blockView
+                    val diff = currentBlock.blockView.height - v.height
+
+                    draggingBlock.blockView.y =
+                        v.y + height + blockMap[endBlockID]!!.blockView.height - diff
+                    draggingBlock.blockView.x = v.x
                 } else {
                     deleteView(draggingBlock)
                 }
@@ -358,13 +355,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             currentBlock.blockView.x = prevBlock.blockView.x
 
             if (prevBlock.isNestingPossible) {
-                currentBlock.blockView.x += INDET
+                currentBlock.blockView.x += INDENT
             }
-            if (prevBlock.blockType==BlockTypes.END_BLOCK_TYPE) {
-                currentBlock.blockView.x -= INDET
+            if (prevBlock.blockType == BlockTypes.END_BLOCK_TYPE) {
+                currentBlock.blockView.x -= INDENT
             }
 
-            prevBlock=currentBlock
+            prevBlock = currentBlock
         }
     }
 }

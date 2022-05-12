@@ -44,7 +44,8 @@ interface CustomView {
                 actionId == EditorInfo.IME_ACTION_DONE ||
                 event != null &&
                 event.action == KeyEvent.ACTION_DOWN &&
-                event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                event.keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
                 if (event == null || !event.isShiftPressed) {
                     textView.text = editText.text
                     editText.visibility = View.GONE
@@ -54,6 +55,7 @@ interface CustomView {
             false
         }
     }
+
     fun blockToCode(): String
 
     fun convertEditTextToTextView(textView: TextView, editText: EditText) {
@@ -61,6 +63,7 @@ interface CustomView {
         editText.visibility = View.GONE
         textView.visibility = View.VISIBLE
     }
+
     fun makeEditTextsDisabled()
 
 }

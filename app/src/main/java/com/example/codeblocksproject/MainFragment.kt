@@ -258,7 +258,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         val currentBlock = blockMap[view.id]
         draggingList.add(currentBlock!!)
         removeNestedBlocks(currentBlock)
-        var block = draggingList[draggingList.size - 1]
+        val block = draggingList[draggingList.size - 1]
         if (currentBlock.previousId != -1) {
             blockMap[currentBlock.previousId]!!.nextId = block.nextId
         }
@@ -267,7 +267,17 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
         view.visibility = View.INVISIBLE
 
-        block=blockMap[startBlockID]!!
+        refreshPositions()
+
+        val data = ClipData.newPlainText("", "")
+        val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
+        view.startDragAndDrop(data, shadowBuilder, view, 0)
+        draggingBlock = blockMap[view.id]!!
+        true
+    }
+
+    private fun refreshPositions(){
+        var block=blockMap[startBlockID]!!
         block.position=0
         var ind=1
         while (block.blockView.id!=endBlockID){
@@ -275,12 +285,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             block.position=ind
             ind++
         }
-
-        val data = ClipData.newPlainText("", "")
-        val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
-        view.startDragAndDrop(data, shadowBuilder, view, 0)
-        draggingBlock = blockMap[view.id]!!
-        true
     }
 
 
@@ -319,15 +323,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     lastBlock.nextId = temp
                     blockMap[temp]!!.previousId = lastBlock.blockView.id
 
-                    currentBlock.position = block.position + 1
-                    for (i in 1 until draggingList.size) {
-                        draggingList[i].position = draggingList[i - 1].position + 1
-                    }
-
-                    while(block!!.blockView.id!=endBlockID){
-                        block=blockMap[block.nextId]
-                        block!!.position=blockMap[block.previousId]!!.position+1
-                    }
+                    refreshPositions()
 
                     binding.mainWorkfield.removeView(currentBlock.blockView)
                     for (dragBlock in draggingList) {

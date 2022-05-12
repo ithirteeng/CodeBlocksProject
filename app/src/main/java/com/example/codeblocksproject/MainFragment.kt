@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import kotlin.math.abs
 
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
@@ -302,21 +301,18 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             currentBlock.position
                         )
 
-                        var counter = 1
+                        var height = 0
                         var tempBlock = currentBlock
                         while (tempBlock.blockView.id != endBlockID) {
+                            height += tempBlock.blockView.height
                             tempBlock = blockMap[tempBlock.nextId]!!
                             tempBlock.position++
-                            counter++
                         }
 
                         val v = block.blockView
-                        val diff = abs(currentBlock.blockView.height - v.height)
+                        val diff = currentBlock.blockView.height - v.height
 
-
-                        counter--
-                        draggingBlock.blockView.y =
-                            v.y + currentBlock.blockView.height * counter + blockMap[endBlockID]!!.blockView.height + diff
+                        draggingBlock.blockView.y = v.y + height + blockMap[endBlockID]!!.blockView.height - diff
                         draggingBlock.blockView.x = v.x
 
 

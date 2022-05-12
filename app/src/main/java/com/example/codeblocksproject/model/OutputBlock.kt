@@ -37,8 +37,8 @@ class OutputBlock @JvmOverloads constructor(
     }
 
     override fun makeEditTextsDisabled() {
-        val conditionTextView = findViewById<TextView>(R.id.conditionText)
-        val conditionEditText = findViewById<EditText>(R.id.varName)
+        val conditionTextView = findViewById<TextView>(R.id.expressionText)
+        val conditionEditText = findViewById<EditText>(R.id.expression)
         convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 }

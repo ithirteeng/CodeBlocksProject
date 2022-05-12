@@ -12,14 +12,14 @@
     android:paddingBottom="@dimen/topAndBottomBlockPadding">
 
     <TextView
-        android:id="@+id/whileText"
+        android:id="@+id/printText"
         style="@style/blocksTextStyle"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:background="@color/transparent"
         android:text="@string/printBlockText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/conditionText"
+        app:layout_constraintEnd_toStartOf="@id/expressionText"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
 
 
     <TextView
-        android:id="@+id/conditionText"
+        android:id="@+id/expressionText"
         style="@style/blocksTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,12 +41,12 @@
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toEndOf="@id/whileText"
+        app:layout_constraintStart_toEndOf="@id/printText"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <EditText
-        android:id="@+id/condition"
+        android:id="@+id/expression"
         style="@style/blocksTextStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,10 +61,10 @@
         android:padding="2dp"
         android:singleLine="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/conditionText"
-        app:layout_constraintEnd_toEndOf="@+id/conditionText"
-        app:layout_constraintStart_toStartOf="@+id/conditionText"
-        app:layout_constraintTop_toTopOf="@+id/conditionText"
+        app:layout_constraintBottom_toBottomOf="@+id/expressionText"
+        app:layout_constraintEnd_toEndOf="@+id/expressionText"
+        app:layout_constraintStart_toStartOf="@+id/expressionText"
+        app:layout_constraintTop_toTopOf="@+id/expressionText"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

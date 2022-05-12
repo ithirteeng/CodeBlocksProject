@@ -67,7 +67,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
         val startBlock: StartProgramBlock = binding.startProgram
-        startBlockID = binding.startProgram.id
+        startBlockID = binding.startProgram.blockView.id
 
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
@@ -75,7 +75,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         startBlock.blockView.setOnDragListener(choiceDragListener())
 
         val endBlock = binding.endProgram
-        endBlockID = binding.endProgram.id
+        endBlockID = binding.endProgram.blockView.id
 
         blockList.add(endBlock)
         blockMap[endBlockID] = endBlock

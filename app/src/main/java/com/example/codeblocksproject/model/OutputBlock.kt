@@ -15,8 +15,8 @@ class OutputBlock @JvmOverloads constructor(
 ) : CustomView, ConstraintLayout(context, attrs) {
     private val view =
         LayoutInflater.from(context).inflate(R.layout.output_block, this).apply {
-            val conditionTextView = findViewById<TextView>(R.id.conditionText)
-            val conditionEditText = findViewById<EditText>(R.id.condition)
+            val conditionTextView = findViewById<TextView>(R.id.expressionText)
+            val conditionEditText = findViewById<EditText>(R.id.expression)
 
             toTextView(conditionEditText, conditionTextView)
             toEditText(conditionTextView, conditionEditText, context)
@@ -28,17 +28,17 @@ class OutputBlock @JvmOverloads constructor(
     override var nextId: Int = -1
     override val blockView: View = view
     override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
-    override val pattern = "print(<condition>);"
+    override val pattern = "print(<expression>);"
     override var position = 0
 
     override fun blockToCode(): String {
-        val condition = view.findViewById<TextView>(R.id.conditionText)
-        return pattern.replace("<condition>", condition.toString())
+        val expression = view.findViewById<TextView>(R.id.expression).text.toString()
+        return pattern.replace("<expression>", expression)
     }
 
     override fun makeEditTextsDisabled() {
         val conditionTextView = findViewById<TextView>(R.id.conditionText)
-        val conditionEditText = findViewById<EditText>(R.id.condition)
+        val conditionEditText = findViewById<EditText>(R.id.varName)
         convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 }

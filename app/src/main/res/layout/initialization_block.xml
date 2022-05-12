@@ -47,7 +47,7 @@
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <EditText
-        android:id="@+id/condition"
+        android:id="@+id/varName"
         style="@style/blocksTextStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

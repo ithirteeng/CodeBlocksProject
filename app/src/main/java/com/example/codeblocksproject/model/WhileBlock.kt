@@ -32,13 +32,13 @@ class WhileBlock @JvmOverloads constructor(
     override var position = 0
 
     override fun blockToCode(): String {
-        val condition = view.findViewById<TextView>(R.id.conditionText)
-        return pattern.replace("<condition>", condition.toString())
+        val condition = view.findViewById<TextView>(R.id.conditionText).text.toString()
+        return pattern.replace("<condition>", condition)
     }
 
     override fun makeEditTextsDisabled() {
         val conditionTextView = findViewById<TextView>(R.id.conditionText)
-        val conditionEditText = findViewById<EditText>(R.id.condition)
+        val conditionEditText = findViewById<EditText>(R.id.varName)
         convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 

@@ -3,11 +3,9 @@ package com.example.codeblocksproject
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -48,17 +46,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         setupOtherFragmentsFunctions()
         setupAllDragListeners()
         binding.zoomLayout.zoomTo(4f, true)
-
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            binding.root.getWindowVisibleDisplayFrame(r)
-            val screenHeight: Int = binding.root.rootView.height
-
-            val keypadHeight = screenHeight - r.bottom
-            if (keypadHeight > screenHeight * 0.15) {
-                Log.i("keyboard", "open")
-            }
-        }
     }
 
     override fun onCreateView(
@@ -183,7 +170,8 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     private fun makeMarginsForBlocks() {
         for (block in blockList) {
-            val params : LinearLayout.LayoutParams = block.blockView.layoutParams as LinearLayout.LayoutParams
+            val params: LinearLayout.LayoutParams =
+                block.blockView.layoutParams as LinearLayout.LayoutParams
             params.setMargins(0, 0, cyclesCount * INDENT, 0)
         }
     }
@@ -213,6 +201,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE)
             block.blockView.setOnLongClickListener(choiceLongClickListener())
         block.blockView.setOnDragListener(choiceDragListener())
+        makeMarginsForBlocks()
 
     }
 
@@ -343,6 +332,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                         )
                     }
                 } else {
+                    if (draggingBlock.blockType == BlockTypes.WHILE_BLOCK_TYPE) {
+                        cyclesCount--
+                    }
                     for (block in draggingList) {
                         deleteView(block)
                     }
@@ -389,7 +381,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 currentBlock.blockView.x += INDENT
             }
             if (prevBlock.blockType == BlockTypes.END_BLOCK_TYPE) {
-                Log.i("-INDENT", "true")
                 currentBlock.blockView.x -= INDENT
             }
 

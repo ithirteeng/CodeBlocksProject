@@ -28,7 +28,7 @@ class WhileBlock @JvmOverloads constructor(
     override var nextId: Int = -1
     override val blockView: View = view
     override val blockType = BlockTypes.WHILE_BLOCK_TYPE
-    override val pattern = "while(<condition>);"
+    override val pattern = "while(<condition>)"
     override var position = 0
 
     override fun blockToCode(): String {

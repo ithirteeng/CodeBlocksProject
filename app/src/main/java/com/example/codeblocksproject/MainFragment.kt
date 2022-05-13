@@ -31,6 +31,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         const val INDENT = 100
     }
 
+    private var cyclesCount = 0
     private val blockList: MutableList<CustomView> = mutableListOf()
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
     private val consoleFragment = ConsoleFragment()
@@ -170,12 +171,21 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
             BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
             BlockTypes.WHILE_BLOCK_TYPE -> {
+                cyclesCount++
+                makeMarginsForBlocks()
                 createBlock(WhileBlock(requireContext()))
                 createBlock(BeginBlock(requireContext()))
                 createBlock(EndBlock(requireContext()))
             }
         }
         alignX()
+    }
+
+    private fun makeMarginsForBlocks() {
+        for (block in blockList) {
+            val params : LinearLayout.LayoutParams = block.blockView.layoutParams as LinearLayout.LayoutParams
+            params.setMargins(0, 0, cyclesCount * INDENT, 0)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -192,11 +202,11 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         blockMap[block.blockView.id] = block
 
         binding.mainWorkfield.addView(block.blockView, lastBlock.position + 1)
-
         block.blockView.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+
         block.position = lastBlock.position + 1
         blockMap[endBlockID]!!.position++
 
@@ -242,7 +252,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 brackets--
             }
         }
-        if (block!!.nextId!=-1)
+        if (block!!.nextId != -1)
             block = blockMap[block.nextId]
         if (block!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
             draggingList.add(block)
@@ -276,13 +286,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         true
     }
 
-    private fun refreshPositions(){
-        var block=blockMap[startBlockID]!!
-        block.position=0
-        var ind=1
-        while (block.blockView.id!=endBlockID){
-            block=blockMap[block.nextId]!!
-            block.position=ind
+    private fun refreshPositions() {
+        var block = blockMap[startBlockID]!!
+        block.position = 0
+        var ind = 1
+        while (block.blockView.id != endBlockID) {
+            block = blockMap[block.nextId]!!
+            block.position = ind
             ind++
         }
     }
@@ -334,6 +344,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     }
                 } else {
                     for (block in draggingList) {
+                        if (block.blockType == BlockTypes.WHILE_BLOCK_TYPE) {
+                            cyclesCount--
+                        }
                         deleteView(block)
                     }
                 }

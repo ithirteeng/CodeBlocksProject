@@ -267,6 +267,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
         view.visibility = View.INVISIBLE
 
+        binding.mainWorkfield.removeView(view)
+        binding.mainWorkfield.addView(view)
+
         refreshPositions()
 
         val data = ClipData.newPlainText("", "")

@@ -38,6 +38,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private var startBlockID = 0
     private var endBlockID = 0
     private var freeId = 0
+    private lateinit var draggingBlock: CustomView
+    private var draggingList = mutableListOf<CustomView>()
+    private var location = MyPoint(0f, 0f)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -168,14 +171,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         alignX()
     }
 
-    private fun makeMarginsForBlocks() {
-        for (block in blockList) {
-            val params: LinearLayout.LayoutParams =
-                block.blockView.layoutParams as LinearLayout.LayoutParams
-            params.setMargins(0, 0, cyclesCount * INDENT, 0)
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(block: CustomView) {
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
@@ -215,41 +210,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             freeId++
     }
 
-    private fun deleteView(block: CustomView) {
-        binding.mainWorkfield.removeView(block.blockView)
-        blockMap.remove(block.blockView.id)
-        blockList.remove(block)
-    }
-
-    private fun removeNestedBlocks(parentBlock: CustomView) {
-        var brackets = 0
-        var block = blockMap[parentBlock.nextId]
-        if (block!!.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
-            brackets++
-            draggingList.add(block)
-            binding.mainWorkfield.removeView(block.blockView)
-        }
-        while (brackets != 0) {
-            block = blockMap[block!!.nextId]!!
-            draggingList.add(block)
-            binding.mainWorkfield.removeView(block.blockView)
-
-            if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
-                brackets++
-            }
-            if (block.blockType == BlockTypes.END_BLOCK_TYPE) {
-                brackets--
-            }
-        }
-        if (block!!.nextId != -1)
-            block = blockMap[block.nextId]
-        if (block!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
-            draggingList.add(block)
-            binding.mainWorkfield.removeView(block.blockView)
-            removeNestedBlocks(block)
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
@@ -277,22 +237,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         draggingBlock = blockMap[view.id]!!
         true
     }
-
-    private fun refreshPositions() {
-        var block = blockMap[startBlockID]!!
-        block.position = 0
-        var ind = 1
-        while (block.blockView.id != endBlockID) {
-            block = blockMap[block.nextId]!!
-            block.position = ind
-            ind++
-        }
-    }
-
-
-    private lateinit var draggingBlock: CustomView
-    private var draggingList = mutableListOf<CustomView>()
-    private var location = MyPoint(0f, 0f)
 
     private fun choiceDragListener() = View.OnDragListener { view, event ->
         when (event.action) {
@@ -353,6 +297,17 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         true
     }
 
+    private fun refreshPositions() {
+        var block = blockMap[startBlockID]!!
+        block.position = 0
+        var ind = 1
+        while (block.blockView.id != endBlockID) {
+            block = blockMap[block.nextId]!!
+            block.position = ind
+            ind++
+        }
+    }
+
     private fun makeAllEditTextsDisabled() {
         for (block in blockList) {
             if (block.blockView.id != endBlockID && block.blockView.id != startBlockID)
@@ -388,6 +343,49 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             }
 
             prevBlock = currentBlock
+        }
+    }
+
+    private fun deleteView(block: CustomView) {
+        binding.mainWorkfield.removeView(block.blockView)
+        blockMap.remove(block.blockView.id)
+        blockList.remove(block)
+    }
+
+    private fun removeNestedBlocks(parentBlock: CustomView) {
+        var brackets = 0
+        var block = blockMap[parentBlock.nextId]
+        if (block!!.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+            brackets++
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+        }
+        while (brackets != 0) {
+            block = blockMap[block!!.nextId]!!
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+
+            if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+                brackets++
+            }
+            if (block.blockType == BlockTypes.END_BLOCK_TYPE) {
+                brackets--
+            }
+        }
+        if (block!!.nextId != -1)
+            block = blockMap[block.nextId]
+        if (block!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+            removeNestedBlocks(block)
+        }
+    }
+
+    private fun makeMarginsForBlocks() {
+        for (block in blockList) {
+            val params: LinearLayout.LayoutParams =
+                block.blockView.layoutParams as LinearLayout.LayoutParams
+            params.setMargins(0, 0, cyclesCount * INDENT, 0)
         }
     }
 }

@@ -24,7 +24,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     }
 
     fun checkCode(s: String) {
-        binding.textFieldView.text = s
+        binding.consoleTextView.text = s
     }
 
     override fun onCreateView(
@@ -109,8 +109,8 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         buttonsColor: Int,
         context: Context
     ) {
-        binding.textFieldView.setBackgroundColor(getColor(backgroundColor, context))
-        binding.textFieldView.setTextColor(getColor(textColor, context))
+        binding.consoleTextView.setBackgroundColor(getColor(backgroundColor, context))
+        binding.consoleTextView.setTextColor(getColor(textColor, context))
 
         binding.buttonBackground.setBackgroundColor(getColor(buttonsColor, context))
     }

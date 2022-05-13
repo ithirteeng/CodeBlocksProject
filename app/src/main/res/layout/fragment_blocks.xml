@@ -83,53 +83,49 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageButton
+                <Button
                     android:id="@+id/initializationBlock"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/blocksSize"
+                    style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/contentDescription"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/initialization_block_image"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
+                    android:background="@drawable/initialization_button_background"
+                    android:text="@string/initializationButton" />
 
-                <ImageButton
+                <Button
+                    android:id="@+id/assignmentBlock"
+                    style="@style/blocksButtonsStyle"
+                    android:layout_margin="@dimen/blocksPadding"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/assignment_button_background"
+                    android:text="@string/assignmentButton" />
+
+                <Button
                     android:id="@+id/outputBlock"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/blocksSize"
+                    style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/contentDescription"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/output_block_image" />
+                    android:background="@drawable/output_button_background"
+                    android:text="@string/outputButton" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/whileBlock"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/blocksSize"
+                    style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/contentDescription"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/while_block_image" />
+                    android:background="@drawable/while_button_background"
+                    android:text="@string/whileButton" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/ifBlock"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/blocksSize"
+                    style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/contentDescription"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/if_block_image" />
+                    android:background="@drawable/if_button_background"
+                    android:text="@string/ifButton" />
             </LinearLayout>
         </ScrollView>
 

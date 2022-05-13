@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
@@ -11,23 +13,32 @@ class OutputBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : CustomView, ConstraintLayout(context, attrs) {
+    private val view =
+        LayoutInflater.from(context).inflate(R.layout.output_block, this).apply {
+            val conditionTextView = findViewById<TextView>(R.id.expressionText)
+            val conditionEditText = findViewById<EditText>(R.id.expression)
+
+            toTextView(conditionEditText, conditionTextView)
+            toEditText(conditionTextView, conditionEditText, context)
+
+        }
 
     override val isNestingPossible = false
     override var previousId: Int = -1
     override var nextId: Int = -1
-    override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-    //TODO:Change to output block
-
+    override val blockView: View = view
     override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
-    override val pattern = ""
-
-    //TODO:Change to output pattern
+    override val pattern = "print(<expression>);"
     override var position = 0
+
     override fun blockToCode(): String {
-        return pattern
+        val expression = view.findViewById<TextView>(R.id.expression).text.toString()
+        return pattern.replace("<expression>", expression)
     }
+
     override fun makeEditTextsDisabled() {
-        TODO("Not yet implemented")
+        val conditionTextView = findViewById<TextView>(R.id.expressionText)
+        val conditionEditText = findViewById<EditText>(R.id.expression)
+        convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 }

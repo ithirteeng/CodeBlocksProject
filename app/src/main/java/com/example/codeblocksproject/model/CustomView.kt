@@ -7,7 +7,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 
 interface CustomView {
 
@@ -33,22 +32,30 @@ interface CustomView {
     }
 
     fun toTextView(editText: EditText, textView: TextView) {
+        editText.setOnFocusChangeListener { _, focus ->
+            if (!focus) {
+                textView.text = editText.text
+                editText.visibility = View.GONE
+                textView.visibility = View.VISIBLE
+            }
+        }
         editText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                 actionId == EditorInfo.IME_ACTION_DONE ||
                 event != null &&
                 event.action == KeyEvent.ACTION_DOWN &&
-                event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                event.keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
                 if (event == null || !event.isShiftPressed) {
                     textView.text = editText.text
                     editText.visibility = View.GONE
                     textView.visibility = View.VISIBLE
-                    true
                 }
             }
             false
         }
     }
+
     fun blockToCode(): String
 
     fun convertEditTextToTextView(textView: TextView, editText: EditText) {
@@ -56,5 +63,7 @@ interface CustomView {
         editText.visibility = View.GONE
         textView.visibility = View.VISIBLE
     }
+
     fun makeEditTextsDisabled()
+
 }

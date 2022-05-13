@@ -38,4 +38,12 @@
     <color name="shrekConsoleColor">#6E7023</color>
     <color name="shrekDrawerColor">#606A38</color>
     <color name="shrekBottomButtonsColor">#64730B</color>
+    <!--  blocks colors  -->
+    <color name="startAndEndProgramBlockColor">#EFD000</color>
+    <color name="beginAndEndCycleBlockColor">#985AC5</color>
+    <color name="whileBlockColor">#F17F1A</color>
+    <color name="initializationBlockColor">#FF03DAC5</color>
+    <color name="assignmentBlockColor">#2BA2F1</color>
+    <color name="outputBlockColor">#FB649C</color>
+    <color name="ifBlockColor">#76E862</color>
 </resources>

@@ -3,11 +3,9 @@ package com.example.codeblocksproject
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +17,6 @@ import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import kotlin.math.abs
 
 
 class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
@@ -29,17 +26,21 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         const val SPACE_COLOR = "space"
         const val MONOCHROME_COLOR = "monochrome"
         const val SHREK_COLOR = "shrek"
+        const val INDENT = 100
     }
 
+    private var cyclesCount = 0
     private val blockList: MutableList<CustomView> = mutableListOf()
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
     private val consoleFragment = ConsoleFragment()
     private val blocksFragment = BlocksFragment()
     private lateinit var binding: FragmentMainBinding
-    private val workFieldRect = Rect()
     private var startBlockID = 0
     private var endBlockID = 0
     private var freeId = 0
+    private lateinit var draggingBlock: CustomView
+    private var draggingList = mutableListOf<CustomView>()
+    private var location = MyPoint(0f, 0f)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,17 +49,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         setupOtherFragmentsFunctions()
         setupAllDragListeners()
         binding.zoomLayout.zoomTo(4f, true)
-
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            binding.root.getWindowVisibleDisplayFrame(r)
-            val screenHeight: Int = binding.root.rootView.height
-
-            val keypadHeight = screenHeight - r.bottom
-            if (keypadHeight > screenHeight * 0.15) {
-                Log.i("keyboard", "open")
-            }
-        }
     }
 
     override fun onCreateView(
@@ -67,17 +57,18 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        binding.mainWorkfield.getHitRect(workFieldRect)
 
-        val startBlock = StartProgramBlock(binding.start, requireContext())
-        startBlockID = binding.start.id
+        val startBlock: StartProgramBlock = binding.startProgram
+        startBlockID = binding.startProgram.blockView.id
+
         blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
         startBlock.position = 0
         startBlock.blockView.setOnDragListener(choiceDragListener())
 
-        val endBlock = EndProgramBlock(binding.end, requireContext())
-        endBlockID = binding.end.id
+        val endBlock = binding.endProgram
+        endBlockID = binding.endProgram.blockView.id
+
         blockList.add(endBlock)
         blockMap[endBlockID] = endBlock
         endBlock.position = 1
@@ -164,39 +155,48 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         binding.blocksButton.visibility = View.VISIBLE
     }
 
-    override fun addBlock() {
-        createBlock()
-
+    override fun addBlock(type: String) {
+        when (type) {
+            BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
+            BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
+            BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
+            BlockTypes.WHILE_BLOCK_TYPE -> {
+                cyclesCount++
+                makeMarginsForBlocks()
+                createBlock(WhileBlock(requireContext()))
+                createBlock(BeginBlock(requireContext()))
+                createBlock(EndBlock(requireContext()))
+            }
+        }
+        alignX()
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBlock() {
-        val newBlock = InitializationBlock(requireContext())
-
+    private fun createBlock(block: CustomView) {
         val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
-        newBlock.setDefault(lastBlock.blockView.x)
-        lastBlock.nextId = newBlock.blockView.id
-        newBlock.previousId = lastBlock.blockView.id
+        block.blockView.setDefault(lastBlock.blockView.x)
+        lastBlock.nextId = block.blockView.id
+        block.previousId = lastBlock.blockView.id
 
-        blockMap[endBlockID]!!.previousId = newBlock.blockView.id
-        newBlock.nextId = endBlockID
+        blockMap[endBlockID]!!.previousId = block.blockView.id
+        block.nextId = endBlockID
 
-        blockList.add(newBlock)
-        blockMap[newBlock.blockView.id] = newBlock
+        blockList.add(block)
+        blockMap[block.blockView.id] = block
 
-        binding.mainWorkfield.addView(newBlock, lastBlock.position + 1)
-
-        newBlock.blockView.layoutParams = LinearLayout.LayoutParams(
+        binding.mainWorkfield.addView(block.blockView, lastBlock.position + 1)
+        block.blockView.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        newBlock.position = lastBlock.position + 1
+
+        block.position = lastBlock.position + 1
         blockMap[endBlockID]!!.position++
 
-
-        newBlock.setOnLongClickListener(choiceTouchListener())
-        newBlock.setOnDragListener(choiceDragListener())
-
+        if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE)
+            block.blockView.setOnLongClickListener(choiceLongClickListener())
+        block.blockView.setOnDragListener(choiceDragListener())
+        makeMarginsForBlocks()
 
     }
 
@@ -204,42 +204,32 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         this.x = x
         this.z = 1F
         this.id = freeId
-        freeId++
-        if (freeId == startBlockID || freeId == endBlockID) {
-            freeId++
-        }
-    }
 
-    private fun deleteView(block: CustomView) {
-        binding.mainWorkfield.removeView(block.blockView)
-        blockMap.remove(block.blockView.id)
-        blockList.remove(block)
+        freeId++
+        if (freeId == startBlockID || freeId == endBlockID)
+            freeId++
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun choiceTouchListener() = View.OnLongClickListener { view ->
+    private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeAllEditTextsDisabled()
+        draggingList.clear()
         val currentBlock = blockMap[view.id]
-        if (currentBlock!!.previousId != -1) {
-            blockMap[currentBlock.previousId]!!.nextId = currentBlock.nextId
+        draggingList.add(currentBlock!!)
+        removeNestedBlocks(currentBlock)
+        val block = draggingList[draggingList.size - 1]
+        if (currentBlock.previousId != -1) {
+            blockMap[currentBlock.previousId]!!.nextId = block.nextId
         }
-        if (currentBlock.nextId != -1) {
-            blockMap[currentBlock.nextId]!!.previousId = currentBlock.previousId
-        }
-
-        var block = currentBlock
-        while (block!!.blockView.id != endBlockID) {
-            block = blockMap[block.nextId]!!
-            block.position--
-            binding.mainWorkfield.removeView(block.blockView)
-        }
-
-        block = currentBlock
-        while (block!!.blockView.id != endBlockID) {
-            block = blockMap[block.nextId]!!
-            binding.mainWorkfield.addView(block.blockView, block.position)
+        if (block.nextId != -1) {
+            blockMap[block.nextId]!!.previousId = currentBlock.previousId
         }
         view.visibility = View.INVISIBLE
+
+        binding.mainWorkfield.removeView(view)
+        binding.mainWorkfield.addView(view)
+
+        refreshPositions()
 
         val data = ClipData.newPlainText("", "")
         val shadowBuilder = DragShadowBuilder(blockMap[view.id]!!.blockView)
@@ -247,10 +237,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         draggingBlock = blockMap[view.id]!!
         true
     }
-
-
-    private lateinit var draggingBlock: CustomView
-    private var location = MyPoint(0f, 0f)
 
     private fun choiceDragListener() = View.OnDragListener { view, event ->
         when (event.action) {
@@ -267,61 +253,59 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                 }
             }
             DragEvent.ACTION_DROP -> {
-                if (blockMap[view.id] != null || view == binding.start) {
-                    if (view.id != endBlockID) {
-                        draggingBlock.blockView.z = 1F
-                        val currentBlock = draggingBlock
-                        val block = view as CustomView
+                if (blockMap[view.id] != null) {
+                    draggingBlock.blockView.z = 1F
+                    val currentBlock = draggingBlock
+                    var block = blockMap[view.id]
+                    if (blockMap[view.id]!!.isNestingPossible) {
+                        block = blockMap[blockMap[view.id]!!.nextId]!!
+                    }
 
-                        val temp = block.nextId
-                        block.nextId = currentBlock.blockView.id
-                        currentBlock.previousId = block.blockView.id
-                        currentBlock.nextId = temp
-                        blockMap[temp]!!.previousId = currentBlock.blockView.id
+                    val temp = block!!.nextId
+                    block.nextId = currentBlock.blockView.id
+                    currentBlock.previousId = block.blockView.id
 
-                        currentBlock.position = block.position + 1
+                    val lastBlock = draggingList[draggingList.size - 1]
+                    lastBlock.nextId = temp
+                    blockMap[temp]!!.previousId = lastBlock.blockView.id
 
-                        binding.mainWorkfield.removeView(currentBlock.blockView)
+                    refreshPositions()
+
+                    binding.mainWorkfield.removeView(currentBlock.blockView)
+                    for (dragBlock in draggingList) {
                         binding.mainWorkfield.addView(
-                            currentBlock.blockView,
-                            currentBlock.position
+                            dragBlock.blockView,
+                            dragBlock.position
                         )
-
-                        var counter = 1
-                        var tempBlock = currentBlock
-                        while (tempBlock.blockView.id != endBlockID) {
-                            tempBlock = blockMap[tempBlock.nextId]!!
-                            tempBlock.position++
-                            counter++
-                        }
-
-                        val v = block.blockView
-                        val diff = abs(currentBlock.blockView.height - v.height)
-
-
-                        counter--
-                        draggingBlock.blockView.y =
-                            v.y + currentBlock.blockView.height * counter + binding.end.height + diff
-                        draggingBlock.blockView.x = v.x
-
-
-                    } else {
-                        deleteView(draggingBlock)
                     }
                 } else {
-                    deleteView(draggingBlock)
+                    if (draggingBlock.blockType == BlockTypes.WHILE_BLOCK_TYPE) {
+                        cyclesCount--
+                    }
+                    for (block in draggingList) {
+                        deleteView(block)
+                    }
                 }
             }
             DragEvent.ACTION_DRAG_ENDED -> {
                 draggingBlock.blockView.post {
                     draggingBlock.blockView.visibility = View.VISIBLE
                 }
-            }
-            DragEvent.ACTION_DRAG_EXITED -> {
-                binding.mainWorkfield.removeView(draggingBlock.blockView)
+                alignX()
             }
         }
         true
+    }
+
+    private fun refreshPositions() {
+        var block = blockMap[startBlockID]!!
+        block.position = 0
+        var ind = 1
+        while (block.blockView.id != endBlockID) {
+            block = blockMap[block.nextId]!!
+            block.position = ind
+            ind++
+        }
     }
 
     private fun makeAllEditTextsDisabled() {
@@ -332,7 +316,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     }
 
     private fun blocksToCode(): String {
-        var code = "{\n"
+        var code = ""
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
@@ -343,5 +327,65 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         return code
     }
 
+    private fun alignX() {
+        var prevBlock = blockMap[startBlockID]
+        var currentBlock = prevBlock
 
+        while (currentBlock!!.blockView.id != endBlockID) {
+            currentBlock = blockMap[prevBlock!!.nextId]!!
+            currentBlock.blockView.x = prevBlock.blockView.x
+
+            if (prevBlock.isNestingPossible) {
+                currentBlock.blockView.x += INDENT
+            }
+            if (prevBlock.blockType == BlockTypes.END_BLOCK_TYPE) {
+                currentBlock.blockView.x -= INDENT
+            }
+
+            prevBlock = currentBlock
+        }
+    }
+
+    private fun deleteView(block: CustomView) {
+        binding.mainWorkfield.removeView(block.blockView)
+        blockMap.remove(block.blockView.id)
+        blockList.remove(block)
+    }
+
+    private fun removeNestedBlocks(parentBlock: CustomView) {
+        var brackets = 0
+        var block = blockMap[parentBlock.nextId]
+        if (block!!.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+            brackets++
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+        }
+        while (brackets != 0) {
+            block = blockMap[block!!.nextId]!!
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+
+            if (block.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
+                brackets++
+            }
+            if (block.blockType == BlockTypes.END_BLOCK_TYPE) {
+                brackets--
+            }
+        }
+        if (block!!.nextId != -1)
+            block = blockMap[block.nextId]
+        if (block!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            draggingList.add(block)
+            binding.mainWorkfield.removeView(block.blockView)
+            removeNestedBlocks(block)
+        }
+    }
+
+    private fun makeMarginsForBlocks() {
+        for (block in blockList) {
+            val params: LinearLayout.LayoutParams =
+                block.blockView.layoutParams as LinearLayout.LayoutParams
+            params.setMargins(0, 0, cyclesCount * INDENT, 0)
+        }
+    }
 }

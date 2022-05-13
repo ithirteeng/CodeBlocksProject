@@ -4,6 +4,6 @@ interface MainFragmentInterface {
     fun displayButtons() {
     }
 
-    fun addBlock() {
+    fun addBlock(type: String) {
     }
 }

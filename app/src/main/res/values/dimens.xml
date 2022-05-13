@@ -13,7 +13,11 @@
     <dimen name="workfieldPadding">10dp</dimen>
     <!-- blocks dimensions -->
     <dimen name="topAndBottomBlockPadding">20dp</dimen>
-    <dimen name="startAndEndBlockPadding">10dp</dimen>
+    <dimen name="startAndEndBlockPadding">15dp</dimen>
     <dimen name="blocksTextSize">18dp</dimen>
     <dimen name="blocksMargin">5dp</dimen>
+    <dimen name="startEndProgramTextSize">34sp</dimen>
+    <dimen name="beginEndCycleTextSize">22sp</dimen>
+    <dimen name="addingBlocksButtonsTextSize">25sp</dimen>
+    <dimen name="addingBlocksButtonsBordersSize">4dp</dimen>
 </resources>

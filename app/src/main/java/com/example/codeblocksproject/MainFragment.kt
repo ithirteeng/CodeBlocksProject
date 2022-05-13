@@ -344,9 +344,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                     }
                 } else {
                     for (block in draggingList) {
-                        if (block.blockType == BlockTypes.WHILE_BLOCK_TYPE) {
-                            cyclesCount--
-                        }
                         deleteView(block)
                     }
                 }

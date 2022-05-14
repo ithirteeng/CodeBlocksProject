@@ -13,12 +13,20 @@ import com.example.codeblocksproject.databinding.FragmentBlocksBinding
 import com.example.codeblocksproject.model.BlockTypes
 
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
-    var isClosedBlocks = true
+    private var isClosedBlocks = true
     private lateinit var binding: FragmentBlocksBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
         addingBlocks()
+    }
+
+    fun getIsClosedBlocks(): Boolean {
+        return isClosedBlocks
+    }
+
+    fun setISClosedBlocks(meaning: Boolean) {
+        isClosedBlocks = meaning
     }
 
     private fun addingBlocks() {
@@ -110,7 +118,6 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
 
     private fun changeColor(backgroundColor: Int, buttonColor: Int, context: Context) {
         binding.blocksBackground.setBackgroundColor(getColor(backgroundColor, context))
-
         binding.buttonBackground.setBackgroundColor(getColor(buttonColor, context))
     }
 

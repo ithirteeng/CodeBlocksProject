@@ -40,7 +40,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
     private var freeId = 0
     private lateinit var draggingBlock: CustomView
     private var draggingList = mutableListOf<CustomView>()
-    private var location = MyPoint(0f, 0f)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -105,9 +104,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     private fun blocksButtonEvent() {
         binding.blocksButton.setOnClickListener {
-            if (consoleFragment.isClosedStart) {
-                if (blocksFragment.isClosedBlocks) {
-                    blocksFragment.isClosedBlocks = false
+            if (consoleFragment.getIsClosedStart()) {
+                if (blocksFragment.getIsClosedBlocks()) {
+                    blocksFragment.setISClosedBlocks(false)
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
@@ -128,9 +127,9 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     private fun startButtonEvent() {
         binding.startButton.setOnClickListener {
-            if (blocksFragment.isClosedBlocks) {
-                if (consoleFragment.isClosedStart) {
-                    consoleFragment.isClosedStart = false
+            if (blocksFragment.getIsClosedBlocks()) {
+                if (consoleFragment.getIsClosedStart()) {
+                    consoleFragment.setISClosedStart(false)
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
                     transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
@@ -212,8 +211,10 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceLongClickListener() = View.OnLongClickListener { view ->
+        makeKeymapHidden()
         makeAllEditTextsDisabled()
         draggingList.clear()
+
         val currentBlock = blockMap[view.id]
         draggingList.add(currentBlock!!)
         removeNestedBlocks(currentBlock)
@@ -242,15 +243,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 binding.mainWorkfield.invalidate()
-                val imm: InputMethodManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(draggingBlock.blockView.windowToken, 0)
-            }
-            DragEvent.ACTION_DRAG_LOCATION -> {
-                if (view == binding.mainWorkfield) {
-                    location.x = event.x
-                    location.y = event.y
-                }
+                makeKeymapHidden()
             }
             DragEvent.ACTION_DROP -> {
                 if (blockMap[view.id] != null) {
@@ -279,11 +272,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                         )
                     }
                 } else {
-                    if (draggingBlock.blockType == BlockTypes.WHILE_BLOCK_TYPE) {
+                    if (draggingBlock.blockType == BlockTypes.WHILE_BLOCK_TYPE ||
+                        draggingBlock.blockType == BlockTypes.IF_BLOCK_TYPE
+                    ) {
                         cyclesCount--
                     }
                     for (block in draggingList) {
-                        deleteView(block)
+                        deleteBlock(block)
                     }
                 }
             }
@@ -313,6 +308,12 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
             if (block.blockView.id != endBlockID && block.blockView.id != startBlockID)
                 block.makeEditTextsDisabled()
         }
+    }
+
+    private fun makeKeymapHidden() {
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.mainWorkfield.windowToken, 0)
     }
 
     private fun blocksToCode(): String {
@@ -346,7 +347,7 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         }
     }
 
-    private fun deleteView(block: CustomView) {
+    private fun deleteBlock(block: CustomView) {
         binding.mainWorkfield.removeView(block.blockView)
         blockMap.remove(block.blockView.id)
         blockList.remove(block)

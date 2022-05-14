@@ -12,15 +12,21 @@ import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentConsoleBinding
 
 class ConsoleFragment : Fragment(R.layout.fragment_console) {
-
-
-    var isClosedStart = true
+    private var isClosedStart = true
     private lateinit var binding: FragmentConsoleBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
 
+    }
+
+    fun getIsClosedStart(): Boolean {
+        return isClosedStart
+    }
+
+    fun setISClosedStart(meaning: Boolean) {
+        isClosedStart = meaning
     }
 
     fun checkCode(s: String) {

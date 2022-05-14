@@ -1,11 +1,14 @@
 package com.example.codeblocksproject
 
+import Lexer
+import Parser
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -143,7 +146,19 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
-                    consoleFragment.checkCode(blocksToCode())
+                    val lexer = Lexer(blocksToCode(), DEBUG = true)
+                    val tokens = lexer.lexicalAnalysis()
+
+                    tokens.forEach { x -> println(x.aboutMe()) }
+                    var answer = ""
+                    val parser = Parser(tokens, DEBUG = true)
+                    val array = parser.run()
+                    for (string in array) {
+                        if (string != "") {
+                            answer += "$string\n"
+                        }
+                    }
+                    consoleFragment.checkCode(answer)
                 }
             }
         }
@@ -320,10 +335,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
-            code += currentBlock.blockToCode() + "\n"
+            if (currentBlock.blockView.id != startBlockID) {
+                code += currentBlock.blockToCode() + "\n"
+            }
             currentBlock = blockMap[currentBlock.nextId]!!
+
+
         }
-        code += "}"
         return code
     }
 

@@ -203,7 +203,6 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         this.x = x
         this.z = 1F
         this.id = freeId
-
         freeId++
         if (freeId == startBlockID || freeId == endBlockID)
             freeId++

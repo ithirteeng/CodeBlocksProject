@@ -21,7 +21,7 @@ interface CustomView {
     fun toEditText(textView: TextView, editText: EditText, context: Context) {
         textView.setOnClickListener {
             editText.visibility = View.VISIBLE
-            textView.visibility = View.INVISIBLE
+            textView.visibility = View.GONE
 
             editText.requestFocus()
             editText.isFocusableInTouchMode = true

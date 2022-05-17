@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
@@ -12,7 +13,7 @@ import com.example.codeblocksproject.R
 class WhileBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : CustomView, ConstraintLayout(context, attrs) {
+) : CustomView, LinearLayout(context, attrs) {
     private val view =
         LayoutInflater.from(context).inflate(R.layout.while_block, this).apply {
             val conditionTextView = findViewById<TextView>(R.id.conditionText)
@@ -47,4 +48,13 @@ class WhileBlock @JvmOverloads constructor(
         return conditionTextView.text.isEmpty()
     }
 
+    init {
+        blockView.setBackgroundResource(R.drawable.while_block_background)
+        blockView.setPadding(
+            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding)
+        )
+    }
 }

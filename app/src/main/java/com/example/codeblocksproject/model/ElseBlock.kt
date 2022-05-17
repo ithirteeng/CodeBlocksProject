@@ -29,4 +29,8 @@ class ElseBlock @JvmOverloads constructor(
     override fun makeEditTextsDisabled() {
         TODO("Not yet implemented")
     }
+
+    override fun ifTextViewEmpty(): Boolean {
+        return false
+    }
 }

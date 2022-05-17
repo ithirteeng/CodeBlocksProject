@@ -1,5 +1,7 @@
 package com.example.codeblocksproject
 
+import Lexer
+import Parser
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
@@ -143,8 +145,37 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
-                    consoleFragment.checkCode(blocksToCode())
+                    try {
+                        checkIfBlocksNull()
+
+                        val lexer = Lexer(blocksToCode(), DEBUG = true)
+                        val tokens = lexer.lexicalAnalysis()
+
+                        tokens.forEach { x -> println(x.aboutMe()) }
+                        var answer = ""
+                        val parser = Parser(tokens, DEBUG = true)
+                        val array = parser.run()
+
+                        for (string in array) {
+                            if (string != "") {
+                                answer += "$string\n"
+                            }
+                        }
+                        consoleFragment.resultsToConsole(answer)
+                    } catch (e: Exception) {
+                        consoleFragment.resultsToConsole(e.message.toString())
+                    }
+
+
                 }
+            }
+        }
+    }
+
+    private fun checkIfBlocksNull() {
+        for (index in 0 until blockList.size) {
+            if (blockList[index].ifTextViewEmpty()) {
+                throw Exception("Check ${blockList[index].blockType} it is empty!")
             }
         }
     }
@@ -320,10 +351,13 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
-            code += currentBlock.blockToCode() + "\n"
+            if (currentBlock.blockView.id != startBlockID) {
+                code += currentBlock.blockToCode() + "\n"
+            }
             currentBlock = blockMap[currentBlock.nextId]!!
+
+
         }
-        code += "}"
         return code
     }
 

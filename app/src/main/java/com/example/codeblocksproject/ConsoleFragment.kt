@@ -29,7 +29,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         isClosedStart = meaning
     }
 
-    fun checkCode(s: String) {
+    fun resultsToConsole(s: String) {
         binding.consoleTextView.text = s
     }
 

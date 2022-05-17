@@ -1,0 +1,24 @@
+var arr: Int = 100 / 30 > 1 ;
+print(arr + 10);
+
+!!! print (20)
+
+
+!!! HELLO{}!@#@$%#@%{DS[]FS() !!!
+
+fun foo() {
+
+var arr[10]: String
+print (15);
+return 20;
+}
+
+
+
+fun com.example.codeblocksproject.interpreter.main() {
+    var x: Int = foo();
+    print x
+    return 0;
+}
+EOF!!!
+

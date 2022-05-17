@@ -1,4 +1,4 @@
-public class Lexer(val code : String, private val DEBUG : Boolean = false) {
+class Lexer(val code : String, private val DEBUG : Boolean = false) {
     private var pos : Int = 0
     private var tokenListAll = mutableListOf<Token>()
 
@@ -28,6 +28,6 @@ public class Lexer(val code : String, private val DEBUG : Boolean = false) {
                 return true
             }
         }
-        throw Error("Check position $pos! There is a lexical error")
+        throw Exception("Check position $pos! There is a lexical error")
     }
 }

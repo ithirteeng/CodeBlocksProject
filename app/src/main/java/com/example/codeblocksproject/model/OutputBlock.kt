@@ -41,4 +41,9 @@ class OutputBlock @JvmOverloads constructor(
         val conditionEditText = findViewById<EditText>(R.id.expression)
         convertEditTextToTextView(conditionTextView, conditionEditText)
     }
+
+    override fun ifTextViewEmpty(): Boolean {
+        val conditionTextView = findViewById<TextView>(R.id.expressionText)
+        return conditionTextView.text.isEmpty()
+    }
 }

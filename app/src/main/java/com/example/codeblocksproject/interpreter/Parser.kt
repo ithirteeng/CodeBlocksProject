@@ -1,5 +1,4 @@
 import java.util.*
-import kotlin.collections.ArrayList
 
 val OPERATORS = arrayOf("+", "-", "*", "/", "==", "!=", ">=", ">", "<=", "<", "||", "&&")
 val OPERATORS_PRIORITY = mapOf<String, Int>(
@@ -25,7 +24,8 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     private fun match(vararg expected: String): Token? {
         // return Token if currentToken is one of expected else null
         if (pos >= tokens.size) {
-            println("Match returned null" + "\n vararg was: ${expected[0]}"); throw Error("pos >= tokens.size")
+            println("Match returned null" + "\n vararg was: ${expected[0]}")
+            throw Exception("pos >= tokens.size")
         }
 
         val currentToken = tokens[pos]
@@ -49,23 +49,23 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     private fun require(vararg expected: String): Token {
         // return Token if currentToken is one of expected else throw exception
         return match(*expected)
-            ?: throw Error("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
+            ?: throw Exception("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
     }
 
     fun run(): ArrayList<String> {
         println("HERE")
-        var array = ArrayList<String>()
+        val array = ArrayList<String>()
         while (pos < tokens.size) {
             array.add(parsing())
         }
         return array
     }
 
-    private fun parsing() : String {
+    private fun parsing(): String {
         if (match("var") != null) {
             println("STARTED VAR INITIALIZING PARSING"); parseVarInitializing()
         } else if (match("print") != null) {
-            println("STARTED PRINT PARSING");
+            println("STARTED PRINT PARSING")
             return parsePrint()
         } else if (match("identifier") != null) {
             println("STARTED ASSIGMENT PARSING"); parseAssignment()
@@ -96,7 +96,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             if (isArray && arrSize > 0) buildList { for (i in 1..arrSize) add(if (variableType == "Int") 0 else "") } else variableValue
     }
 
-    private fun parsePrint() : String {
+    private fun parsePrint(): String {
         val expression = parseExpression()
         if (expression == null) {
             if (DEBUG) {
@@ -121,7 +121,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             if (arrIndex != null) {
                 (scope[variableName] as Array<Int>)[arrIndex] = (variableValue as Int)
             } else scope[variableName] = (variableValue as Int)
-        } else throw Error("Variable $variableName is not declared!")
+        } else throw Exception("Variable $variableName is not declared!")
     }
 
     private fun parseExpression(): Any? {
@@ -206,7 +206,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
         if (operator == "<") {
             return if (number2 < number1) 1 else 0
         }
-        throw Error("Operator '$operator' isn't supported")
+        throw Exception("Operator '$operator' isn't supported")
     }
 
     private fun parseLoop() {

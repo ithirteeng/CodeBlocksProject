@@ -66,4 +66,6 @@ interface CustomView {
 
     fun makeEditTextsDisabled()
 
+    fun ifTextViewEmpty() : Boolean
+
 }

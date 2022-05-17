@@ -42,5 +42,9 @@ class WhileBlock @JvmOverloads constructor(
         convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 
+    override fun ifTextViewEmpty(): Boolean {
+        val conditionTextView = findViewById<TextView>(R.id.conditionText)
+        return conditionTextView.text.isEmpty()
+    }
 
 }

@@ -29,4 +29,8 @@ class StartProgramBlock @JvmOverloads constructor(
 
     override fun makeEditTextsDisabled() {
     }
+
+    override fun ifTextViewEmpty(): Boolean {
+        return false
+    }
 }

@@ -50,6 +50,13 @@ class InitializationBlock @JvmOverloads constructor(
         convertEditTextToTextView(valueText, valueEdit)
         convertEditTextToTextView(nameText, nameEdit)
     }
+
+    override fun ifTextViewEmpty(): Boolean {
+        val valueText: TextView = view.findViewById(R.id.valueText)
+        val nameText: TextView = view.findViewById(R.id.nameText)
+
+        return valueText.text.isEmpty() || nameText.text.isEmpty()
+    }
 }
 
 

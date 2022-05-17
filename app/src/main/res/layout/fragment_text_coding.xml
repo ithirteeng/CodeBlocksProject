@@ -1,0 +1,138 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/codingContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/chocolateMainColor"
+        tools:context=".WorkspaceFragment">
+
+        <ImageView
+            android:id="@+id/workspaceBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/chocolateWorkingPanelColor"
+            android:contentDescription="@string/contentDescription"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollView"
+            app:layout_constraintEnd_toEndOf="@+id/scrollView"
+            app:layout_constraintStart_toStartOf="@+id/scrollView"
+            app:layout_constraintTop_toTopOf="@+id/scrollView"
+            app:srcCompat="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/drawerOutsideButton"
+            android:layout_width="@dimen/drawerButtonWidth"
+            android:layout_height="0dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="@string/contentDescription"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/chocolate_drawer_button_image" />
+
+        <ImageView
+            android:id="@+id/bottomButtonsBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/chocolateBottomButtonsColor"
+            android:contentDescription="@string/contentDescription"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/startButton"
+            app:layout_constraintStart_toStartOf="@+id/startButton"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:srcCompat="@android:color/transparent" />
+
+        <Button
+            android:id="@+id/startButton"
+            style="@style/bottomButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/start_button_background"
+            android:fontFamily="@font/courier_prime"
+            android:text="@string/startButtonText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/drawerOutsideButton"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintGuide_end="@dimen/bottomButtonsSize" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/workfieldMargin"
+            android:background="@drawable/workfield_borders"
+            android:fillViewport="true"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@+id/bottomButtonsBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/drawerOutsideButton"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck">
+
+
+        </ScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollView"
+            app:layout_constraintEnd_toEndOf="@+id/scrollView"
+            app:layout_constraintStart_toStartOf="@+id/scrollView"
+            app:layout_constraintTop_toTopOf="@+id/scrollView">
+
+            <EditText
+                android:id="@+id/codingField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:background="@null"
+                android:gravity="top|start"
+                android:hint="@string/codingText"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:textSize="20sp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TextContrastCheck" />
+        </HorizontalScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_margin="0dp"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        android:padding="0dp">
+
+        <include layout="@layout/drawer_layout" />
+
+
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

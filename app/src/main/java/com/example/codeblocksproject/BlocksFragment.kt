@@ -31,19 +31,19 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
 
     private fun addingBlocks() {
         binding.initializationBlock.setOnClickListener {
-            (parentFragment as MainFragment).addBlock(BlockTypes.INIT_BLOCK_TYPE)
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.INIT_BLOCK_TYPE)
         }
         binding.assignmentBlock.setOnClickListener {
-            (parentFragment as MainFragment).addBlock(BlockTypes.ASSIGN_BLOCK_TYPE)
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.ASSIGN_BLOCK_TYPE)
         }
         binding.outputBlock.setOnClickListener {
-            (parentFragment as MainFragment).addBlock(BlockTypes.OUTPUT_BLOCK_TYPE)
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.OUTPUT_BLOCK_TYPE)
         }
         binding.whileBlock.setOnClickListener {
-            (parentFragment as MainFragment).addBlock(BlockTypes.WHILE_BLOCK_TYPE)
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.WHILE_BLOCK_TYPE)
         }
         binding.ifBlock.setOnClickListener {
-            (parentFragment as MainFragment).addBlock(BlockTypes.IF_BLOCK_TYPE)
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.IF_BLOCK_TYPE)
         }
     }
 
@@ -67,7 +67,7 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
             isClosedBlocks = true
             Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
-                    (parentFragment as MainFragment).displayButtons()
+                    (parentFragment as WorkspaceFragment).displayButtons()
                 }
             }, 350)
         }
@@ -77,28 +77,28 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
         binding.closeButton.setTextColor(getColor(R.color.chocolateMainColor, context))
 
         when (color) {
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeColor(
                     R.color.spaceConsoleColor,
                     R.color.spaceBottomButtonsColor,
                     context
                 )
             }
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeColor(
                     R.color.pinkConsoleColor,
                     R.color.pinkBottomButtonsColor,
                     context
                 )
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeColor(
                     R.color.chocolateConsoleColor,
                     R.color.chocolateBottomButtonsColor,
                     context
                 )
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeColor(
                     R.color.monochromeConsoleColor,
                     R.color.monochromeBottomButtonsColor,
@@ -106,7 +106,7 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
                 )
                 binding.closeButton.setTextColor(getColor(R.color.white, context))
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeColor(
                     R.color.shrekConsoleColor,
                     R.color.shrekBottomButtonsColor,

@@ -6,8 +6,33 @@
     app:startDestination="@id/mainFragment">
 
     <fragment
+        android:id="@+id/workspaceFragment"
+        android:name="com.example.codeblocksproject.WorkspaceFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_workspace" >
+        <action
+            android:id="@+id/action_workspaceFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/textCodingFragment"
+        android:name="com.example.codeblocksproject.TextCodingFragment"
+        android:label="fragment_text_coding"
+        tools:layout="@layout/fragment_text_coding" >
+        <action
+            android:id="@+id/action_textCodingFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.codeblocksproject.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_workspaceFragment"
+            app:destination="@id/workspaceFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_textCodingFragment"
+            app:destination="@id/textCodingFragment" />
+    </fragment>
 </navigation>

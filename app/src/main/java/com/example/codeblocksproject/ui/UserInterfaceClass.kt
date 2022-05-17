@@ -12,7 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.codeblocksproject.BlocksFragment
 import com.example.codeblocksproject.ConsoleFragment
-import com.example.codeblocksproject.MainFragment
+import com.example.codeblocksproject.WorkspaceFragment
 import com.example.codeblocksproject.R
 
 class UserInterfaceClass(
@@ -27,7 +27,7 @@ class UserInterfaceClass(
     fun setupAllUIFunctions(view: View) {
         setupButtonsEvents(view)
 
-        view.findViewById<DrawerLayout>(R.id.drawerLayout)
+        view.findViewById<DrawerLayout>(R.id.codingContainer)
             .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
@@ -43,7 +43,7 @@ class UserInterfaceClass(
         button.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    view.findViewById<DrawerLayout>(R.id.drawerLayout).openDrawer(Gravity.LEFT)
+                    view.findViewById<DrawerLayout>(R.id.codingContainer).openDrawer(Gravity.LEFT)
                 }
             }
             false
@@ -56,7 +56,7 @@ class UserInterfaceClass(
         button.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN ->
-                    view.findViewById<DrawerLayout>(R.id.drawerLayout).closeDrawer(Gravity.LEFT)
+                    view.findViewById<DrawerLayout>(R.id.codingContainer).closeDrawer(Gravity.LEFT)
             }
             false
         }
@@ -69,19 +69,19 @@ class UserInterfaceClass(
             button?.apply {
                 when (checkedId) {
                     R.id.spaceTheme -> {
-                        setupChangeColorsFunctions(view, MainFragment.SPACE_COLOR, this.context)
+                        setupChangeColorsFunctions(view, WorkspaceFragment.SPACE_COLOR, this.context)
                     }
                     R.id.pinkTheme -> {
-                        setupChangeColorsFunctions(view, MainFragment.PINK_COLOR, this.context)
+                        setupChangeColorsFunctions(view, WorkspaceFragment.PINK_COLOR, this.context)
                     }
                     R.id.chocolateTheme -> {
-                        setupChangeColorsFunctions(view, MainFragment.CHOCOLATE_COLOR, this.context)
+                        setupChangeColorsFunctions(view, WorkspaceFragment.CHOCOLATE_COLOR, this.context)
                     }
                     R.id.sepiaTheme -> {
-                        setupChangeColorsFunctions(view, MainFragment.MONOCHROME_COLOR, this.context)
+                        setupChangeColorsFunctions(view, WorkspaceFragment.MONOCHROME_COLOR, this.context)
                     }
                     R.id.shrekTheme -> {
-                        setupChangeColorsFunctions(view, MainFragment.SHREK_COLOR, this.context)
+                        setupChangeColorsFunctions(view, WorkspaceFragment.SHREK_COLOR, this.context)
                     }
                 }
             }
@@ -89,13 +89,27 @@ class UserInterfaceClass(
     }
 
     private fun setupChangeColorsFunctions(view: View, color: String, context: Context) {
+        val buttonsArrayList: ArrayList<Button> = try {
+            val buttonStart = view.findViewById<Button>(R.id.startButton)
+            val buttonBlocks = view.findViewById<Button>(R.id.blocksButton)
+            arrayListOf(buttonBlocks, buttonStart)
+        } catch (e: Exception) {
+            val buttonStart = view.findViewById<Button>(R.id.startButton)
+            arrayListOf(buttonStart)
+        }
         changeMainBackgroundColor(view, color)
         changeWorkfieldColor(view, color)
         changeDrawerButtonColor(view, color)
         changeDrawerBackgroundColor(view, color)
-        changeBottomButtonsColor(view, color)
-        consoleFragment.changeTheme(color, context)
-        blocksFragment.changeTheme(color, context)
+
+        changeBottomButtonsColor(view, color, buttonsArrayList)
+        try {
+            consoleFragment.changeTheme(color, context)
+            blocksFragment.changeTheme(color, context)
+        } catch (e: Exception) {
+            consoleFragment.changeTheme(color, context)
+        }
+
     }
 
     private fun changeDrawerBackgroundColor(view: View, color: String) {
@@ -103,19 +117,19 @@ class UserInterfaceClass(
         val shrekView = view.findViewById<ImageView>(R.id.shrekImage)
         shrekView.visibility = View.GONE
         when (color) {
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeColor(background, R.color.spaceMainColor)
             }
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeColor(background, R.color.pinkMainColor)
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeColor(background, R.color.chocolateMainColor)
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeColor(background, R.color.monochromeMainColor)
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 shrekView.visibility = View.VISIBLE
                 changeColor(background, R.color.shrekConsoleColor)
             }
@@ -125,19 +139,19 @@ class UserInterfaceClass(
     private fun changeMainBackgroundColor(view: View, color: String) {
         val background = view.findViewById<ConstraintLayout>(R.id.container)
         when (color) {
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeColor(background, R.color.spaceMainColor)
             }
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeColor(background, R.color.pinkMainColor)
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeColor(background, R.color.chocolateMainColor)
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeColor(background, R.color.monochromeMainColor)
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeColor(background, R.color.shrekConsoleColor)
             }
         }
@@ -146,48 +160,48 @@ class UserInterfaceClass(
     private fun changeWorkfieldColor(view: View, color: String) {
         val imageView = view.findViewById<ImageView>(R.id.workspaceBackground)
         when (color) {
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeColor(imageView, R.color.spaceWorkingPanelColor)
             }
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeColor(imageView, R.color.pinkWorkingPanelColor)
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeColor(imageView, R.color.chocolateWorkingPanelColor)
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeColor(imageView, R.color.monochromeWorkingPanelColor)
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeColor(imageView, R.color.shrekWorkingPanelColor)
             }
         }
     }
 
-    private fun changeBottomButtonsColor(view: View, color: String) {
+    private fun changeBottomButtonsColor(view: View, color: String, arrayList: ArrayList<Button>) {
         val imageView = view.findViewById<ImageView>(R.id.bottomButtonsBackground)
 
-        val buttonStart = view.findViewById<Button>(R.id.startButton)
-        val buttonBlocks = view.findViewById<Button>(R.id.blocksButton)
-        buttonStart.setTextColor(getColor(R.color.chocolateMainColor, this.context))
-        buttonBlocks.setTextColor(getColor(R.color.chocolateMainColor, this.context))
+        for (button in arrayList) {
+            button.setTextColor(getColor(R.color.chocolateMainColor, this.context))
+        }
 
         when (color) {
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeColor(imageView, R.color.spaceBottomButtonsColor)
             }
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeColor(imageView, R.color.pinkBottomButtonsColor)
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeColor(imageView, R.color.chocolateBottomButtonsColor)
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeColor(imageView, R.color.monochromeBottomButtonsColor)
-                buttonStart.setTextColor(getColor(R.color.white, this.context))
-                buttonBlocks.setTextColor(getColor(R.color.white, this.context))
+                for (button in arrayList) {
+                    button.setTextColor(getColor(R.color.white, this.context))
+                }
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeColor(imageView, R.color.shrekBottomButtonsColor)
             }
         }
@@ -197,37 +211,37 @@ class UserInterfaceClass(
     private fun changeDrawerButtonColor(view: View, color: String) {
         var button = view.findViewById<ImageButton>(R.id.drawerButton)
         when (color) {
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeDrawerImage(button, R.drawable.pink_drawer_button_image)
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeDrawerImage(button, R.drawable.chocolate_drawer_button_image)
             }
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeDrawerImage(button, R.drawable.space_drawer_button_image)
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeDrawerImage(button, R.drawable.shrek_drawer_button_image)
             }
         }
         button = view.findViewById(R.id.drawerOutsideButton)
         when (color) {
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeDrawerImage(button, R.drawable.pink_drawer_button_image)
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeDrawerImage(button, R.drawable.chocolate_drawer_button_image)
             }
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeDrawerImage(button, R.drawable.space_drawer_button_image)
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeDrawerImage(button, R.drawable.shrek_drawer_button_image)
             }
         }

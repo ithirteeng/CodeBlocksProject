@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="0dp"
-    android:background="@drawable/assignment_block_background"
-    android:paddingStart="20dp"
-    android:paddingTop="@dimen/topAndBottomBlockPadding"
-    android:paddingEnd="15dp"
-    android:paddingBottom="@dimen/topAndBottomBlockPadding">
+    tools:parentTag="android.widget.LinearLayout">
 
     <TextView
         android:id="@+id/nameText"
@@ -56,7 +51,7 @@
         android:id="@+id/equalTextView"
         style="@style/blocksTextStyle"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/blocksMargin"
         android:layout_marginEnd="@dimen/blocksMargin"
         android:padding="2dp"
@@ -113,4 +108,4 @@
         app:layout_constraintTop_toTopOf="@+id/valueText"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

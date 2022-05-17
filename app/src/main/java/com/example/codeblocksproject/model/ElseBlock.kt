@@ -4,13 +4,14 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 class ElseBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : CustomView, ConstraintLayout(context, attrs) {
+) : CustomView, LinearLayout(context, attrs) {
 
     override val isNestingPossible = true
     override var previousId: Int = -1
@@ -32,5 +33,15 @@ class ElseBlock @JvmOverloads constructor(
 
     override fun ifTextViewEmpty(): Boolean {
         return false
+    }
+
+    init {
+        //blockView.setBackgroundResource(R.drawable.)
+        blockView.setPadding(
+            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding)
+        )
     }
 }

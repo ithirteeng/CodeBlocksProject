@@ -4,13 +4,14 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 class BeginBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : CustomView, ConstraintLayout(context, attrs) {
+) : CustomView, LinearLayout(context, attrs) {
     override val isNestingPossible = false
     override var previousId = -1
     override var nextId = -1

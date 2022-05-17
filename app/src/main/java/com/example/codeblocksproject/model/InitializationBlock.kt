@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
@@ -13,7 +14,7 @@ import com.example.codeblocksproject.R
 class InitializationBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : CustomView, ConstraintLayout(context, attrs) {
+) : CustomView, LinearLayout(context, attrs) {
     private val view =
         LayoutInflater.from(context).inflate(R.layout.initialization_block, this).apply {
             val valueEdit: EditText = findViewById(R.id.varValue)
@@ -56,6 +57,16 @@ class InitializationBlock @JvmOverloads constructor(
         val nameText: TextView = view.findViewById(R.id.nameText)
 
         return valueText.text.isEmpty() || nameText.text.isEmpty()
+    }
+
+    init {
+        blockView.setBackgroundResource(R.drawable.init_block_background)
+        blockView.setPadding(
+            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
+            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding)
+        )
     }
 }
 

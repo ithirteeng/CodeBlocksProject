@@ -18,7 +18,6 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
-
     }
 
     fun getIsClosedStart(): Boolean {
@@ -53,7 +52,11 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             isClosedStart = true
             Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
-                    (parentFragment as MainFragment).displayButtons()
+                    try {
+                        (parentFragment as WorkspaceFragment).displayButtons()
+                    } catch (e: Exception) {
+                        (parentFragment as TextCodingFragment).displayButtons()
+                    }
                 }
             }, 350)
 
@@ -64,7 +67,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         binding.closeButton.setTextColor(getColor(R.color.chocolateMainColor, context))
 
         when (color) {
-            MainFragment.SPACE_COLOR -> {
+            WorkspaceFragment.SPACE_COLOR -> {
                 changeColor(
                     R.color.spaceConsoleColor,
                     R.color.chocolateMainColor,
@@ -72,7 +75,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                     context
                 )
             }
-            MainFragment.PINK_COLOR -> {
+            WorkspaceFragment.PINK_COLOR -> {
                 changeColor(
                     R.color.pinkConsoleColor,
                     R.color.chocolateMainColor,
@@ -80,7 +83,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                     context
                 )
             }
-            MainFragment.CHOCOLATE_COLOR -> {
+            WorkspaceFragment.CHOCOLATE_COLOR -> {
                 changeColor(
                     R.color.chocolateConsoleColor,
                     R.color.black,
@@ -88,7 +91,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                     context
                 )
             }
-            MainFragment.MONOCHROME_COLOR -> {
+            WorkspaceFragment.MONOCHROME_COLOR -> {
                 changeColor(
                     R.color.monochromeConsoleColor,
                     R.color.white,
@@ -97,7 +100,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                 )
                 binding.closeButton.setTextColor(getColor(R.color.white, context))
             }
-            MainFragment.SHREK_COLOR -> {
+            WorkspaceFragment.SHREK_COLOR -> {
                 changeColor(
                     R.color.shrekConsoleColor,
                     R.color.black,

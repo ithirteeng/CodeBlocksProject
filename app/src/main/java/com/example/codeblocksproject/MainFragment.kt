@@ -8,7 +8,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -146,20 +145,37 @@ class MainFragment : Fragment(R.layout.fragment_main), MainFragmentInterface {
                             binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
-                    val lexer = Lexer(blocksToCode(), DEBUG = true)
-                    val tokens = lexer.lexicalAnalysis()
+                    try {
+                        checkIfBlocksNull()
 
-                    tokens.forEach { x -> println(x.aboutMe()) }
-                    var answer = ""
-                    val parser = Parser(tokens, DEBUG = true)
-                    val array = parser.run()
-                    for (string in array) {
-                        if (string != "") {
-                            answer += "$string\n"
+                        val lexer = Lexer(blocksToCode(), DEBUG = true)
+                        val tokens = lexer.lexicalAnalysis()
+
+                        tokens.forEach { x -> println(x.aboutMe()) }
+                        var answer = ""
+                        val parser = Parser(tokens, DEBUG = true)
+                        val array = parser.run()
+
+                        for (string in array) {
+                            if (string != "") {
+                                answer += "$string\n"
+                            }
                         }
+                        consoleFragment.resultsToConsole(answer)
+                    } catch (e: Exception) {
+                        consoleFragment.resultsToConsole(e.message.toString())
                     }
-                    consoleFragment.checkCode(answer)
+
+
                 }
+            }
+        }
+    }
+
+    private fun checkIfBlocksNull() {
+        for (index in 0 until blockList.size) {
+            if (blockList[index].ifTextViewEmpty()) {
+                throw Exception("Check ${blockList[index].blockType} it is empty!")
             }
         }
     }

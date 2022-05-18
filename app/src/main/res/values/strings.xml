@@ -44,5 +44,6 @@
     <string name="assignmentButton">ASSIGNMENT</string>
 
     <string name="codingText">coding…</string>
-    <string name="backToMenuText">menu</string>
+    <string name="backToMenuText">to menu</string>
+    <string name="clearAllText">clear all</string>
 </resources>

@@ -52,6 +52,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         setupOtherFragmentsFunctions()
         setupAllDragListeners()
         backToMenuButtonEvent()
+        //clearAllButtonEvent()
         binding.zoomLayout.zoomTo(4f, true)
     }
 
@@ -204,10 +205,17 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         alignX()
     }
 
-    private fun backToMenuButtonEvent(){
+    private fun backToMenuButtonEvent() {
         view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
             findNavController().navigate(R.id.mainFragment)
         }
+    }
+
+    private fun clearAllButtonEvent() {
+        view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
+            // доделать хз пока как
+        }
+
     }
 
     @SuppressLint("ClickableViewAccessibility")

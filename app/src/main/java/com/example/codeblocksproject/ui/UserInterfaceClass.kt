@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -12,8 +13,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.codeblocksproject.BlocksFragment
 import com.example.codeblocksproject.ConsoleFragment
-import com.example.codeblocksproject.WorkspaceFragment
 import com.example.codeblocksproject.R
+import com.example.codeblocksproject.WorkspaceFragment
 
 class UserInterfaceClass(
     private val context: Context,
@@ -26,7 +27,6 @@ class UserInterfaceClass(
 
     fun setupAllUIFunctions(view: View) {
         setupButtonsEvents(view)
-
         view.findViewById<DrawerLayout>(R.id.codingContainer)
             .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
@@ -43,6 +43,7 @@ class UserInterfaceClass(
         button.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    makeKeymapHidden(view)
                     view.findViewById<DrawerLayout>(R.id.codingContainer).openDrawer(Gravity.LEFT)
                 }
             }
@@ -69,19 +70,35 @@ class UserInterfaceClass(
             button?.apply {
                 when (checkedId) {
                     R.id.spaceTheme -> {
-                        setupChangeColorsFunctions(view, WorkspaceFragment.SPACE_COLOR, this.context)
+                        setupChangeColorsFunctions(
+                            view,
+                            WorkspaceFragment.SPACE_COLOR,
+                            this.context
+                        )
                     }
                     R.id.pinkTheme -> {
                         setupChangeColorsFunctions(view, WorkspaceFragment.PINK_COLOR, this.context)
                     }
                     R.id.chocolateTheme -> {
-                        setupChangeColorsFunctions(view, WorkspaceFragment.CHOCOLATE_COLOR, this.context)
+                        setupChangeColorsFunctions(
+                            view,
+                            WorkspaceFragment.CHOCOLATE_COLOR,
+                            this.context
+                        )
                     }
                     R.id.sepiaTheme -> {
-                        setupChangeColorsFunctions(view, WorkspaceFragment.MONOCHROME_COLOR, this.context)
+                        setupChangeColorsFunctions(
+                            view,
+                            WorkspaceFragment.MONOCHROME_COLOR,
+                            this.context
+                        )
                     }
                     R.id.shrekTheme -> {
-                        setupChangeColorsFunctions(view, WorkspaceFragment.SHREK_COLOR, this.context)
+                        setupChangeColorsFunctions(
+                            view,
+                            WorkspaceFragment.SHREK_COLOR,
+                            this.context
+                        )
                     }
                 }
             }
@@ -264,5 +281,11 @@ class UserInterfaceClass(
                 colorId
             )
         )
+    }
+
+    private fun makeKeymapHidden(view: View) {
+        val imm: InputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

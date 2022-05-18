@@ -65,9 +65,27 @@
     </style>
 
     <style name="nameEditTextStyle">
-        <item name="android:digits">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</item>
+        <item name="android:digits">
+            0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+        </item>
     </style>
+
     <style name="valueEditText">
-        <item name="android:digits">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,()</item>
+        <item name="android:digits">
+            0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,()
+        </item>
+    </style>
+    <style name="mainButtonsTextStyle">
+        <item name="android:textSize">34sp</item>
+        <item name="android:paddingStart">@dimen/startAndEndBlockPadding</item>
+        <item name="android:paddingEnd">@dimen/startAndEndBlockPadding</item>
+        <item name="android:paddingTop">@dimen/topAndBottomBlockPadding</item>
+        <item name="android:paddingBottom">@dimen/topAndBottomBlockPadding</item>
+        <item name="android:fontFamily">@font/courier_prime</item>
+        <item name="android:textColor">@color/chocolateWorkingPanelColor</item>
+        <item name="android:background">@drawable/main_buttons_background</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:animation">@null</item>
     </style>
 </resources>

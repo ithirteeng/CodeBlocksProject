@@ -4,28 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainFragment">
+    tools:context=".MainFragment"
+    android:background="@color/chocolateMainColor">
 
     <Button
         android:id="@+id/buttonToWorkspace"
+        style="@style/mainButtonsTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/blocksCodingText"
         app:layout_constraintBottom_toTopOf="@+id/buttonToTextWorkspace"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.317" />
+        app:layout_constraintTop_toTopOf="@+id/guideline8"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <Button
         android:id="@+id/buttonToTextWorkspace"
+        style="@style/mainButtonsTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/textCodingText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/buttonToWorkspace"
+        app:layout_constraintStart_toStartOf="@+id/buttonToWorkspace"
+        app:layout_constraintTop_toBottomOf="@+id/buttonToWorkspace" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_logo_background"
+        android:fontFamily="@font/courier_prime"
+        android:text="@string/sixDoubleOne"
+        android:textColor="@color/chocolateMainColor"
+        android:textSize="140sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/chocolateWorkingPanelColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonToWorkspace" />
+        app:layout_constraintTop_toTopOf="@+id/guideline8"
+        tools:src="@color/transparent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

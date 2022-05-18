@@ -36,6 +36,7 @@
     <string name="whileBlockText">while</string>
     <string name="ifBlockText">if</string>
     <string name="printBlockText">print</string>
+    <string name="elseBlockText">else</string>
 
     <string name="initializationButton">INITIALIZATION</string>
     <string name="whileButton">WHILE</string>
@@ -44,5 +45,10 @@
     <string name="assignmentButton">ASSIGNMENT</string>
 
     <string name="codingText">coding…</string>
-    <string name="backToMenuText">menu</string>
+    <string name="backToMenuText">to menu</string>
+    <string name="clearAllText">clear all</string>
+
+    <string name="blocksCodingText">blocks coding</string>
+    <string name="textCodingText">text coding</string>
+    <string name="sixDoubleOne">611</string>
 </resources>

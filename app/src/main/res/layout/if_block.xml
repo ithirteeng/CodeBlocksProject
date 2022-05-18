@@ -6,20 +6,21 @@
     android:layout_height="wrap_content"
     tools:parentTag="android.widget.LinearLayout">
 
+
     <TextView
         android:id="@+id/ifText"
         style="@style/blocksTextStyle"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:background="@color/transparent"
+        android:paddingEnd="13dp"
         android:text="@string/ifBlockText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/conditionText"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextContrastCheck" />
-
+        tools:ignore="RtlSymmetry,TextContrastCheck" />
 
     <TextView
         android:id="@+id/conditionText"

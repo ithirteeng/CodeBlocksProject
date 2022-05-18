@@ -45,6 +45,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/main_logo_background"
         android:fontFamily="@font/courier_prime"
+        android:paddingStart="8dp"
+        android:paddingEnd="6dp"
         android:text="@string/sixDoubleOne"
         android:textColor="@color/chocolateMainColor"
         android:textSize="140sp"
@@ -63,6 +65,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        tools:src="@color/transparent" />
+        tools:src="@drawable/workfield_borders" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

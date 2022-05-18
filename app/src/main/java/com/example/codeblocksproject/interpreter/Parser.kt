@@ -1,7 +1,10 @@
+package com.example.codeblocksproject.interpreter
+
+import com.example.codeblocksproject.ConsoleFragment
 import java.util.*
 
 val OPERATORS = arrayOf("+", "-", "*", "/", "==", "!=", ">=", ">", "<=", "<", "||", "&&")
-val OPERATORS_PRIORITY = mapOf<String, Int>(
+val OPERATORS_PRIORITY = mapOf(
     "||" to 1,
     "&&" to 1,
     "==" to 2,
@@ -22,10 +25,9 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
 
     //    private val scopeArrays = mutableMapOf<String, List<>>()
     private fun match(vararg expected: String): Token? {
-        // return Token if currentToken is one of expected else null
+        // return com.example.codeblocksproject.interpreter.Token if currentToken is one of expected else null
         if (pos >= tokens.size) {
-            println("Match returned null" + "\n vararg was: ${expected[0]}")
-            throw Exception("pos >= tokens.size")
+            println("Match returned null" + "\n vararg was: ${expected[0]}"); throw Error("pos >= tokens.size")
         }
 
         val currentToken = tokens[pos]
@@ -47,36 +49,32 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     }
 
     private fun require(vararg expected: String): Token {
-        // return Token if currentToken is one of expected else throw exception
+        // return com.example.codeblocksproject.interpreter.Token if currentToken is one of expected else throw exception
         return match(*expected)
-            ?: throw Exception("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
+            ?: throw Error("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
     }
 
-    fun run(): ArrayList<String> {
-        println("HERE")
-        val array = ArrayList<String>()
+    fun run(consoleFragment: ConsoleFragment) {
         while (pos < tokens.size) {
-            array.add(parsing())
+            parsing(consoleFragment)
         }
-        return array
     }
 
-    private fun parsing(): String {
+    private fun parsing(consoleFragment: ConsoleFragment) {
         if (match("var") != null) {
             println("STARTED VAR INITIALIZING PARSING"); parseVarInitializing()
         } else if (match("print") != null) {
-            println("STARTED PRINT PARSING")
-            return parsePrint()
+            println("STARTED PRINT PARSING"); parsePrint(consoleFragment)
         } else if (match("identifier") != null) {
             println("STARTED ASSIGMENT PARSING"); parseAssignment()
-//        } else if (match("if") != null) {
-//            println("STARTED PARSING CONDITIONAL"); parseIf()
+        } else if (match("if") != null) {
+            println("STARTED PARSING CONDITIONAL"); parseIf(consoleFragment)
 //        } else if (match("while") != null) {
 //            println("STARTED LOOP PARSING"); parseLoop()
 //        } else if (match("fun") != null) parseFunDeclaration() {
 
-        }
-        return ""
+        } else pos++
+
     }
 
     private fun parseVarInitializing() {
@@ -96,32 +94,34 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             if (isArray && arrSize > 0) buildList { for (i in 1..arrSize) add(if (variableType == "Int") 0 else "") } else variableValue
     }
 
-    private fun parsePrint(): String {
+    private fun parsePrint(consoleFragment: ConsoleFragment) {
         val expression = parseExpression()
         if (expression == null) {
             if (DEBUG) {
-                return ("emptyshit")
+                consoleFragment.resultsToConsole("Empty output\n")
+                println("Empty output")
             }
-            return ""
+            println("")
         } else {
-            return ("$expression")
+            consoleFragment.resultsToConsole("$expression\n")
+            println("$expression")
         }
     }
 
     private fun parseAssignment() {
-        val variableName: String = tokens[pos].text
+        val variableName: String = tokens[pos - 1].text
         var arrIndex: Int? = null
         if (match("[") != null) {
-            arrIndex = parseExpression() as Int
+            arrIndex = parseExpression() as Int;
             require("]")
         }
         require("=")
-        val variableValue = parseExpression()
+        var variableValue = parseExpression()
         if (scope[variableName] != null) {
             if (arrIndex != null) {
                 (scope[variableName] as Array<Int>)[arrIndex] = (variableValue as Int)
             } else scope[variableName] = (variableValue as Int)
-        } else throw Exception("Variable $variableName is not declared!")
+        } else throw Error("Variable $variableName is not declared!")
     }
 
     private fun parseExpression(): Any? {
@@ -130,7 +130,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
         var currentToken = require("number", "identifier", "(")
         var isBooleanOperation: Boolean = false
         while (currentToken.text != ";" && currentToken.text != "{") {
-//            println(currentToken.aboutMe())
+            println(currentToken.aboutMe())
             if (currentToken.text == "(") {
                 operatorsStack.push("(")
             } else if (currentToken.text == ")") {
@@ -163,8 +163,12 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             } else if (currentToken.type.name == "NUMBER") {
                 numberStack.push(currentToken.text.toInt())
             } else if (currentToken.type.name == "IDENT_NAME") {
+                if (scope[currentToken.text] == null) {
+                    throw Error("Check ${currentToken.position}. Variable isn't declared")
+                }
                 numberStack.push(scope[currentToken.text] as Int)
             }
+
             currentToken = require("number", "identifier", "[", "]", "(", ")", ";", *OPERATORS, "{")
         }
         while (!operatorsStack.isEmpty()) {
@@ -176,61 +180,116 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     }
 
     private fun calculateExpression(number1: Int, number2: Int, operator: String): Int {
-        if (operator == "+") {
-            return number2 + number1
+        when (operator) {
+            "+" -> {
+                return number2 + number1
+            }
+            "-" -> {
+                return number2 - number1
+            }
+            "*" -> {
+                return number2 * number1
+            }
+            "/" -> {
+                return number2 / number1
+            }
+            "!=" -> {
+                return if (number2 != number1) 1 else 0
+            }
+            "==" -> {
+                return if (number2 == number1) 1 else 0
+            }
+            ">=" -> {
+                return if (number2 >= number1) 1 else 0
+            }
+            "<=" -> {
+                return if (number2 <= number1) 1 else 0
+            }
+            ">" -> {
+                return if (number2 > number1) 1 else 0
+            }
+            "<" -> {
+                return if (number2 < number1) 1 else 0
+            }
+            "||" -> {
+                return if ((number1 != 0) || (number2 != 0)) 1 else 0
+            }
+            "&&" -> {
+                return if ((number1 != 0) && (number2 != 0)) 1 else 0
+            }
+            else -> throw Error("Operator '$operator' isn't supported")
         }
-        if (operator == "-") {
-            return number2 - number1
-        }
-        if (operator == "*") {
-            return number2 * number1
-        }
-        if (operator == "/") {
-            return number2 / number1
-        }
-        if (operator == "!=") {
-            return if (number2 != number1) 1 else 0
-        }
-        if (operator == "==") {
-            return if (number2 == number1) 1 else 0
-        }
-        if (operator == ">=") {
-            return if (number2 >= number1) 1 else 0
-        }
-        if (operator == "<=") {
-            return if (number2 <= number1) 1 else 0
-        }
-        if (operator == ">") {
-            return if (number2 > number1) 1 else 0
-        }
-        if (operator == "<") {
-            return if (number2 < number1) 1 else 0
-        }
-        throw Exception("Operator '$operator' isn't supported")
     }
 
-    private fun parseLoop() {
+//    private fun parseLoop() {
+//        var startConditionPos = pos
+//        var isTrue: Boolean = parseExpression() as Int != 0
+//        while (isTrue) {
+//            parsing()
+//            pos = startConditionPos
+//            isTrue = parseExpression() as Int != 0
+//        }
+//
+//    }
 
-    }
+    private fun parseIf(consoleFragment: ConsoleFragment) {
 
-    private fun parseIf() {
-        var isTrue: Boolean = parseExpression() as Int != 0
+        val isTrue: Boolean = parseExpression() as Int != 0
         if (isTrue) {
-            while (match("}") == null) {
-                parsing()
+            while (tokens[pos].text != "}") {
+                parsing(consoleFragment)
+            }
+            if (match("else") != null) {
+                var openBraces = 1
+                var closingBraces = 0
+                while (openBraces != closingBraces) {
+                    if (match("}") != null) closingBraces++
+                    else if (match("{") != null) openBraces++
+                    else pos++
+                }
             }
         } else {
             var openBraces = 1
             var closingBraces = 0
             while (openBraces != closingBraces) {
                 if (match("}") != null) closingBraces++
-                if (match("{") != null) openBraces++
+                else if (match("{") != null) openBraces++
+                else pos++
             }
             if (match("else") != null) {
-                while (match("}") == null) {
-                    parsing()
+                require("{")
+                while (tokens[pos].text != "}") {
+                    parsing(consoleFragment)
                 }
             }
         }
+
+//        if (isTrue) {
+//            var openBraces = 1
+//            var closingBraces = 0
+//            while (openBraces != closingBraces) {
+//                if (match("}") != null) closingBraces++
+//                else if (match("{") != null) openBraces++
+//                else parsing()
+//            }
+//        } else {
+//            var openBraces = 1
+//            var closingBraces = 0
+//            while (openBraces != closingBraces) {
+//                if (match("}") != null) closingBraces++
+//                else if (match("{") != null) openBraces++
+//                else pos++
+//            }
+//            if (match("else") != null) {
+//                require("{")
+//                var openBraces = 1
+//                var closingBraces = 0
+//                while (openBraces != closingBraces) {
+//                    if (match("}") != null) closingBraces++
+//                    else if (match("{") != null) openBraces++
+//                    else parsing()
+//                }
+//            }
+//        }
     }
 }

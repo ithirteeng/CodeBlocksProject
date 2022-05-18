@@ -124,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.8" />
 
     <Button
         android:id="@+id/backToMainButton"
@@ -138,10 +138,10 @@
 
         android:text="@string/backToMenuText"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintBottom_toTopOf="@+id/menuGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/clearGuideline"
         tools:ignore="TouchTargetSizeCheck" />
 
     <Button
@@ -156,21 +156,21 @@
         android:text="@string/clearAllText"
 
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintBottom_toTopOf="@+id/clearGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/themesGuideline"
         tools:ignore="TouchTargetSizeCheck" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
+        android:id="@+id/clearGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.46" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
+        android:id="@+id/menuGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -1,7 +1,7 @@
 package com.example.codeblocksproject
 
-import Lexer
-import Parser
+import com.example.codeblocksproject.interpreter.Lexer
+import com.example.codeblocksproject.interpreter.Parser
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -66,20 +66,20 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
                     }
                 }, 350)
                 try {
-                    val lexer = Lexer(binding.codingField.text.toString(), DEBUG = true)
-                    val tokens = lexer.lexicalAnalysis()
-
-                    tokens.forEach { x -> println(x.aboutMe()) }
-                    var answer = ""
-                    val parser = Parser(tokens, DEBUG = true)
-                    val array = parser.run()
-
-                    for (string in array) {
-                        if (string != "") {
-                            answer += "$string\n"
-                        }
-                    }
-                    consoleFragment.resultsToConsole(answer)
+//                    val lexer = Lexer(binding.codingField.text.toString(), DEBUG = true)
+//                    val tokens = lexer.lexicalAnalysis()
+//
+//                    tokens.forEach { x -> println(x.aboutMe()) }
+//                    var answer = ""
+//                    val parser = Parser(tokens, DEBUG = true)
+//                    val array = parser.run()
+//
+//                    for (string in array) {
+//                        if (string != "") {
+//                            answer += "$string\n"
+//                        }
+//                    }
+//                    consoleFragment.resultsToConsole(answer)
                 } catch (e: Exception) {
                     consoleFragment.resultsToConsole(e.message.toString())
                 }

@@ -1,7 +1,6 @@
 package com.example.codeblocksproject
 
-import Lexer
-import Parser
+import com.example.codeblocksproject.interpreter.Lexer
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
@@ -156,16 +155,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                         val tokens = lexer.lexicalAnalysis()
 
                         tokens.forEach { x -> println(x.aboutMe()) }
-                        var answer = ""
-                        val parser = Parser(tokens, DEBUG = true)
-                        val array = parser.run()
-
-                        for (string in array) {
-                            if (string != "") {
-                                answer += "$string\n"
-                            }
-                        }
-                        consoleFragment.resultsToConsole(answer)
+                        val parser = com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
+                        parser.run(consoleFragment)
                     } catch (e: Exception) {
                         consoleFragment.resultsToConsole(e.message.toString())
                     }
@@ -233,7 +224,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
             val endBlock = blockMap[endBlockID]
 
             for (block in blockList) {
-                if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE ||
+                if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE &&
                     block.blockType != BlockTypes.END_PROGRAM_BLOCK_TYPE
                 ) {
                     binding.mainWorkfield.removeView(block.blockView)
@@ -368,7 +359,9 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                     }
 
                     if (draggingBlock.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
-                        if (!ifBlockList.contains(block) || blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+                        if (!ifBlockList.contains(block) ||
+                            blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE
+                        ) {
                             block = prevIfBlock
                         }
                     } else {
@@ -466,7 +459,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
 
         while (currentBlock!!.blockView.id != endBlockID) {
             if (currentBlock.blockView.id != startBlockID) {
-                code += currentBlock.blockToCode() + "\n"
+                code += "\n" + currentBlock.blockToCode()
             }
             currentBlock = blockMap[currentBlock.nextId]!!
 

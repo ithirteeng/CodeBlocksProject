@@ -189,6 +189,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         binding.blocksButton.visibility = View.VISIBLE
     }
 
+    private val ifBlockList = mutableListOf<CustomView>()
     override fun addBlock(type: String) {
         when (type) {
             BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
@@ -206,7 +207,15 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                 makeMarginsForBlocks()
                 createBlock(IfBlock(requireContext()))
                 createBlock(BeginBlock(requireContext()))
-                createBlock(EndBlock(requireContext()))
+
+                val newEndBlock = EndBlock(requireContext())
+                createBlock(newEndBlock)
+                ifBlockList.add(newEndBlock)
+            }
+            BlockTypes.ELSE_BLOCK_TYPE -> {
+                if (lastFreeIf() != null) {
+                    createBlock(ElseBlock(requireContext()), lastFreeIf())
+                }
             }
         }
         alignX()
@@ -220,38 +229,85 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
 
     private fun clearAllButtonEvent() {
         view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
-            // доделать хз пока как
+            val startBlock = blockMap[startBlockID]
+            val endBlock = blockMap[endBlockID]
+
+            for (block in blockList) {
+                if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE ||
+                    block.blockType != BlockTypes.END_PROGRAM_BLOCK_TYPE
+                ) {
+                    binding.mainWorkfield.removeView(block.blockView)
+                }
+            }
+
+            blockMap.clear()
+            blockList.clear()
+
+            blockList.add(startBlock!!)
+            blockList.add(endBlock!!)
+
+            blockMap[startBlockID] = startBlock
+            blockMap[endBlockID] = endBlock
         }
 
     }
 
+    private fun refreshList() {
+        val list = mutableListOf<CustomView>()
+        for (block in ifBlockList) {
+            if (blockMap.containsKey(block.blockView.id)) {
+                list.add(block)
+            }
+        }
+
+        ifBlockList.clear()
+        ifBlockList.addAll(list)
+    }
+
+    private fun lastFreeIf(): CustomView? {
+        var lastBlock: CustomView? = null
+        refreshList()
+        for (block in ifBlockList) {
+            if (blockMap[block.nextId]!!.blockType != BlockTypes.ELSE_BLOCK_TYPE) {
+                lastBlock = block
+            }
+        }
+        return lastBlock
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    private fun createBlock(block: CustomView) {
-        val lastBlock = blockMap[blockMap[endBlockID]!!.previousId]!!
+    private fun createBlock(block: CustomView, prevBlock: CustomView? = null) {
+        val lastBlock: CustomView = prevBlock ?: blockMap[blockMap[endBlockID]!!.previousId]!!
+
+        val endBlock = blockMap[lastBlock.nextId]!!
+
         block.blockView.setDefault(lastBlock.blockView.x)
         lastBlock.nextId = block.blockView.id
         block.previousId = lastBlock.blockView.id
 
-        blockMap[endBlockID]!!.previousId = block.blockView.id
-        block.nextId = endBlockID
+        endBlock.previousId = block.blockView.id
+        block.nextId = endBlock.blockView.id
 
         blockList.add(block)
         blockMap[block.blockView.id] = block
 
-        binding.mainWorkfield.addView(block.blockView, lastBlock.position + 1)
+        refreshPositions()
+
+        binding.mainWorkfield.addView(block.blockView, block.position)
         block.blockView.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-
-        block.position = lastBlock.position + 1
-        blockMap[endBlockID]!!.position++
 
         if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE)
             block.blockView.setOnLongClickListener(choiceLongClickListener())
         block.blockView.setOnDragListener(choiceDragListener())
         makeMarginsForBlocks()
 
+        if (block.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            createBlock(BeginBlock(requireContext()), block)
+            createBlock(EndBlock(requireContext()), blockMap[block.nextId])
+        }
     }
 
     private fun View.setDefault(x: Float) {
@@ -263,6 +319,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
             freeId++
     }
 
+    private lateinit var prevIfBlock: CustomView
+
     @SuppressLint("ClickableViewAccessibility")
     private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeKeymapHidden()
@@ -270,7 +328,9 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         draggingList.clear()
 
         val currentBlock = blockMap[view.id]
-        draggingList.add(currentBlock!!)
+        if (currentBlock!!.blockType == BlockTypes.ELSE_BLOCK_TYPE)
+            prevIfBlock = blockMap[currentBlock.previousId]!!
+        draggingList.add(currentBlock)
         removeNestedBlocks(currentBlock)
         val block = draggingList[draggingList.size - 1]
         if (currentBlock.previousId != -1) {
@@ -301,12 +361,20 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
             }
             DragEvent.ACTION_DROP -> {
                 if (blockMap[view.id] != null) {
-                    draggingBlock.blockView.z = 1F
-                    val currentBlock = draggingBlock
                     var block = blockMap[view.id]
                     if (blockMap[view.id]!!.isNestingPossible) {
                         block = blockMap[blockMap[view.id]!!.nextId]!!
                     }
+
+                    if (draggingBlock.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+                        if (!ifBlockList.contains(block) || blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+                            block = prevIfBlock
+                        }
+                    }
+
+                    draggingBlock.blockView.z = 1F
+                    val currentBlock = draggingBlock
+
 
                     val temp = block!!.nextId
                     block.nextId = currentBlock.blockView.id

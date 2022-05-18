@@ -331,7 +331,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         if (currentBlock!!.blockType == BlockTypes.ELSE_BLOCK_TYPE)
             prevIfBlock = blockMap[currentBlock.previousId]!!
         draggingList.add(currentBlock)
-        removeNestedBlocks(currentBlock)
+        if (currentBlock.isNestingPossible)
+            removeNestedBlocks(currentBlock)
         val block = draggingList[draggingList.size - 1]
         if (currentBlock.previousId != -1) {
             blockMap[currentBlock.previousId]!!.nextId = block.nextId
@@ -369,6 +370,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                     if (draggingBlock.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
                         if (!ifBlockList.contains(block) || blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
                             block = prevIfBlock
+                        }
+                    } else {
+                        if (ifBlockList.contains(block) &&
+                            blockMap[block!!.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE
+                        ) {
+                            block = endOfElse(blockMap[block.nextId]!!)
                         }
                     }
 
@@ -412,6 +419,21 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
             }
         }
         true
+    }
+
+    private fun endOfElse(elseBlock: CustomView): CustomView {
+        var brackets = 1
+        var block = blockMap[elseBlock.nextId]
+        while (brackets != 0) {
+            block = blockMap[block!!.nextId]
+            if(block!!.blockType==BlockTypes.BEGIN_BLOCK_TYPE){
+                brackets++
+            }
+            if(block.blockType==BlockTypes.END_BLOCK_TYPE){
+                brackets--
+            }
+        }
+        return block!!
     }
 
     private fun refreshPositions() {

@@ -1,15 +1,18 @@
-public class TokenType(val name : String, val group : String = "default", val regex : Regex) {}
-public class Token(val type : TokenType, val text : String, val position : Int) {
+package com.example.codeblocksproject.interpreter
+
+class TokenType(val name : String, val group : String = "default", val regex : Regex)
+class Token(val type : TokenType, val text : String, private val stringNumber: Int, private val stringPos: Int, val position : Int) {
     fun aboutMe() : String {
-        return "Token(${type.name}, '$text', pos: $position)"
+        return "com.example.codeblocksproject.interpreter.Token(${type.name}, '$text', string $stringNumber, stringPos ${stringPos}, pos: $position)"
     }
 
 }
 
 
-public val tokensMap : Map<String, TokenType>
+val tokensMap : Map<String, TokenType>
     get() = mapOf(
-            "SPACE" to TokenType("SPACE", "Spaces", Regex("[ \\n\\t\\r]")),
+            "SPACE" to TokenType("SPACE", "spaces", Regex("[ \\t\\r]")),
+            "\\n" to TokenType("NEWSTR", "spaces", Regex("\\n")),
             "print" to TokenType("PRINT", "ReservedWords", Regex("print")),
             "if" to TokenType("IF", "ReservedWords", Regex("if")),
             "else" to TokenType("ELSE", "ReservedWords", Regex("else")),
@@ -31,7 +34,10 @@ public val tokensMap : Map<String, TokenType>
             "]" to TokenType("SqRBRACKET", "Braces", Regex("]")),
             "{" to TokenType("CuLBRACKET", "Braces", Regex("\\{")),
             "}" to TokenType("CuRBRACKET", "Braces", Regex("\\}")),
-            "=" to TokenType("ASSIGN", "AssignOperators", Regex("=")),
+            "!=" to TokenType("UNEQUALLY", "BooleanOperators", Regex("!=")),
+            "==" to TokenType("EQUALS", "BooleanOperators", Regex("==")),
+            "<=" to TokenType("LESS|EQUALS", "BooleanOperators", Regex("<=")),
+            ">=" to TokenType("GREATER|EQUALS", "BooleanOperators", Regex(">=")),
             "+=" to TokenType("PLUS_ASSIGN", "AssignOperators", Regex("\\+=")),
             "-=" to TokenType("MINUS_ASSIGN", "AssignOperators", Regex("-=")),
             "+" to TokenType("PLUS", "operators", Regex("\\+")),
@@ -40,19 +46,17 @@ public val tokensMap : Map<String, TokenType>
             "*" to TokenType("MULTIPLY", "operators", Regex("\\*")),
             "||" to TokenType("OR", "BooleanOperators", Regex("\\|\\|")),
             "&&" to TokenType("AND", "BooleanOperators", Regex("&&")),
-            "!=" to TokenType("UNEQUALLY", "BooleanOperators", Regex("!=")),
-            "==" to TokenType("EQUALS", "BooleanOperators", Regex("==")),
-            "<=" to TokenType("LESS|EQUALS", "BooleanOperators", Regex("<=")),
-            "<=" to TokenType("LESS", "BooleanOperators", Regex("<")),
-            ">=" to TokenType("GREATER|EQUALS", "BooleanOperators", Regex(">=")),
-            ">=" to TokenType("GREATER", "BooleanOperators", Regex(">")),
+
+            "<" to TokenType("LESS", "BooleanOperators", Regex("<")),
+            ">" to TokenType("GREATER", "BooleanOperators", Regex(">")),
+            "=" to TokenType("ASSIGN", "AssignOperators", Regex("=")),
             "stringValue" to TokenType("STRING", "Types", Regex("\"[\\w\\s]*\"")),
             "number" to TokenType("NUMBER", "Types", Regex("(0|[1-9]\\d*)")),
             "identifier" to TokenType("IDENT_NAME", "Identifiers", Regex("[A-Za-z_]\\w*")),
 
 
-//            "MULTIPLY" to TokenType("MULTIPLY", "BinaryOperators", Regex("\\*")),
-//            "DIV" to TokenType("DIV", "BinaryOperators", Regex("/")),
-//            "MOD" to TokenType("MOD", "BinaryOperators", Regex("%")),
+//            "MULTIPLY" to com.example.codeblocksproject.interpreter.TokenType("MULTIPLY", "BinaryOperators", Regex("\\*")),
+//            "DIV" to com.example.codeblocksproject.interpreter.TokenType("DIV", "BinaryOperators", Regex("/")),
+//            "MOD" to com.example.codeblocksproject.interpreter.TokenType("MOD", "BinaryOperators", Regex("%")),
 
     )

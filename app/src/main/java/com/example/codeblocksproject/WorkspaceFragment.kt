@@ -1,5 +1,6 @@
 package com.example.codeblocksproject
 
+import com.example.codeblocksproject.interpreter.Lexer
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
@@ -148,22 +149,14 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                         }
                     }, 350)
                     try {
-//                        checkIfBlocksNull()
-//
-//                        val lexer = Lexer(blocksToCode(), DEBUG = true)
-//                        val tokens = lexer.lexicalAnalysis()
-//
-//                        tokens.forEach { x -> println(x.aboutMe()) }
-//                        var answer = ""
-//                        val parser = Parser(tokens, DEBUG = true)
-//                        val array = parser.run()
-//
-//                        for (string in array) {
-//                            if (string != "") {
-//                                answer += "$string\n"
-//                            }
-//                        }
-                        consoleFragment.resultsToConsole(blocksToCode())
+                        checkIfBlocksNull()
+
+                        val lexer = Lexer(blocksToCode(), DEBUG = true)
+                        val tokens = lexer.lexicalAnalysis()
+
+                        tokens.forEach { x -> println(x.aboutMe()) }
+                        val parser = com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
+                        parser.run(consoleFragment)
                     } catch (e: Exception) {
                         consoleFragment.resultsToConsole(e.message.toString())
                     }
@@ -444,7 +437,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
 
         while (currentBlock!!.blockView.id != endBlockID) {
             if (currentBlock.blockView.id != startBlockID) {
-                code += currentBlock.blockToCode() + "\n"
+                code += "\n" + currentBlock.blockToCode()
             }
             currentBlock = blockMap[currentBlock.nextId]!!
 

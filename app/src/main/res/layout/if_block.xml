@@ -48,7 +48,7 @@
         android:layout_margin="0dp"
         android:autofillHints=""
         android:background="@drawable/textfields_background"
-        android:digits="0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,()"
+        android:digits="0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,()>"
         android:hint="@string/conditionHint"
         android:imeOptions="actionDone"
         android:inputType="text"

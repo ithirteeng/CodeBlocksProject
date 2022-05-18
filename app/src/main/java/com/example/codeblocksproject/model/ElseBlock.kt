@@ -30,13 +30,4 @@ class ElseBlock @JvmOverloads constructor(
     override fun ifTextViewEmpty(): Boolean {
         return false
     }
-
-    init {
-        blockView.setPadding(
-            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
-            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),
-            context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
-            context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding)
-        )
-    }
 }

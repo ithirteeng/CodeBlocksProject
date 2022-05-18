@@ -27,7 +27,7 @@ class IfBlock @JvmOverloads constructor(
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View = view
-    override val blockType = BlockTypes.WHILE_BLOCK_TYPE
+    override val blockType = BlockTypes.IF_BLOCK_TYPE
     override val pattern = "if(<condition>)"
     override var position = 0
 

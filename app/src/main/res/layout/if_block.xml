@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:background="@color/transparent"
-        android:text="@string/whileBlockText"
+        android:text="@string/ifBlockText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/conditionText"
         app:layout_constraintHorizontal_chainStyle="spread"

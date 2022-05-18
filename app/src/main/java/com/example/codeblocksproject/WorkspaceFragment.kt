@@ -201,6 +201,13 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                 createBlock(BeginBlock(requireContext()))
                 createBlock(EndBlock(requireContext()))
             }
+            BlockTypes.IF_BLOCK_TYPE -> {
+                cyclesCount++
+                makeMarginsForBlocks()
+                createBlock(IfBlock(requireContext()))
+                createBlock(BeginBlock(requireContext()))
+                createBlock(EndBlock(requireContext()))
+            }
         }
         alignX()
     }

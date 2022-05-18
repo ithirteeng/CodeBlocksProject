@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 class ElseBlock @JvmOverloads constructor(
@@ -17,9 +16,7 @@ class ElseBlock @JvmOverloads constructor(
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-    //TODO: Change to else block
-
+        LayoutInflater.from(context).inflate(R.layout.else_block, this)
     override val blockType = BlockTypes.ELSE_BLOCK_TYPE
     override val pattern = "else"
     override var position = 0
@@ -28,7 +25,6 @@ class ElseBlock @JvmOverloads constructor(
     }
 
     override fun makeEditTextsDisabled() {
-        TODO("Not yet implemented")
     }
 
     override fun ifTextViewEmpty(): Boolean {
@@ -36,7 +32,6 @@ class ElseBlock @JvmOverloads constructor(
     }
 
     init {
-        //blockView.setBackgroundResource(R.drawable.)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

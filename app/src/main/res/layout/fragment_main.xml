@@ -12,6 +12,7 @@
         style="@style/mainButtonsTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/main_buttons_background"
         android:text="@string/blocksCodingText"
         app:layout_constraintBottom_toTopOf="@+id/buttonToTextWorkspace"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +25,7 @@
         style="@style/mainButtonsTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/main_buttons_background"
         android:text="@string/textCodingText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/buttonToWorkspace"
@@ -38,7 +40,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/mainLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/main_logo_background"
@@ -52,10 +54,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/mainButtonsBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/chocolateWorkingPanelColor"
+        android:contentDescription="@string/contentDescription"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

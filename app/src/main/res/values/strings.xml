@@ -60,8 +60,8 @@
     <string name="clearToast">everything is deleted</string>
     <string name="JSON_error">file is empty!</string>
 
-    <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;</string>
-    <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;[]</string>
+    <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]</string>
     <string name="correctSymbolsForFile">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-</string>
 
     <string name="autoFillFileName">NewFile</string>

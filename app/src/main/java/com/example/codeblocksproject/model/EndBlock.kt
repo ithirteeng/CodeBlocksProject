@@ -30,4 +30,7 @@ class EndBlock @JvmOverloads constructor(
     override fun ifTextViewEmpty(): Boolean {
         return false
     }
+    override fun content(): ArrayList<String> {
+        return arrayListOf()
+    }
 }

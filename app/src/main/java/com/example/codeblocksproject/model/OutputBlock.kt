@@ -47,6 +47,11 @@ class OutputBlock @JvmOverloads constructor(
         return conditionTextView.text.isEmpty()
     }
 
+    override fun content(): ArrayList<String> {
+        val expression = view.findViewById<TextView>(R.id.expression).text.toString()
+        return arrayListOf(expression)
+    }
+
     init {
         blockView.setBackgroundResource(R.drawable.output_block_background)
         blockView.setPadding(

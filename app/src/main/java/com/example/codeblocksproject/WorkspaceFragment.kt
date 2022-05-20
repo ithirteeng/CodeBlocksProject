@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
+import com.google.gson.Gson
 
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
@@ -31,6 +33,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         const val SHREK_COLOR = "shrek"
         const val INDENT = 100
     }
+
     private lateinit var binding: FragmentWorkspaceBinding
 
     private val blockList: MutableList<CustomView> = mutableListOf()
@@ -152,6 +155,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun startButtonEvent() {
         binding.startButton.setOnClickListener {
+            blockMapToJson()
             if (blocksFragment.getIsClosedBlocks()) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
@@ -415,7 +419,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         true
     }
 
-
     private fun endOfElse(elseBlock: CustomView): CustomView {
         var brackets = 1
         var block = blockMap[elseBlock.nextId]
@@ -565,5 +568,29 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                 block.blockView.layoutParams as LinearLayout.LayoutParams
             params.setMargins(0, 0, cyclesCount * INDENT, 0)
         }
+    }
+
+    private fun blockMapToJson() {
+        val array: ArrayList<BlockData> = arrayListOf()
+
+        var block = blockMap[startBlockID]!!
+        while (block.nextId != endBlockID) {
+            block = blockMap[block.nextId]!!
+            array.add(blockToData(block))
+        }
+
+        val json = Gson().toJson(array)
+        Log.i("JSON",json.toString())
+    }
+
+    private fun blockToData(block: CustomView): BlockData {
+        return BlockData(
+            block.blockType,
+            block.blockView.id,
+            block.nextId,
+            block.previousId,
+            block.position,
+            block.content()
+        )
     }
 }

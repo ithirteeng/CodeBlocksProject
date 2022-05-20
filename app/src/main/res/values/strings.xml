@@ -53,4 +53,5 @@
     <string name="sixDoubleOne">611</string>
 
     <string name="clearToast">everything is deleted</string>
+    <string name="JSON_error">file is empty!</string>
 </resources>

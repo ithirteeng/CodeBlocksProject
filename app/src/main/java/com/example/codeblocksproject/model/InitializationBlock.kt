@@ -57,6 +57,12 @@ class InitializationBlock @JvmOverloads constructor(
         return valueText.text.isEmpty() || nameText.text.isEmpty()
     }
 
+    override fun content(): ArrayList<String> {
+        val valueText: TextView = findViewById(R.id.valueText)
+        val nameText: TextView = findViewById(R.id.nameText)
+        return arrayListOf(nameText.text.toString(), valueText.text.toString())
+    }
+
     init {
         blockView.setBackgroundResource(R.drawable.init_block_background)
         blockView.setPadding(

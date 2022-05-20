@@ -18,7 +18,7 @@ class EndProgramBlock @JvmOverloads constructor(
     override var nextId: Int = -1
     override val blockType = BlockTypes.END_PROGRAM_BLOCK_TYPE
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.end_program_block, this)
+        LayoutInflater.from(context).inflate(R.layout.block_end_program, this)
     override var position = 0
     override val pattern = "}"
 

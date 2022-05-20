@@ -16,7 +16,7 @@ class ElseBlock @JvmOverloads constructor(
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.else_block, this)
+        LayoutInflater.from(context).inflate(R.layout.block_else, this)
     override val blockType = BlockTypes.ELSE_BLOCK_TYPE
     override val pattern = "else"
     override var position = 0

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.codeblocksproject.databinding.FragmentTextCodingBinding
@@ -23,6 +24,7 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
         ui.setupAllUIFunctions(view)
         setupOtherFragmentsFunctions()
         backToMenuButtonEvent()
+        clearAllButtonEvent()
     }
 
     override fun onCreateView(
@@ -84,6 +86,17 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
 
     fun displayButtons() {
         binding.startButton.visibility = View.VISIBLE
+    }
+
+    private fun clearAllButtonEvent() {
+        view?.findViewById<Button>(R.id.clearAllButton)!!.setOnClickListener {
+            binding.codingField.text.clear()
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.clearToast),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun backToMenuButtonEvent() {

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
@@ -227,6 +228,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun clearAllButtonEvent() {
         view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
             clearWorkfield()
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.clearToast),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }
@@ -460,10 +466,14 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun checkIfBlocksNull() {
-        for (index in 0 until blockList.size) {
-            if (blockList[index].ifTextViewEmpty()) {
-                throw Exception("Check ${blockList[index].blockType} it is empty!")
+        var tempBlock = blockMap[startBlockID]
+        var counter = 0
+        while (tempBlock!!.blockView.id != endBlockID) {
+            counter++
+            if (tempBlock.ifTextViewEmpty()) {
+                throw Exception("check ${tempBlock.blockType} block, it is empty: ($counter line)")
             }
+            tempBlock = blockMap[tempBlock.nextId]
         }
     }
 

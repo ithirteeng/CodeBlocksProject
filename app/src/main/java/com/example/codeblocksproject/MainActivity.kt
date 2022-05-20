@@ -14,10 +14,4 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
     }
-
-    override fun onDestroy() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.workspaceFragment)
-        (fragment as WorkspaceFragment).saveData()
-        super.onDestroy()
-    }
 }

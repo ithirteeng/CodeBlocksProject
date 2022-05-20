@@ -13,10 +13,12 @@ import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.codeblocksproject.databinding.DrawerLayoutBinding
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
@@ -24,6 +26,7 @@ import com.example.codeblocksproject.ui.UserInterfaceClass
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
 
 @DelicateCoroutinesApi
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
@@ -38,6 +41,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private lateinit var binding: FragmentWorkspaceBinding
+    private lateinit var drawerLayoutBinding: DrawerLayoutBinding
 
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
     private var startBlockID = 0
@@ -64,6 +68,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     ): View {
         programFile = ProgramFile(requireContext())
         binding = FragmentWorkspaceBinding.inflate(inflater, container, false)
+        drawerLayoutBinding = DrawerLayoutBinding.inflate(inflater, container, false)
 
         val startBlock: StartProgramBlock = binding.startProgram
         startBlockID = binding.startProgram.blockView.id
@@ -81,25 +86,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         startBlock.nextId = endBlockID
         endBlock.previousId = startBlockID
 
-        try {
-            if (fileName.isEmpty())
-                fileName = FILE_NAME
-            val map = programFile.loadProgram(fileName)
-            fillBlockMap(map)
-            fillIfList()
-
-            freeId = blockMap.size - 2
-            loadToWorkfield()
-
-            var block = blockMap[startBlockID]!!
-            Log.i("ID---", block.blockType)
-            while (block.blockView.id != endBlockID) {
-                block = blockMap[block.nextId]!!
-                Log.i("ID---", block.blockType)
-            }
-        } catch (e: Exception) {
-            Log.i("---", e.toString())
-        }
+        uploadData()
 
         return binding.root
     }
@@ -112,16 +99,18 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         setupAllDragListeners()
         backToMenuButtonEvent()
         clearAllButtonEvent()
+        openFileButtonEvent()
+        saveFileButtonEvent()
         binding.zoomLayout.zoomTo(4f, true)
     }
 
-    override fun onPause() {
+    /*override fun onPause() {
         saveData()
         super.onPause()
-    }
+    }*/
 
     override fun onDestroy() {
-        saveData()
+        //saveData()
         super.onDestroy()
     }
 
@@ -133,6 +122,31 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             Log.i("onDestroy", "Completed")
         } catch (e: Exception) {
             Log.i("onDestroy", e.toString())
+        }
+    }
+
+    private fun uploadData() {
+        try {
+            if (fileName.isEmpty())
+                fileName = FILE_NAME
+            val map = programFile.loadProgram(fileName)
+            fillBlockMap(map)
+            fillIfList()
+            freeId = 0
+            loadToWorkfield()
+
+            var block = blockMap[startBlockID]!!
+            Log.i("ID---", block.blockType)
+            while (block.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                if (block.blockView.id > freeId) {
+                    freeId = block.blockView.id
+                }
+                Log.i("ID---", block.blockType)
+            }
+            freeId++
+        } catch (e: Exception) {
+            Log.i("---", e.toString())
         }
     }
 
@@ -295,6 +309,33 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
     }
 
+    private fun openFileButtonEvent() {
+        view?.findViewById<Button>(R.id.openFileButton)?.setOnClickListener {
+            val lastFileName=fileName
+            if(view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
+                fileName=view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            clearWorkfield()
+            uploadData()
+        }
+    }
+
+    private fun saveFileButtonEvent() {
+        view?.findViewById<Button>(R.id.saveFileButton)?.setOnClickListener {
+            if(view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
+                fileName=view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            saveData()
+        }
+    }
+
+    private fun deleteFileButtonEvent() {
+        view?.findViewById<Button>(R.id.saveFileButton)?.setOnClickListener {
+            if(view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
+                fileName=view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            saveData()
+
+        }
+    }
+
     private fun clearWorkfield(isRemovingOn: Boolean = true) {
         val startBlock = blockMap[startBlockID]
         val endBlock = blockMap[endBlockID]
@@ -323,7 +364,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun clearAllButtonEvent() {
         view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
             clearWorkfield()
-            saveData()
             Toast.makeText(
                 requireContext(),
                 resources.getString(R.string.clearToast),

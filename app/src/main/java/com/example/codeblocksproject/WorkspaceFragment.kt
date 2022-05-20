@@ -51,7 +51,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         setupOtherFragmentsFunctions()
         setupAllDragListeners()
         backToMenuButtonEvent()
-        //clearAllButtonEvent()
+        clearAllButtonEvent()
         binding.zoomLayout.zoomTo(4f, true)
     }
 
@@ -81,6 +81,21 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         endBlock.previousId = startBlockID
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        var block = blockMap[startBlockID]!!
+        while (block.nextId != endBlockID) {
+            block = blockMap[block.nextId]!!
+            binding.mainWorkfield.addView(block.blockView, block.position)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        clearWorkfield(false)
     }
 
     private fun setupAllDragListeners() {
@@ -155,13 +170,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                         val tokens = lexer.lexicalAnalysis()
 
                         tokens.forEach { x -> println(x.aboutMe()) }
-                        val parser = com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
+                        val parser =
+                            com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
                         parser.run(consoleFragment)
                     } catch (e: Exception) {
                         consoleFragment.resultsToConsole(e.message.toString())
                     }
-
-
                 }
             }
         }
@@ -218,19 +232,19 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         }
     }
 
-    private fun clearAllButtonEvent() {
-        view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
-            val startBlock = blockMap[startBlockID]
-            val endBlock = blockMap[endBlockID]
+    private fun clearWorkfield(isRemovingOn: Boolean = true) {
+        val startBlock = blockMap[startBlockID]
+        val endBlock = blockMap[endBlockID]
 
-            for (block in blockList) {
-                if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE &&
-                    block.blockType != BlockTypes.END_PROGRAM_BLOCK_TYPE
-                ) {
-                    binding.mainWorkfield.removeView(block.blockView)
-                }
+        for (block in blockList) {
+            if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE &&
+                block.blockType != BlockTypes.END_PROGRAM_BLOCK_TYPE
+            ) {
+                binding.mainWorkfield.removeView(block.blockView)
             }
+        }
 
+        if (isRemovingOn) {
             blockMap.clear()
             blockList.clear()
 
@@ -239,6 +253,15 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
 
             blockMap[startBlockID] = startBlock
             blockMap[endBlockID] = endBlock
+
+            startBlock.nextId = endBlockID
+            endBlock.previousId = startBlockID
+        }
+    }
+
+    private fun clearAllButtonEvent() {
+        view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
+            clearWorkfield()
         }
 
     }
@@ -419,10 +442,10 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         var block = blockMap[elseBlock.nextId]
         while (brackets != 0) {
             block = blockMap[block!!.nextId]
-            if(block!!.blockType==BlockTypes.BEGIN_BLOCK_TYPE){
+            if (block!!.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
                 brackets++
             }
-            if(block.blockType==BlockTypes.END_BLOCK_TYPE){
+            if (block.blockType == BlockTypes.END_BLOCK_TYPE) {
                 brackets--
             }
         }

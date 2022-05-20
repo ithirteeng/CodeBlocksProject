@@ -14,7 +14,7 @@ class OutputBlock @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : CustomView, LinearLayout(context, attrs) {
     private val view =
-        LayoutInflater.from(context).inflate(R.layout.output_block, this).apply {
+        LayoutInflater.from(context).inflate(R.layout.block_output, this).apply {
             val conditionTextView = findViewById<TextView>(R.id.expressionText)
             val conditionEditText = findViewById<EditText>(R.id.expression)
 

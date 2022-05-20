@@ -14,7 +14,7 @@ class InitializationBlock @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : CustomView, LinearLayout(context, attrs) {
     private val view =
-        LayoutInflater.from(context).inflate(R.layout.initialization_block, this).apply {
+        LayoutInflater.from(context).inflate(R.layout.block_initialization, this).apply {
             val valueEdit: EditText = findViewById(R.id.varValue)
             val nameEdit: EditText = findViewById(R.id.varName)
             val valueText: TextView = findViewById(R.id.valueText)

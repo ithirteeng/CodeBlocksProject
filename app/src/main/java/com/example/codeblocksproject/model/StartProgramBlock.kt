@@ -18,7 +18,7 @@ class StartProgramBlock @JvmOverloads constructor(
     override var nextId = 0
     override val blockType = BlockTypes.START_PROGRAM_BLOCK_TYPE
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.start_program_block, this)
+        LayoutInflater.from(context).inflate(R.layout.block_start_program, this)
 
     override val pattern = "{"
     override var position = 0

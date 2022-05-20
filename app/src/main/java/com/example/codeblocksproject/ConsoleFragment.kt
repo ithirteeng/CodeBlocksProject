@@ -11,13 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentConsoleBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
     private var isClosedStart = true
     private lateinit var binding: FragmentConsoleBinding
     private var isProgramStopped = false
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,7 +89,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             }, 350)
         }
     }
-
+    @DelicateCoroutinesApi
     private fun stopProgramButtonEvent() {
         binding.stopButton.setOnClickListener {
             if (!isProgramStopped) {

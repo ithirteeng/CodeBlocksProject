@@ -11,7 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentBlocksBinding
 import com.example.codeblocksproject.model.BlockTypes
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     private var isClosedBlocks = true
     private lateinit var binding: FragmentBlocksBinding

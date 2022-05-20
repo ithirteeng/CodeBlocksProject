@@ -1,6 +1,7 @@
 package com.example.codeblocksproject.interpreter
 
 import com.example.codeblocksproject.ConsoleFragment
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.*
 
 val OPERATORS = arrayOf("+", "-", "*", "/", "==", "!=", ">=", ">", "<=", "<", "||", "&&")
@@ -19,6 +20,7 @@ val OPERATORS_PRIORITY = mapOf(
     "/" to 4,
 )
 
+@DelicateCoroutinesApi
 class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false) {
     private var pos: Int = 0
     private val scope = mutableMapOf<String, Any>()

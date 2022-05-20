@@ -13,7 +13,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.codeblocksproject.databinding.FragmentTextCodingBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.ui.UserInterfaceClass
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
     private val consoleFragment = ConsoleFragment()
     private val blocksFragment = BlocksFragment()

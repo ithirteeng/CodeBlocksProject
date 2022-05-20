@@ -56,4 +56,7 @@
     <string name="JSON_error">file is empty!</string>
 
     <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;</string>
+    <string name="hz">хуй знает че не работет, ебись сам</string>
+
+    <string name="stopButton">stop</string>
 </resources>

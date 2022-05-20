@@ -21,8 +21,6 @@ class Lexer(private val code: String, private val DEBUG: Boolean = false) {
         return filterTokenList(tokenListAll)
     }
 
-    fun getFullTokenList(): List<Token> = tokenListAll.toList()
-
     private fun nextToken(): Boolean {
         if (pos >= code.length) return false
         for (i in tokensMap.values) {
@@ -51,6 +49,6 @@ class Lexer(private val code: String, private val DEBUG: Boolean = false) {
                 return true
             }
         }
-        throw Error("LEXER ERROR: Check position $pos! There is a lexical error")
+        throw Exception("LEXER ERROR: Check position $pos! There is a lexical error")
     }
 }

@@ -174,23 +174,31 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                             binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
-                    GlobalScope.launch {
-                        try {
-                            checkIfBlocksNull()
-
-                            val lexer = Lexer(blocksToCode(), DEBUG = false)
-                            val tokens = lexer.lexicalAnalysis()
-
-                            tokens.forEach { x -> println(x.aboutMe()) }
-                            val parser =
-                                com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = false)
-                            parser.run(consoleFragment)
-                        } catch (e: Exception) {
-                            consoleFragment.resultsToConsole(e.message.toString())
-                        }
-                    }
-
+                    startInterpreter()
+                    consoleFragment.setStopProgramFlag(false)
+                    consoleFragment.changeStopButtonIcon(false)
                 }
+            }
+        }
+    }
+
+    fun startInterpreter() {
+        GlobalScope.launch {
+            try {
+                checkIfBlocksNull()
+
+                val lexer = Lexer(blocksToCode(), DEBUG = false)
+                val tokens = lexer.lexicalAnalysis()
+
+                tokens.forEach { x -> println(x.aboutMe()) }
+                val parser =
+                    com.example.codeblocksproject.interpreter.Parser(
+                        tokens,
+                        DEBUG = false
+                    )
+                parser.run(consoleFragment)
+            } catch (e: Exception) {
+                consoleFragment.resultsToConsole(resources.getString(R.string.hz))
             }
         }
     }
@@ -585,7 +593,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
 
         val json = Gson().toJson(array)
-        Log.i("JSON",json.toString())
+        Log.i("JSON", json.toString())
     }
 
     private fun blockToData(block: CustomView): BlockData {

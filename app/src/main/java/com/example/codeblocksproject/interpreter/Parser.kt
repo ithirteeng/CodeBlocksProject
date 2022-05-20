@@ -42,7 +42,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     private fun require(vararg expected: String): Token {
         // return com.example.codeblocksproject.interpreter.Token if currentToken is one of expected else throw exception
         return match(*expected)
-            ?: throw Error("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
+            ?: throw Exception("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
     }
 
     fun run(consoleFragment: ConsoleFragment) {
@@ -52,6 +52,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     }
 
     private fun parsing(consoleFragment: ConsoleFragment) {
+
         if (match("var") != null) {
             if (DEBUG) println("STARTED VAR INITIALIZING PARSING")
             parseVarInitializing()
@@ -115,7 +116,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             if (arrIndex != null) {
                 (scope[variableName] as Array<Int>)[arrIndex] = (variableValue as Int)
             } else scope[variableName] = (variableValue as Int)
-        } else throw Error("Variable $variableName is not declared!")
+        } else throw Exception("Variable $variableName is not declared!")
     }
 
     private fun parseExpression(): Any? {
@@ -160,7 +161,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
                 numberStack.push(currentToken.text.toInt())
             } else if (currentToken.type.name == "IDENT_NAME") {
                 if (scope[currentToken.text] == null) {
-                    throw Error("Check ${currentToken.position}. Variable isn't declared")
+                    throw Exception("Check ${currentToken.position}. Variable isn't declared")
                 }
                 numberStack.push(scope[currentToken.text] as Int)
             }
@@ -213,7 +214,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             "&&" -> {
                 return if ((number1 != 0) && (number2 != 0)) 1 else 0
             }
-            else -> throw Error("Operator '$operator' isn't supported")
+            else -> throw Exception("Operator '$operator' isn't supported")
         }
     }
 
@@ -239,6 +240,9 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             }
             pos = startConditionPos
             isTrue = parseExpression() as Int != 0
+            if (consoleFragment.getStopProgramFlag()) {
+                isTrue = false
+            }
             if (DEBUG) println("Loop condition = $isTrue")
         }
         skipBlock()

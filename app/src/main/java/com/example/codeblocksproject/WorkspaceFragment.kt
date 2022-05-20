@@ -244,8 +244,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
                     openFragment(consoleFragment)
-                    //startInterpreter()
-                    consoleFragment.resultsToConsole(blocksToCode())
+                    startProgram()
                     consoleFragment.setStopProgramFlag(false)
                     consoleFragment.changeStopButtonIcon(false)
                 }
@@ -258,7 +257,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         binding.blocksButton.visibility = visibility
     }
 
-    fun startInterpreter() {
+    fun startProgram() {
         GlobalScope.launch {
             try {
                 checkIfBlocksNull()

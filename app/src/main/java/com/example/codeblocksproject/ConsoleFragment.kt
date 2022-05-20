@@ -62,7 +62,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     private fun closeSlidingFragment() {
         binding.closeButton.setOnClickListener {
             isProgramStopped = true
-
+            changeStopButtonIcon(isProgramStopped)
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(0, R.anim.bottom_panel_slide_in)
@@ -73,7 +73,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
                     binding.consoleTextView.text = ""
-                    changeStopButtonIcon(isProgramStopped)
+
                     try {
                         (parentFragment as WorkspaceFragment).displayButtons()
                     } catch (e: Exception) {
@@ -93,8 +93,9 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             } else {
                 isProgramStopped = false
                 binding.consoleTextView.text = ""
-                (parentFragment as WorkspaceFragment).startInterpreter()
                 changeStopButtonIcon(false)
+                (parentFragment as WorkspaceFragment).startProgram()
+
             }
         }
     }

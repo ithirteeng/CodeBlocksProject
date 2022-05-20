@@ -3,9 +3,11 @@ package com.example.codeblocksproject.model
 import android.content.Context
 import com.example.codeblocksproject.WorkspaceFragment
 import com.google.gson.Gson
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
+@DelicateCoroutinesApi
 class ProgramFile(val context: Context) {
 
     private fun blockToData(block: CustomView): BlockData {

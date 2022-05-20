@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.3515732" />
 
     <ImageView
         android:id="@+id/shrekImage"
@@ -175,6 +175,80 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5718194" />
+
+    <EditText
+        android:id="@+id/fileNameEditText"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints="@string/autoFillFileName"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/fileNameHint"
+        android:inputType="textNoSuggestions"
+        android:maxEms="30"
+        android:singleLine="true"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textColorHighlight="#2C2C2C"
+        android:textColorLink="#090909"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/menuGuideline"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    <Button
+        android:id="@+id/openFileButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_open_file_background"
+        android:text="@string/openFileText"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/saveFileButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline7"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <Button
+        android:id="@+id/saveFileButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_save_file_background"
+        android:text="@string/saveFileText"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/openFileButton"
+        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.68262655" />
+
+    <ImageView
+        android:id="@+id/fileNameBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/contentDescription"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/menuGuideline"
+        app:srcCompat="@drawable/button_menu_border" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,6 @@ package com.example.codeblocksproject.model
 import android.content.Context
 import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -69,8 +68,8 @@ interface CustomView {
 
     fun ifTextViewEmpty(): Boolean
 
-    fun content() : ArrayList<String>
+    fun content(): ArrayList<String>
 
-    fun loadBlock(data:BlockData)
+    fun loadBlock(data: BlockData)
 
 }

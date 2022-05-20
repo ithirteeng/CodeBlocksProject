@@ -39,7 +39,7 @@
     <string name="printBlockText">print</string>
     <string name="inputBlockText">input</string>
     <string name="elseBlockText">else</string>
-    <string name="arrayInit">: array of</string>
+    <string name="arrayInit">:  array of</string>
     <string name="arrayLengthHint">length</string>
 
     <string name="initializationButton">INITIALIZATION</string>
@@ -59,9 +59,10 @@
 
     <string name="clearToast">everything is deleted</string>
     <string name="JSON_error">file is empty!</string>
+    <string name="hz">хуй знает че не работет, ебись сам</string>
 
     <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;[]</string>
-    <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]</string>
+    <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ][+-</string>
     <string name="correctSymbolsForFile">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-</string>
 
     <string name="autoFillFileName">NewFile</string>
@@ -69,9 +70,8 @@
     <string name="saveFileText">save</string>
     <string name="openFileText">open</string>
 
-    <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;[]</string>
-    <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ][+-</string>
-    <string name="hz">хуй знает че не работет, ебись сам</string>
+
+
 
     <string name="stopButton">stop</string>
 </resources>

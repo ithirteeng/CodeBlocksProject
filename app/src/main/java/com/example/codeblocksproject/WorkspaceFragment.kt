@@ -91,14 +91,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             freeId = blockMap.size - 2
             loadToWorkfield()
 
-            var block=blockMap[startBlockID]!!
-            Log.i("ID---",block.blockType)
-            while (block.blockView.id!=endBlockID){
-                block=blockMap[block.nextId]!!
-                Log.i("ID---",block.blockType)
+            var block = blockMap[startBlockID]!!
+            Log.i("ID---", block.blockType)
+            while (block.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                Log.i("ID---", block.blockType)
             }
-
-
         } catch (e: Exception) {
             Log.i("---", e.toString())
         }
@@ -280,7 +278,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                     )
                 parser.run(consoleFragment)
             } catch (e: Exception) {
-                consoleFragment.resultsToConsole(resources.getString(R.string.hz))
+                consoleFragment.resultsToConsole(e.message.toString())
             }
         }
     }

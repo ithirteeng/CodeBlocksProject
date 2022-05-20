@@ -43,6 +43,7 @@ class ProgramFile(val context: Context) {
         endBlockID: Int,
         fileName: String = WorkspaceFragment.FILE_NAME
     ) {
+        context.deleteFile(fileName)
         context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(blockMapToJson(blockMap, startBlockID, endBlockID).toByteArray())
             it.close()
@@ -54,6 +55,7 @@ class ProgramFile(val context: Context) {
         val json = context.openFileInput(fileName).bufferedReader().use {
             it.readText()
         }
+        Log.i("blocks-----",json)
         return dataToMap(Json.decodeFromString(json))
     }
 

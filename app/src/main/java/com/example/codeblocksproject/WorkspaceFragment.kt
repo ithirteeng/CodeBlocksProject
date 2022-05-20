@@ -21,7 +21,6 @@ import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -83,13 +82,19 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         try {
             val map = programFile.loadProgram()
             fillBlockMap(map)
+            fillIfList()
 
-            if (blockMap.size > 2) {
-                fillBlockMap(programFile.loadProgram())
-                fillIfList()
-                freeId = blockMap.size - 2
-                loadToWorkfield()
+            var block = blockMap[startBlockID]
+            Log.i("blocks-----", block!!.blockType)
+            while (block!!.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]
+                Log.i("blocks-----", block!!.blockType)
             }
+
+            freeId = blockMap.size - 2
+            loadToWorkfield()
+
+
         } catch (e: Exception) {
             Log.i("---", e.toString())
         }
@@ -108,20 +113,23 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         binding.zoomLayout.zoomTo(4f, true)
     }
 
-    fun saveData(){
-        programFile.saveProgram(blockMap, startBlockID, endBlockID)
+    override fun onPause() {
+        saveData()
+        super.onPause()
     }
 
     override fun onDestroy() {
-        Toast.makeText(requireContext(),"onDestroy",Toast.LENGTH_LONG).show()
+        saveData()
+        super.onDestroy()
+    }
+
+    fun saveData() {
         try {
             programFile.saveProgram(blockMap, startBlockID, endBlockID)
-            Log.i("ID---","true")
+            Log.i("onDestroy", "Completed")
         } catch (e: Exception) {
-            Log.i("onDestroy",e.toString())
+            Log.i("onDestroy", e.toString())
         }
-        clearWorkfield(false)
-        super.onDestroy()
     }
 
     private fun fillBlockMap(map: Map<Int, CustomView>) {
@@ -129,6 +137,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             blockMap[block.blockView.id] = block
             if (block.blockType == BlockTypes.WHILE_BLOCK_TYPE || block.blockType == BlockTypes.IF_BLOCK_TYPE)
                 cyclesCount++
+
+            Log.i("blocks-----", block.previousId.toString())
             if (block.previousId == startBlockID) {
                 blockMap[startBlockID]!!.nextId = block.blockView.id
             }
@@ -282,6 +292,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun backToMenuButtonEvent() {
         view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
             findNavController().navigate(R.id.mainFragment)
+            saveData()
         }
     }
 

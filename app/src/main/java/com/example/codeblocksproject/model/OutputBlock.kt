@@ -49,7 +49,6 @@ class OutputBlock @JvmOverloads constructor(
         toTextView(binding.expression, binding.expressionText)
         toEditText(binding.expressionText, binding.expression, context)
 
-        blockView.setBackgroundResource(R.drawable.output_block_background)
         blockView.setBackgroundResource(R.drawable.block_output_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),

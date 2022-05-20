@@ -134,7 +134,7 @@
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/if_button_background"
+                    android:background="@drawable/button_if_background"
                     android:text="@string/elseBlockText" />
             </LinearLayout>
         </ScrollView>

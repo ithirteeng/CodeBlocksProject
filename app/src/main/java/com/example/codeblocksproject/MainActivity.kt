@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         val fragment = supportFragmentManager.findFragmentById(R.id.workspaceFragment)
-        fragment!!.onDestroy()
+        (fragment as WorkspaceFragment).saveData()
         super.onDestroy()
     }
 }

@@ -7,9 +7,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class ProgramFile(val context: Context) {
-    private var startBlockID = 0
-    private var endBlockID = 0
-
 
     private fun blockToData(block: CustomView): BlockData {
         return BlockData(
@@ -44,7 +41,6 @@ class ProgramFile(val context: Context) {
         endBlockID: Int,
         fileName: String = WorkspaceFragment.FILE_NAME
     ) {
-        context.deleteFile(fileName)
         context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(blockMapToJson(blockMap, startBlockID, endBlockID).toByteArray())
             it.close()

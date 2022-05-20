@@ -1,7 +1,5 @@
 package com.example.codeblocksproject
 
-import com.example.codeblocksproject.interpreter.Lexer
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.Context
 import android.os.Bundle
@@ -18,11 +16,12 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
+import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
 
 
-class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInterface {
+class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     companion object {
         const val PINK_COLOR = "pink"
         const val CHOCOLATE_COLOR = "chocolate"
@@ -31,18 +30,23 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         const val SHREK_COLOR = "shrek"
         const val INDENT = 100
     }
+    private lateinit var binding: FragmentWorkspaceBinding
 
-    private var cyclesCount = 0
     private val blockList: MutableList<CustomView> = mutableListOf()
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
-    private val consoleFragment = ConsoleFragment()
-    private val blocksFragment = BlocksFragment()
-    private lateinit var binding: FragmentWorkspaceBinding
     private var startBlockID = 0
     private var endBlockID = 0
+
+    private val consoleFragment = ConsoleFragment()
+    private val blocksFragment = BlocksFragment()
+
+    private var cyclesCount = 0
+
     private var freeId = 0
     private lateinit var draggingBlock: CustomView
     private var draggingList = mutableListOf<CustomView>()
+    private val ifBlockList = mutableListOf<CustomView>()
+    private lateinit var prevIfBlock: CustomView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -155,7 +159,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
                         val tokens = lexer.lexicalAnalysis()
 
                         tokens.forEach { x -> println(x.aboutMe()) }
-                        val parser = com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
+                        val parser =
+                            com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
                         parser.run(consoleFragment)
                     } catch (e: Exception) {
                         consoleFragment.resultsToConsole(e.message.toString())
@@ -167,49 +172,10 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         }
     }
 
-    private fun checkIfBlocksNull() {
-        for (index in 0 until blockList.size) {
-            if (blockList[index].ifTextViewEmpty()) {
-                throw Exception("Check ${blockList[index].blockType} it is empty!")
-            }
-        }
-    }
 
-    override fun displayButtons() {
+    fun displayButtons() {
         binding.startButton.visibility = View.VISIBLE
         binding.blocksButton.visibility = View.VISIBLE
-    }
-
-    private val ifBlockList = mutableListOf<CustomView>()
-    override fun addBlock(type: String) {
-        when (type) {
-            BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
-            BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
-            BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
-            BlockTypes.WHILE_BLOCK_TYPE -> {
-                cyclesCount++
-                makeMarginsForBlocks()
-                createBlock(WhileBlock(requireContext()))
-                createBlock(BeginBlock(requireContext()))
-                createBlock(EndBlock(requireContext()))
-            }
-            BlockTypes.IF_BLOCK_TYPE -> {
-                cyclesCount++
-                makeMarginsForBlocks()
-                createBlock(IfBlock(requireContext()))
-                createBlock(BeginBlock(requireContext()))
-
-                val newEndBlock = EndBlock(requireContext())
-                createBlock(newEndBlock)
-                ifBlockList.add(newEndBlock)
-            }
-            BlockTypes.ELSE_BLOCK_TYPE -> {
-                if (lastFreeIf() != null) {
-                    createBlock(ElseBlock(requireContext()), lastFreeIf())
-                }
-            }
-        }
-        alignX()
     }
 
     private fun backToMenuButtonEvent() {
@@ -243,30 +209,47 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
 
     }
 
-    private fun refreshList() {
-        val list = mutableListOf<CustomView>()
-        for (block in ifBlockList) {
-            if (blockMap.containsKey(block.blockView.id)) {
-                list.add(block)
+
+    fun addBlock(type: String) {
+        when (type) {
+            BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
+            BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
+            BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
+            BlockTypes.WHILE_BLOCK_TYPE -> {
+                cyclesCount++
+                makeMarginsForBlocks()
+                createBlock(WhileBlock(requireContext()))
+                createBlock(BeginBlock(requireContext()))
+                createBlock(EndBlock(requireContext()))
+            }
+            BlockTypes.IF_BLOCK_TYPE -> {
+                cyclesCount++
+                makeMarginsForBlocks()
+                createBlock(IfBlock(requireContext()))
+                createBlock(BeginBlock(requireContext()))
+
+                val newEndBlock = EndBlock(requireContext())
+                createBlock(newEndBlock)
+                ifBlockList.add(newEndBlock)
+            }
+            BlockTypes.ELSE_BLOCK_TYPE -> {
+                if (lastFreeIf() != null) {
+                    createBlock(ElseBlock(requireContext()), lastFreeIf())
+                }
             }
         }
-
-        ifBlockList.clear()
-        ifBlockList.addAll(list)
+        alignX()
     }
 
-    private fun lastFreeIf(): CustomView? {
-        var lastBlock: CustomView? = null
-        refreshList()
-        for (block in ifBlockList) {
-            if (blockMap[block.nextId]!!.blockType != BlockTypes.ELSE_BLOCK_TYPE) {
-                lastBlock = block
-            }
-        }
-        return lastBlock
+    private fun View.setDefault(x: Float) {
+        this.x = x
+        this.z = 1F
+        this.id = freeId
+        freeId++
+        if (freeId == startBlockID || freeId == endBlockID)
+            freeId++
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(block: CustomView, prevBlock: CustomView? = null) {
         val lastBlock: CustomView = prevBlock ?: blockMap[blockMap[endBlockID]!!.previousId]!!
 
@@ -290,8 +273,9 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE)
+        if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE) {
             block.blockView.setOnLongClickListener(choiceLongClickListener())
+        }
         block.blockView.setOnDragListener(choiceDragListener())
         makeMarginsForBlocks()
 
@@ -301,18 +285,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         }
     }
 
-    private fun View.setDefault(x: Float) {
-        this.x = x
-        this.z = 1F
-        this.id = freeId
-        freeId++
-        if (freeId == startBlockID || freeId == endBlockID)
-            freeId++
-    }
 
-    private lateinit var prevIfBlock: CustomView
-
-    @SuppressLint("ClickableViewAccessibility")
     private fun choiceLongClickListener() = View.OnLongClickListener { view ->
         makeKeymapHidden()
         makeAllEditTextsDisabled()
@@ -414,19 +387,43 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         true
     }
 
+
     private fun endOfElse(elseBlock: CustomView): CustomView {
         var brackets = 1
         var block = blockMap[elseBlock.nextId]
         while (brackets != 0) {
             block = blockMap[block!!.nextId]
-            if(block!!.blockType==BlockTypes.BEGIN_BLOCK_TYPE){
+            if (block!!.blockType == BlockTypes.BEGIN_BLOCK_TYPE) {
                 brackets++
             }
-            if(block.blockType==BlockTypes.END_BLOCK_TYPE){
+            if (block.blockType == BlockTypes.END_BLOCK_TYPE) {
                 brackets--
             }
         }
         return block!!
+    }
+
+    private fun lastFreeIf(): CustomView? {
+        var lastBlock: CustomView? = null
+        refreshList()
+        for (block in ifBlockList) {
+            if (blockMap[block.nextId]!!.blockType != BlockTypes.ELSE_BLOCK_TYPE) {
+                lastBlock = block
+            }
+        }
+        return lastBlock
+    }
+
+    private fun refreshList() {
+        val list = mutableListOf<CustomView>()
+        for (block in ifBlockList) {
+            if (blockMap.containsKey(block.blockView.id)) {
+                list.add(block)
+            }
+        }
+
+        ifBlockList.clear()
+        ifBlockList.addAll(list)
     }
 
     private fun refreshPositions() {
@@ -437,6 +434,14 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
             block = blockMap[block.nextId]!!
             block.position = ind
             ind++
+        }
+    }
+
+    private fun checkIfBlocksNull() {
+        for (index in 0 until blockList.size) {
+            if (blockList[index].ifTextViewEmpty()) {
+                throw Exception("Check ${blockList[index].blockType} it is empty!")
+            }
         }
     }
 

@@ -22,6 +22,8 @@ import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
 import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
@@ -155,7 +157,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun startButtonEvent() {
         binding.startButton.setOnClickListener {
-            blockMapToJson()
+            //blockMapToJson()
             if (blocksFragment.getIsClosedBlocks()) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
@@ -172,19 +174,22 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                             binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
-                    try {
-                        checkIfBlocksNull()
+                    GlobalScope.launch {
+                        try {
+                            checkIfBlocksNull()
 
-                        val lexer = Lexer(blocksToCode(), DEBUG = true)
-                        val tokens = lexer.lexicalAnalysis()
+                            val lexer = Lexer(blocksToCode(), DEBUG = false)
+                            val tokens = lexer.lexicalAnalysis()
 
-                        tokens.forEach { x -> println(x.aboutMe()) }
-                        val parser =
-                            com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
-                        parser.run(consoleFragment)
-                    } catch (e: Exception) {
-                        consoleFragment.resultsToConsole(e.message.toString())
+                            tokens.forEach { x -> println(x.aboutMe()) }
+                            val parser =
+                                com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = false)
+                            parser.run(consoleFragment)
+                        } catch (e: Exception) {
+                            consoleFragment.resultsToConsole(e.message.toString())
+                        }
                     }
+
                 }
             }
         }

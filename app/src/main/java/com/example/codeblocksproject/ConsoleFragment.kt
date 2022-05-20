@@ -29,9 +29,15 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     }
 
     fun resultsToConsole(s: String) {
-        var string = binding.consoleTextView.text
-        string = "$string$s"
-        binding.consoleTextView.text = string
+        activity?.runOnUiThread {
+            var string = binding.consoleTextView.text
+            string = "$string$s"
+            binding.consoleTextView.text = string
+            binding.scroll.post {
+                binding.scroll.fullScroll(View.FOCUS_DOWN)
+            }
+        }
+
     }
 
     override fun onCreateView(

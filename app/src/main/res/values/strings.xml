@@ -62,6 +62,13 @@
 
     <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;</string>
     <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="correctSymbolsForFile">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-</string>
+
+    <string name="autoFillFileName">NewFile</string>
+    <string name="fileNameHint">file name</string>
+    <string name="saveFileText">save</string>
+    <string name="openFileText">open</string>
+
     <string name="hz">хуй знает че не работет, ебись сам</string>
 
     <string name="stopButton">stop</string>

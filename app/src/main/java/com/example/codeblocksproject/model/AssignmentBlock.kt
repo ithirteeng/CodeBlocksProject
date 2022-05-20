@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.example.codeblocksproject.R
 import com.example.codeblocksproject.databinding.BlockAssignmentBinding
 
@@ -45,15 +43,15 @@ class AssignmentBlock @JvmOverloads constructor(
     }
 
     override fun loadBlock(data: BlockData) {
-        this.id=data.id
-        this.nextId=data.nextId
-        this.previousId=data.prevId
-        this.position=data.position
+        this.id = data.id
+        this.nextId = data.nextId
+        this.previousId = data.prevId
+        this.position = data.position
 
-        binding.nameText.text=data.content[0]
+        binding.nameText.text = data.content[0]
         binding.varName.setText(data.content[0])
 
-        binding.valueText.text=data.content[1]
+        binding.valueText.text = data.content[1]
         binding.varValue.setText(data.content[1])
     }
 

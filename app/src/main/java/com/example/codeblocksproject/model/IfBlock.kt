@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.example.codeblocksproject.R
 import com.example.codeblocksproject.databinding.BlockIfBinding
 

@@ -31,4 +31,8 @@ class BeginBlock @JvmOverloads constructor(
         return false
     }
 
+    override fun content(): ArrayList<String> {
+        return arrayListOf()
+    }
+
 }

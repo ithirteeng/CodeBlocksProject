@@ -68,4 +68,6 @@ interface CustomView {
 
     fun ifTextViewEmpty(): Boolean
 
+    fun content() : ArrayList<String>
+
 }

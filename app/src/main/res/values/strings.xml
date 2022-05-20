@@ -51,4 +51,7 @@
     <string name="blocksCodingText">blocks coding</string>
     <string name="textCodingText">text coding</string>
     <string name="sixDoubleOne">611</string>
+
+    <string name="clearToast">everything is deleted</string>
+    <string name="JSON_error">file is empty!</string>
 </resources>

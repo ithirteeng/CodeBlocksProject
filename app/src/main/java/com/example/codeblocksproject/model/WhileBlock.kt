@@ -47,6 +47,11 @@ class WhileBlock @JvmOverloads constructor(
         return conditionTextView.text.isEmpty()
     }
 
+    override fun content(): ArrayList<String> {
+        val condition = view.findViewById<TextView>(R.id.conditionText).text.toString()
+        return arrayListOf(condition)
+    }
+
     init {
         blockView.setBackgroundResource(R.drawable.while_block_background)
         blockView.setPadding(

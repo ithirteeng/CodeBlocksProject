@@ -36,7 +36,10 @@
     <string name="whileBlockText">while</string>
     <string name="ifBlockText">if</string>
     <string name="printBlockText">print</string>
+    <string name="inputBlockText">input</string>
     <string name="elseBlockText">else</string>
+    <string name="arrayInit">: Array</string>
+    <string name="arrayLengthHint">length</string>
 
     <string name="initializationButton">INITIALIZATION</string>
     <string name="whileButton">WHILE</string>

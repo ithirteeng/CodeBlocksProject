@@ -21,11 +21,9 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
         addingBlocks()
     }
 
-    fun getIsClosedBlocks(): Boolean {
-        return isClosedBlocks
-    }
+    fun getIsClosedBlocks() = isClosedBlocks
 
-    fun setISClosedBlocks(meaning: Boolean) {
+    fun setIsClosedBlocks(meaning: Boolean) {
         isClosedBlocks = meaning
     }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:id="@+id/printText"
+        style="@style/blocksTextStyle"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:background="@color/transparent"
+        android:text="@string/inputBlockText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/expressionText"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
+
+    <TextView
+        android:id="@+id/expressionText"
+        style="@style/blocksTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+
+        android:layout_marginStart="@dimen/blocksMargin"
+        android:autofillHints=""
+        android:background="@drawable/textviews_background"
+        android:hint="@string/conditionHint"
+        android:padding="2dp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/printText"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/expression"
+        style="@style/blocksTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:autofillHints=""
+        android:background="@drawable/textviews_background"
+        android:digits="0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,()"
+        android:hint="@string/conditionHint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:padding="2dp"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/expressionText"
+        app:layout_constraintEnd_toEndOf="@+id/expressionText"
+        app:layout_constraintStart_toStartOf="@+id/expressionText"
+        app:layout_constraintTop_toTopOf="@+id/expressionText"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+</merge>

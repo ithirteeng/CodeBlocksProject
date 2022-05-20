@@ -13,5 +13,6 @@ class BlockTypes {
         const val BEGIN_BLOCK_TYPE = "begin"
         const val END_BLOCK_TYPE = "end"
         const val WHILE_BLOCK_TYPE = "while"
+        const val ARRAY_INIT_BLOCK_TYPE = "arrayInit"
     }
 }

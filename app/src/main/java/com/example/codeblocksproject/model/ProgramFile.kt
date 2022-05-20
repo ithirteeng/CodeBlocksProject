@@ -1,14 +1,15 @@
 package com.example.codeblocksproject.model
 
 import android.content.Context
-import android.util.Log
 import com.example.codeblocksproject.WorkspaceFragment
 import com.google.gson.Gson
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import java.io.File
 
 class ProgramFile(val context: Context) {
+    private var startBlockID = 0
+    private var endBlockID = 0
+
 
     private fun blockToData(block: CustomView): BlockData {
         return BlockData(
@@ -55,7 +56,6 @@ class ProgramFile(val context: Context) {
         val json = context.openFileInput(fileName).bufferedReader().use {
             it.readText()
         }
-        Log.i("blocks-----",json)
         return dataToMap(Json.decodeFromString(json))
     }
 
@@ -85,6 +85,12 @@ class ProgramFile(val context: Context) {
                 }
                 BlockTypes.BEGIN_BLOCK_TYPE -> {
                     newBlock = BeginBlock(context)
+                }
+                BlockTypes.ARRAY_INIT_BLOCK_TYPE -> {
+                    newBlock = ArrayInitBlock(context)
+                }
+                BlockTypes.INPUT_BLOCK_TYPE -> {
+                    newBlock = InputBlock(context)
                 }
                 else -> {
                     newBlock = EndBlock(context)

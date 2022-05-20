@@ -26,17 +26,13 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         stopProgramButtonEvent()
     }
 
-    fun getStopProgramFlag(): Boolean {
-        return isProgramStopped
-    }
+    fun getStopProgramFlag() = isProgramStopped
 
     fun setStopProgramFlag(flag: Boolean) {
         isProgramStopped = flag
     }
 
-    fun getIsClosedStart(): Boolean {
-        return isClosedStart
-    }
+    fun getIsClosedStart() = isClosedStart
 
     fun setISClosedStart(meaning: Boolean) {
         isClosedStart = meaning

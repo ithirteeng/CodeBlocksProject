@@ -133,12 +133,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun fillBlockMap(map: Map<Int, CustomView>) {
+
         for (block in map.values) {
             blockMap[block.blockView.id] = block
             if (block.blockType == BlockTypes.WHILE_BLOCK_TYPE || block.blockType == BlockTypes.IF_BLOCK_TYPE)
                 cyclesCount++
 
-            Log.i("blocks-----", block.previousId.toString())
             if (block.previousId == startBlockID) {
                 blockMap[startBlockID]!!.nextId = block.blockView.id
             }
@@ -212,24 +212,27 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         transaction.commit()
     }
 
+    private fun openFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
+        fragment.onCreateAnimation(0, true, 1)
+        transaction.show(fragment)
+        transaction.commit()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            kotlin.run {
+                bottomMenuVisibility(View.GONE)
+            }
+        }, 350)
+    }
+
     private fun blocksButtonEvent() {
         binding.blocksButton.setOnClickListener {
             if (consoleFragment.getIsClosedStart()) {
                 if (blocksFragment.getIsClosedBlocks()) {
-                    blocksFragment.setISClosedBlocks(false)
-                    val fragmentManager = childFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
-                    blocksFragment.onCreateAnimation(0, true, 1)
-                    transaction.show(blocksFragment)
-                    transaction.commit()
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        kotlin.run {
-                            binding.blocksButton.visibility = View.GONE
-                            binding.startButton.visibility = View.GONE
-                        }
-                    }, 350)
+                    blocksFragment.setIsClosedBlocks(false)
+                    openFragment(blocksFragment)
                 }
             }
         }
@@ -240,19 +243,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             if (blocksFragment.getIsClosedBlocks()) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
-                    val fragmentManager = childFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
-                    consoleFragment.onCreateAnimation(0, true, 1)
-                    transaction.show(consoleFragment)
-                    transaction.commit()
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        kotlin.run {
-                            binding.startButton.visibility = View.GONE
-                            binding.blocksButton.visibility = View.GONE
-                        }
-                    }, 350)
+                    openFragment(consoleFragment)
                     //startInterpreter()
                     consoleFragment.resultsToConsole(blocksToCode())
                     consoleFragment.setStopProgramFlag(false)
@@ -260,6 +251,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                 }
             }
         }
+    }
+
+    private fun bottomMenuVisibility(visibility: Int) {
+        binding.startButton.visibility = visibility
+        binding.blocksButton.visibility = visibility
     }
 
     fun startInterpreter() {
@@ -285,8 +281,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
 
     fun displayButtons() {
-        binding.startButton.visibility = View.VISIBLE
-        binding.blocksButton.visibility = View.VISIBLE
+        bottomMenuVisibility(View.VISIBLE)
     }
 
     private fun backToMenuButtonEvent() {

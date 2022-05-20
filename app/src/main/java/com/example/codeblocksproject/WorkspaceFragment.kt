@@ -174,7 +174,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                             binding.blocksButton.visibility = View.GONE
                         }
                     }, 350)
-                    startInterpreter()
+                    //startInterpreter()
+                    consoleFragment.resultsToConsole(blocksToCode())
                     consoleFragment.setStopProgramFlag(false)
                     consoleFragment.changeStopButtonIcon(false)
                 }

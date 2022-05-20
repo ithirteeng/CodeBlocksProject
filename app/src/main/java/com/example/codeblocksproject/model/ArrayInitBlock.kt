@@ -57,7 +57,7 @@ class ArrayInitBlock @JvmOverloads constructor(
         toTextView(binding.varLength, binding.lengthText)
         toTextView(binding.varName, binding.nameText)
 
-        blockView.setBackgroundResource(R.drawable.button_array_background)
+        blockView.setBackgroundResource(R.drawable.block_array_init_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

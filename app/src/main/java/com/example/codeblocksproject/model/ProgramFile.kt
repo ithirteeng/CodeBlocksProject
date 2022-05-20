@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 
 @DelicateCoroutinesApi
 class ProgramFile(val context: Context) {
+
     private fun blockToData(block: CustomView): BlockData {
         return BlockData(
             block.blockType,
@@ -42,7 +43,6 @@ class ProgramFile(val context: Context) {
         endBlockID: Int,
         fileName: String = WorkspaceFragment.FILE_NAME
     ) {
-        context.deleteFile(fileName)
         context.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(blockMapToJson(blockMap, startBlockID, endBlockID).toByteArray())
             it.close()

@@ -113,7 +113,7 @@
         android:digits="@string/correctSymbols"
         android:hint="@string/valueTextHint"
         android:imeOptions="actionDone"
-        android:inputType="number"
+        android:inputType="text"
         android:maxLength="25"
         android:maxLines="1"
         android:padding="2dp"

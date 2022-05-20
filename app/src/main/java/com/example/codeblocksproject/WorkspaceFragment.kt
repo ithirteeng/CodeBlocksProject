@@ -21,10 +21,11 @@ import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
+@DelicateCoroutinesApi
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     companion object {
         const val PINK_COLOR = "pink"
@@ -256,6 +257,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         binding.startButton.visibility = visibility
         binding.blocksButton.visibility = visibility
     }
+
 
     fun startProgram() {
         GlobalScope.launch {

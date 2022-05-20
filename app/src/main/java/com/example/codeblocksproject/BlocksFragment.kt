@@ -48,6 +48,9 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
         binding.elseBlock.setOnClickListener {
             (parentFragment as WorkspaceFragment).addBlock(BlockTypes.ELSE_BLOCK_TYPE)
         }
+        binding.arrayInitBlock.setOnClickListener {
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.ARRAY_INIT_BLOCK_TYPE)
+        }
     }
 
     override fun onCreateView(

@@ -320,6 +320,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun clearAllButtonEvent() {
         view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
             clearWorkfield()
+            saveData()
             Toast.makeText(
                 requireContext(),
                 resources.getString(R.string.clearToast),
@@ -334,6 +335,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         when (type) {
             BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
             BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
+            BlockTypes.ARRAY_INIT_BLOCK_TYPE -> createBlock(ArrayInitBlock(requireContext()))
             BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
             BlockTypes.WHILE_BLOCK_TYPE -> {
                 cyclesCount++

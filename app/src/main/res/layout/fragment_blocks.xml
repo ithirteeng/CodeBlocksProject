@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:weightSum="6">
+                android:weightSum="7">
 
                 <Button
                     android:id="@+id/initializationBlock"
@@ -111,6 +111,15 @@
                     android:text="@string/outputButton" />
 
                 <Button
+                    android:id="@+id/arrayInitBlock"
+                    style="@style/blocksButtonsStyle"
+                    android:layout_margin="@dimen/blocksPadding"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_array_background"
+                    android:text="@string/arrayButton" />
+
+                <Button
                     android:id="@+id/whileBlock"
                     style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
@@ -136,6 +145,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_if_background"
                     android:text="@string/elseBlockText" />
+
             </LinearLayout>
         </ScrollView>
 

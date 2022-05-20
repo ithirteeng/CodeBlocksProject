@@ -30,24 +30,24 @@ class ArrayInitBlock @JvmOverloads constructor(
         convertEditTextToTextView(binding.nameText, binding.varName)
     }
 
-    override fun ifTextViewEmpty()=
+    override fun ifTextViewEmpty() =
         binding.lengthText.text.isEmpty() || binding.nameText.text.isEmpty()
 
 
-    override fun content()=
+    override fun content() =
         arrayListOf(binding.nameText.text.toString(), binding.lengthText.text.toString())
 
 
     override fun loadBlock(data: BlockData) {
-        this.id=data.id
-        this.nextId=data.nextId
-        this.previousId=data.prevId
-        this.position=data.position
+        this.id = data.id
+        this.nextId = data.nextId
+        this.previousId = data.prevId
+        this.position = data.position
 
-        binding.nameText.text=data.content[0]
+        binding.nameText.text = data.content[0]
         binding.varName.setText(data.content[0])
 
-        binding.lengthText.text=data.content[1]
+        binding.lengthText.text = data.content[1]
         binding.varLength.setText(data.content[1])
     }
 
@@ -57,7 +57,7 @@ class ArrayInitBlock @JvmOverloads constructor(
         toTextView(binding.varLength, binding.lengthText)
         toTextView(binding.varName, binding.nameText)
 
-        blockView.setBackgroundResource(R.drawable.block_init_background)
+        blockView.setBackgroundResource(R.drawable.button_array_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

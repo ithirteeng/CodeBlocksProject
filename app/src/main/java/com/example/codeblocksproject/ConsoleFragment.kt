@@ -85,6 +85,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             }, 350)
         }
     }
+
     @DelicateCoroutinesApi
     private fun stopProgramButtonEvent() {
         binding.stopButton.setOnClickListener {

@@ -38,7 +38,7 @@
     <string name="printBlockText">print</string>
     <string name="inputBlockText">input</string>
     <string name="elseBlockText">else</string>
-    <string name="arrayInit">: Array</string>
+    <string name="arrayInit">: Array of</string>
     <string name="arrayLengthHint">length</string>
 
     <string name="initializationButton">INITIALIZATION</string>
@@ -46,6 +46,7 @@
     <string name="ifButton">IF</string>
     <string name="outputButton">OUTPUT</string>
     <string name="assignmentButton">ASSIGNMENT</string>
+    <string name="arrayButton">ARRAY</string>
 
     <string name="codingText">coding…</string>
     <string name="backToMenuText">to menu</string>

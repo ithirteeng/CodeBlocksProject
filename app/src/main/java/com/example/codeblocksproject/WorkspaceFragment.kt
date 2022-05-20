@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
+import com.google.gson.Gson
+
+import java.io.File
+import java.io.FileOutputStream
 
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInterface {
@@ -30,6 +35,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         const val MONOCHROME_COLOR = "monochrome"
         const val SHREK_COLOR = "shrek"
         const val INDENT = 100
+        const val FILE_NAME = "blockProgram"
     }
 
     private var cyclesCount = 0
@@ -44,6 +50,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
     private lateinit var draggingBlock: CustomView
     private var draggingList = mutableListOf<CustomView>()
 
+    private var content=""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
@@ -98,6 +105,24 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
         clearWorkfield(false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        try {
+            saveProgramToFile()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun saveProgramToFile(fileName: String = FILE_NAME) {
+        requireContext().openFileOutput(fileName, Context.MODE_PRIVATE).use {
+            it.write(blockMap.toString().toByteArray())
+            it.close()
+        }
+    }
+
+
     private fun setupAllDragListeners() {
         binding.mainWorkfield.setOnDragListener(choiceDragListener())
         binding.drawerOutsideButton.setOnDragListener(choiceDragListener())
@@ -147,6 +172,25 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
 
     private fun startButtonEvent() {
         binding.startButton.setOnClickListener {
+            /*val map: MutableMap<String, String> = mutableMapOf()
+            var block=blockMap[startBlockID]
+            map[startBlockID.toString()]=block!!.blockType
+            while (block!!.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                map[block.blockView.id.toString()]=block.blockType
+            }
+
+             */
+            val map  = mutableListOf<String>()
+            var block=blockMap[startBlockID]
+            map.add(block!!.blockType)
+            while (block!!.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                map.add(block.blockType)
+            }
+
+            val json= Gson().toJson(map)
+            Log.e("DD", json.toString())
             if (blocksFragment.getIsClosedBlocks()) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
@@ -477,16 +521,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace), MainFragmentInt
     }
 
     private fun blocksToCode(): String {
-        var code = ""
+        var code = "{"
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
-            if (currentBlock.blockView.id != startBlockID) {
-                code += "\n" + currentBlock.blockToCode()
-            }
             currentBlock = blockMap[currentBlock.nextId]!!
-
-
+            code += "\n" + currentBlock.blockToCode()
         }
         return code
     }

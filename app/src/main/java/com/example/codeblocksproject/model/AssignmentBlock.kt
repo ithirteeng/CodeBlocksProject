@@ -65,7 +65,7 @@ class AssignmentBlock @JvmOverloads constructor(
     }
 
     init {
-        blockView.setBackgroundResource(R.drawable.assignment_block_background)
+        blockView.setBackgroundResource(R.drawable.block_assignment_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

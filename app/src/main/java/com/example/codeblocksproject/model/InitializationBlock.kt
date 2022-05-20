@@ -64,7 +64,7 @@ class InitializationBlock @JvmOverloads constructor(
     }
 
     init {
-        blockView.setBackgroundResource(R.drawable.init_block_background)
+        blockView.setBackgroundResource(R.drawable.block_init_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

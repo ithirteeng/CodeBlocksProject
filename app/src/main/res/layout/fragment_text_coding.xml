@@ -38,7 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/chocolate_drawer_button_image" />
+            app:srcCompat="@drawable/drawer_chocolate_button_image" />
 
         <ImageView
             android:id="@+id/bottomButtonsBackground"
@@ -57,7 +57,7 @@
             style="@style/bottomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/start_button_background"
+            android:background="@drawable/button_start_background"
             android:fontFamily="@font/courier_prime"
             android:text="@string/startButtonText"
             app:layout_constraintBottom_toBottomOf="parent"

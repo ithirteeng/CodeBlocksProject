@@ -53,7 +53,7 @@ class OutputBlock @JvmOverloads constructor(
     }
 
     init {
-        blockView.setBackgroundResource(R.drawable.output_block_background)
+        blockView.setBackgroundResource(R.drawable.block_output_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

@@ -229,37 +229,37 @@ class UserInterfaceClass(
         var button = view.findViewById<ImageButton>(R.id.drawerButton)
         when (color) {
             WorkspaceFragment.PINK_COLOR -> {
-                changeDrawerImage(button, R.drawable.pink_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_pink_button_image)
             }
             WorkspaceFragment.CHOCOLATE_COLOR -> {
-                changeDrawerImage(button, R.drawable.chocolate_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_chocolate_button_image)
             }
             WorkspaceFragment.SPACE_COLOR -> {
-                changeDrawerImage(button, R.drawable.space_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_space_button_image)
             }
             WorkspaceFragment.MONOCHROME_COLOR -> {
-                changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_sepia_button_image)
             }
             WorkspaceFragment.SHREK_COLOR -> {
-                changeDrawerImage(button, R.drawable.shrek_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_shrek_button_image)
             }
         }
         button = view.findViewById(R.id.drawerOutsideButton)
         when (color) {
             WorkspaceFragment.PINK_COLOR -> {
-                changeDrawerImage(button, R.drawable.pink_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_pink_button_image)
             }
             WorkspaceFragment.CHOCOLATE_COLOR -> {
-                changeDrawerImage(button, R.drawable.chocolate_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_chocolate_button_image)
             }
             WorkspaceFragment.SPACE_COLOR -> {
-                changeDrawerImage(button, R.drawable.space_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_space_button_image)
             }
             WorkspaceFragment.MONOCHROME_COLOR -> {
-                changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_sepia_button_image)
             }
             WorkspaceFragment.SHREK_COLOR -> {
-                changeDrawerImage(button, R.drawable.shrek_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_shrek_button_image)
             }
         }
     }

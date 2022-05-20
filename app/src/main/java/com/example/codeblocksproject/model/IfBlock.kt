@@ -53,7 +53,7 @@ class IfBlock @JvmOverloads constructor(
     }
 
     init {
-        blockView.setBackgroundResource(R.drawable.if_block_background)
+        blockView.setBackgroundResource(R.drawable.block_if_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

@@ -53,7 +53,7 @@ class WhileBlock @JvmOverloads constructor(
     }
 
     init {
-        blockView.setBackgroundResource(R.drawable.while_block_background)
+        blockView.setBackgroundResource(R.drawable.block_while_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

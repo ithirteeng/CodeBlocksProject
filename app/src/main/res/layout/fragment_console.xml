@@ -32,7 +32,7 @@
             style="@style/bottomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/bottomButtonsSize"
-            android:background="@drawable/close_button_background"
+            android:background="@drawable/button_close_background"
             android:text="@string/closeButtonText"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toStartOf="@+id/guideline6"
@@ -45,7 +45,7 @@
             android:id="@+id/guideline3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/stop_program_button_background"
+            android:background="@drawable/button_stop_program_background"
             android:orientation="horizontal"
             app:layout_constraintGuide_end="236dp" />
 
@@ -91,7 +91,7 @@
             android:id="@+id/stopButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/stop_program_button_background"
+            android:background="@drawable/button_stop_program_background"
             android:text="@string/transparentString"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/stopButton"
             app:layout_constraintTop_toTopOf="@+id/stopButton"
-            app:srcCompat="@drawable/stop_button_image" />
+            app:srcCompat="@drawable/button_stop_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

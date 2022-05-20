@@ -107,7 +107,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             binding.buttonIcon.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
-                    R.drawable.continue_button_image,
+                    R.drawable.button_continue_image,
                     requireContext().theme
                 )
             )
@@ -115,7 +115,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             binding.buttonIcon.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
-                    R.drawable.stop_button_image,
+                    R.drawable.button_stop_image,
                     requireContext().theme
                 )
             )

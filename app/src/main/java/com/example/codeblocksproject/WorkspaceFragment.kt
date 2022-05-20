@@ -55,6 +55,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private lateinit var prevIfBlock: CustomView
 
     private lateinit var programFile: ProgramFile
+    var fileName = FILE_NAME
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,16 +82,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         endBlock.previousId = startBlockID
 
         try {
-            val map = programFile.loadProgram()
+            if (fileName.isEmpty())
+                fileName = FILE_NAME
+            val map = programFile.loadProgram(fileName)
             fillBlockMap(map)
             fillIfList()
-
-            var block = blockMap[startBlockID]
-            Log.i("blocks-----", block!!.blockType)
-            while (block!!.blockView.id != endBlockID) {
-                block = blockMap[block.nextId]
-                Log.i("blocks-----", block!!.blockType)
-            }
 
             freeId = blockMap.size - 2
             loadToWorkfield()
@@ -126,7 +122,9 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     fun saveData() {
         try {
-            programFile.saveProgram(blockMap, startBlockID, endBlockID)
+            if (fileName.isEmpty())
+                fileName = FILE_NAME
+            programFile.saveProgram(blockMap, startBlockID, endBlockID, fileName)
             Log.i("onDestroy", "Completed")
         } catch (e: Exception) {
             Log.i("onDestroy", e.toString())

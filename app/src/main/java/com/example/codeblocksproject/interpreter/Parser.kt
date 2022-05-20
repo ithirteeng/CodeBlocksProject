@@ -23,27 +23,18 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     private var pos: Int = 0
     private val scope = mutableMapOf<String, Any>()
 
-    //    private val scopeArrays = mutableMapOf<String, List<>>()
     private fun match(vararg expected: String): Token? {
         // return com.example.codeblocksproject.interpreter.Token if currentToken is one of expected else null
         if (pos >= tokens.size) {
-            println("Match returned null" + "\n vararg was: ${expected[0]}"); throw Error("pos >= tokens.size")
+            return null
         }
 
         val currentToken = tokens[pos]
         if (expected.find { type -> tokensMap[type]!!.name == currentToken.type.name } != null) {
             pos++
 
-//            if (DEBUG) {
-//                println("Match returned ${currentToken.aboutMe()}")
-//            }
-
             return currentToken
         }
-
-//        if (DEBUG) {
-//            println("Match returned null" + "\n vararg was: ${expected[0]}" + " found ${tokens[pos].aboutMe()}")
-//        }
 
         return null
     }
@@ -51,7 +42,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     private fun require(vararg expected: String): Token {
         // return com.example.codeblocksproject.interpreter.Token if currentToken is one of expected else throw exception
         return match(*expected)
-            ?: throw Error("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
+            ?: throw Exception("Check pos ${tokens[pos].position}. Expected ${tokensMap[expected[0]]?.name}")
     }
 
     fun run(consoleFragment: ConsoleFragment) {
@@ -61,18 +52,22 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
     }
 
     private fun parsing(consoleFragment: ConsoleFragment) {
-        if (match("var") != null) {
-            println("STARTED VAR INITIALIZING PARSING"); parseVarInitializing()
-        } else if (match("print") != null) {
-            println("STARTED PRINT PARSING"); parsePrint(consoleFragment)
-        } else if (match("identifier") != null) {
-            println("STARTED ASSIGMENT PARSING"); parseAssignment()
-        } else if (match("if") != null) {
-            println("STARTED PARSING CONDITIONAL"); parseIf(consoleFragment)
-//        } else if (match("while") != null) {
-//            println("STARTED LOOP PARSING"); parseLoop()
-//        } else if (match("fun") != null) parseFunDeclaration() {
 
+        if (match("var") != null) {
+            if (DEBUG) println("STARTED VAR INITIALIZING PARSING")
+            parseVarInitializing()
+        } else if (match("print") != null) {
+            if (DEBUG) println("STARTED PRINT PARSING")
+            parsePrint(consoleFragment)
+        } else if (match("identifier") != null) {
+            if (DEBUG) println("STARTED ASSIGNMENT PARSING")
+            parseAssignment()
+        } else if (match("if") != null) {
+            if (DEBUG) println("STARTED PARSING CONDITIONAL")
+            parseIf(consoleFragment)
+        } else if (match("while") != null) {
+            if (DEBUG) println("STARTED LOOP PARSING")
+            parseLoop(consoleFragment)
         } else pos++
 
     }
@@ -98,13 +93,13 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
         val expression = parseExpression()
         if (expression == null) {
             if (DEBUG) {
-                consoleFragment.resultsToConsole("Empty output\n")
                 println("Empty output")
             }
             println("")
         } else {
-            consoleFragment.resultsToConsole("$expression\n")
-            println("$expression")
+
+            consoleFragment.resultsToConsole("♫ $expression\n")
+            println(">> $expression")
         }
     }
 
@@ -112,25 +107,27 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
         val variableName: String = tokens[pos - 1].text
         var arrIndex: Int? = null
         if (match("[") != null) {
-            arrIndex = parseExpression() as Int;
+            arrIndex = parseExpression() as Int
             require("]")
         }
         require("=")
-        var variableValue = parseExpression()
+        val variableValue = parseExpression()
         if (scope[variableName] != null) {
             if (arrIndex != null) {
                 (scope[variableName] as Array<Int>)[arrIndex] = (variableValue as Int)
             } else scope[variableName] = (variableValue as Int)
-        } else throw Error("Variable $variableName is not declared!")
+        } else throw Exception("Variable $variableName is not declared!")
     }
 
     private fun parseExpression(): Any? {
+        if (match("input") != null) {
+            return readLine()?.toInt()
+        }
         val operatorsStack = ArrayDeque<String>()
         val numberStack = ArrayDeque<Int>()
         var currentToken = require("number", "identifier", "(")
-        var isBooleanOperation: Boolean = false
         while (currentToken.text != ";" && currentToken.text != "{") {
-            println(currentToken.aboutMe())
+            if (DEBUG) println(currentToken.aboutMe())
             if (currentToken.text == "(") {
                 operatorsStack.push("(")
             } else if (currentToken.text == ")") {
@@ -142,12 +139,12 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
                     currentOperator = operatorsStack.pop()
                 }
             } else if (currentToken.type.group == "operators" || currentToken.type.group == "BooleanOperators") {
-                if (operatorsStack.isEmpty() || operatorsStack.last == "(") operatorsStack.push(
+                if (operatorsStack.isEmpty() || operatorsStack.first == "(") operatorsStack.push(
                     currentToken.text
                 )
                 else {
                     val currentOperatorPriority = OPERATORS_PRIORITY[currentToken.text]!!
-                    val stackOperatorPriority = OPERATORS_PRIORITY[operatorsStack.last]!!
+                    val stackOperatorPriority = OPERATORS_PRIORITY[operatorsStack.first]!!
                     if (currentOperatorPriority > stackOperatorPriority) {
                         operatorsStack.push(currentToken.text)
                     } else {
@@ -164,7 +161,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
                 numberStack.push(currentToken.text.toInt())
             } else if (currentToken.type.name == "IDENT_NAME") {
                 if (scope[currentToken.text] == null) {
-                    throw Error("Check ${currentToken.position}. Variable isn't declared")
+                    throw Exception("Check ${currentToken.position}. Variable isn't declared")
                 }
                 numberStack.push(scope[currentToken.text] as Int)
             }
@@ -217,45 +214,55 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             "&&" -> {
                 return if ((number1 != 0) && (number2 != 0)) 1 else 0
             }
-            else -> throw Error("Operator '$operator' isn't supported")
+            else -> throw Exception("Operator '$operator' isn't supported")
         }
     }
 
-//    private fun parseLoop() {
-//        var startConditionPos = pos
-//        var isTrue: Boolean = parseExpression() as Int != 0
-//        while (isTrue) {
-//            parsing()
-//            pos = startConditionPos
-//            isTrue = parseExpression() as Int != 0
-//        }
-//
-//    }
+    private fun skipBlock() {
+        var openBraces = 1
+        var closingBraces = 0
+        while (openBraces != closingBraces) {
+            if (match("}") != null) closingBraces++
+            else if (match("{") != null) openBraces++
+            else pos++
+        }
+    }
+
+    private fun parseLoop(consoleFragment: ConsoleFragment) {
+        val startConditionPos = pos
+        var isTrue: Boolean = parseExpression() as Int != 0
+        if (DEBUG) {
+            println("Loop condition = $isTrue")
+        }
+        while (isTrue) {
+            while (tokens[pos].text != "}") {
+                parsing(consoleFragment)
+            }
+            pos = startConditionPos
+            isTrue = parseExpression() as Int != 0
+            if (consoleFragment.getStopProgramFlag()) {
+                isTrue = false
+            }
+            if (DEBUG) println("Loop condition = $isTrue")
+        }
+        skipBlock()
+
+    }
 
     private fun parseIf(consoleFragment: ConsoleFragment) {
-
         val isTrue: Boolean = parseExpression() as Int != 0
+        if (DEBUG) println("`If` condition = $isTrue")
         if (isTrue) {
             while (tokens[pos].text != "}") {
                 parsing(consoleFragment)
             }
+            require("}")
             if (match("else") != null) {
-                var openBraces = 1
-                var closingBraces = 0
-                while (openBraces != closingBraces) {
-                    if (match("}") != null) closingBraces++
-                    else if (match("{") != null) openBraces++
-                    else pos++
-                }
+                require("{")
+                skipBlock()
             }
         } else {
-            var openBraces = 1
-            var closingBraces = 0
-            while (openBraces != closingBraces) {
-                if (match("}") != null) closingBraces++
-                else if (match("{") != null) openBraces++
-                else pos++
-            }
+            skipBlock()
             if (match("else") != null) {
                 require("{")
                 while (tokens[pos].text != "}") {
@@ -263,33 +270,6 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
                 }
             }
         }
-
-//        if (isTrue) {
-//            var openBraces = 1
-//            var closingBraces = 0
-//            while (openBraces != closingBraces) {
-//                if (match("}") != null) closingBraces++
-//                else if (match("{") != null) openBraces++
-//                else parsing()
-//            }
-//        } else {
-//            var openBraces = 1
-//            var closingBraces = 0
-//            while (openBraces != closingBraces) {
-//                if (match("}") != null) closingBraces++
-//                else if (match("{") != null) openBraces++
-//                else pos++
-//            }
-//            if (match("else") != null) {
-//                require("{")
-//                var openBraces = 1
-//                var closingBraces = 0
-//                while (openBraces != closingBraces) {
-//                    if (match("}") != null) closingBraces++
-//                    else if (match("{") != null) openBraces++
-//                    else parsing()
-//                }
-//            }
-//        }
     }
 }
+

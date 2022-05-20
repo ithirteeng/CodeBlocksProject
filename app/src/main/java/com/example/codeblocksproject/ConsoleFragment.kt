@@ -8,16 +8,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentConsoleBinding
 
 class ConsoleFragment : Fragment(R.layout.fragment_console) {
+
     private var isClosedStart = true
     private lateinit var binding: FragmentConsoleBinding
+    private var isProgramStopped = false
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
+        changeStopButtonIcon(isProgramStopped)
+        stopProgramButtonEvent()
+    }
+
+    fun getStopProgramFlag(): Boolean {
+        return isProgramStopped
+    }
+
+    fun setStopProgramFlag(flag: Boolean) {
+        isProgramStopped = flag
     }
 
     fun getIsClosedStart(): Boolean {
@@ -29,9 +43,15 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     }
 
     fun resultsToConsole(s: String) {
-        var string = binding.consoleTextView.text
-        string = "$string$s"
-        binding.consoleTextView.text = string
+        activity?.runOnUiThread {
+            var string = binding.consoleTextView.text
+            string = "$string$s"
+            binding.consoleTextView.text = string
+            binding.scroll.post {
+                binding.scroll.fullScroll(View.FOCUS_DOWN)
+            }
+        }
+
     }
 
     override fun onCreateView(
@@ -45,6 +65,8 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
     private fun closeSlidingFragment() {
         binding.closeButton.setOnClickListener {
+            isProgramStopped = true
+
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(0, R.anim.bottom_panel_slide_in)
@@ -55,15 +77,52 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
                     binding.consoleTextView.text = ""
+                    changeStopButtonIcon(isProgramStopped)
                     try {
                         (parentFragment as WorkspaceFragment).displayButtons()
                     } catch (e: Exception) {
                         (parentFragment as TextCodingFragment).displayButtons()
                     }
                 }
+
             }, 350)
         }
     }
+
+    private fun stopProgramButtonEvent() {
+        binding.stopButton.setOnClickListener {
+            if (!isProgramStopped) {
+                isProgramStopped = true
+                changeStopButtonIcon(true)
+            } else {
+                isProgramStopped = false
+                binding.consoleTextView.text = ""
+                (parentFragment as WorkspaceFragment).startInterpreter()
+                changeStopButtonIcon(false)
+            }
+        }
+    }
+
+    fun changeStopButtonIcon(flag: Boolean) {
+        if (flag) {
+            binding.buttonIcon.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.button_continue_image,
+                    requireContext().theme
+                )
+            )
+        } else {
+            binding.buttonIcon.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.button_stop_image,
+                    requireContext().theme
+                )
+            )
+        }
+    }
+
 
     fun changeTheme(color: String, context: Context) {
         binding.closeButton.setTextColor(getColor(R.color.chocolateMainColor, context))

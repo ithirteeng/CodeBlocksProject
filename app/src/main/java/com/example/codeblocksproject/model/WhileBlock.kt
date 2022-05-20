@@ -47,6 +47,7 @@ class WhileBlock @JvmOverloads constructor(
     }
 
     init {
+        blockView.setBackgroundResource(R.drawable.block_while_background)
         toTextView(binding.condition, binding.conditionText)
         toEditText(binding.conditionText, binding.condition, context)
 

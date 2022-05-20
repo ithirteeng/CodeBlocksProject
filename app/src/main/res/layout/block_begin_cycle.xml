@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/textView"
-        android:background="@drawable/begin_end_cycle_block_background"
+        android:background="@drawable/block_brackets_background"
         android:padding="@dimen/blocksPadding"
         android:textSize="@dimen/beginEndCycleTextSize"
         style="@style/borderBlocksTextStyle"

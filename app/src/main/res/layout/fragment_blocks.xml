@@ -30,7 +30,7 @@
             style="@style/bottomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/bottomButtonsSize"
-            android:background="@drawable/close_button_background"
+            android:background="@drawable/button_close_background"
             android:text="@string/closeButtonText"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +90,7 @@
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/initialization_button_background"
+                    android:background="@drawable/button_initialization_background"
                     android:text="@string/initializationButton" />
 
                 <Button
@@ -99,7 +99,7 @@
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/assignment_button_background"
+                    android:background="@drawable/button_assignment_background"
                     android:text="@string/assignmentButton" />
 
                 <Button
@@ -107,7 +107,7 @@
                     style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_weight="1"
-                    android:background="@drawable/output_button_background"
+                    android:background="@drawable/button_output_background"
                     android:text="@string/outputButton" />
 
                 <Button
@@ -116,7 +116,7 @@
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/while_button_background"
+                    android:background="@drawable/button_while_background"
                     android:text="@string/whileButton" />
 
                 <Button
@@ -125,7 +125,7 @@
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/if_button_background"
+                    android:background="@drawable/button_if_background"
                     android:text="@string/ifButton" />
 
                 <Button

@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/chocolate_drawer_button_image"
+        app:srcCompat="@drawable/drawer_chocolate_button_image"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:id="@+id/themesGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/background_with_bottom_border"
+        android:background="@drawable/view_with_bottom_border_background"
         android:checkedButton="@id/chocolateTheme"
         android:weightSum="50"
         app:layout_constraintBottom_toTopOf="@+id/themesGuideline"
@@ -117,7 +117,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/shrekGuideline"
         app:layout_constraintVertical_bias="0.333"
-        app:srcCompat="@drawable/shrek_image" />
+        app:srcCompat="@drawable/image_shrek" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/shrekGuideline"
@@ -131,7 +131,7 @@
         style="@style/HeaderTextStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/menu_button_borders"
+        android:background="@drawable/button_menu_border"
         android:minHeight="0dp"
         android:paddingTop="5dp"
         android:paddingBottom="10dp"
@@ -149,7 +149,7 @@
         style="@style/HeaderTextStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/menu_button_borders"
+        android:background="@drawable/button_menu_border"
         android:minHeight="0dp"
         android:paddingTop="5dp"
         android:paddingBottom="10dp"

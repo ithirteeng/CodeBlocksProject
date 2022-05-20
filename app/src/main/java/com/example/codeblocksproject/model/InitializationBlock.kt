@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.codeblocksproject.R
 import com.example.codeblocksproject.databinding.BlockInitializationBinding
 
@@ -58,6 +60,7 @@ class InitializationBlock @JvmOverloads constructor(
         toTextView(binding.varName, binding.nameText)
 
         blockView.setBackgroundResource(R.drawable.init_block_background)
+        blockView.setBackgroundResource(R.drawable.block_init_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

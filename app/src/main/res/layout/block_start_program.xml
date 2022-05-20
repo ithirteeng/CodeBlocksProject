@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/textView"
         style="@style/borderBlocksTextStyle"
-        android:background="@drawable/start_end_program_block_background"
+        android:background="@drawable/block_program_borders_background"
         android:padding="@dimen/blocksPadding"
         android:textSize="@dimen/startEndProgramTextSize"
         android:text="@string/startProgramText" />

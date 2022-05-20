@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.codeblocksproject.R
 import com.example.codeblocksproject.databinding.BlockIfBinding
 
@@ -46,6 +48,7 @@ class IfBlock @JvmOverloads constructor(
     }
 
     init {
+        blockView.setBackgroundResource(R.drawable.block_if_background)
         toTextView(binding.condition, binding.conditionText)
         toEditText(binding.conditionText, binding.condition, context)
 

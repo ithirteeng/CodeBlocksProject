@@ -4,55 +4,51 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.example.codeblocksproject.R
+import com.example.codeblocksproject.databinding.BlockOutputBinding
 
 class OutputBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : CustomView, LinearLayout(context, attrs) {
-    private val view =
-        LayoutInflater.from(context).inflate(R.layout.block_output, this).apply {
-            val conditionTextView = findViewById<TextView>(R.id.expressionText)
-            val conditionEditText = findViewById<EditText>(R.id.expression)
-
-            toTextView(conditionEditText, conditionTextView)
-            toEditText(conditionTextView, conditionEditText, context)
-
-        }
+    private val binding = BlockOutputBinding.inflate(LayoutInflater.from(context), this)
 
     override val isNestingPossible = false
     override var previousId: Int = -1
     override var nextId: Int = -1
-    override val blockView: View = view
+    override val blockView: View = binding.root
     override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
     override val pattern = "print(<expression>);"
     override var position = 0
 
-    override fun blockToCode(): String {
-        val expression = view.findViewById<TextView>(R.id.expression).text.toString()
-        return pattern.replace("<expression>", expression)
-    }
+    override fun blockToCode() = pattern.replace("<expression>", binding.expression.text.toString())
+
 
     override fun makeEditTextsDisabled() {
-        val conditionTextView = findViewById<TextView>(R.id.expressionText)
-        val conditionEditText = findViewById<EditText>(R.id.expression)
-        convertEditTextToTextView(conditionTextView, conditionEditText)
+        convertEditTextToTextView(binding.expressionText, binding.expression)
     }
 
-    override fun ifTextViewEmpty(): Boolean {
-        val conditionTextView = findViewById<TextView>(R.id.expressionText)
-        return conditionTextView.text.isEmpty()
-    }
+    override fun ifTextViewEmpty() = binding.expressionText.text.isEmpty()
 
-    override fun content(): ArrayList<String> {
-        val expression = view.findViewById<TextView>(R.id.expression).text.toString()
-        return arrayListOf(expression)
+
+    override fun content() = arrayListOf(binding.expression.text.toString())
+
+
+    override fun loadBlock(data: BlockData) {
+        this.id = data.id
+        this.nextId = data.nextId
+        this.previousId = data.prevId
+        this.position = data.position
+
+        binding.expressionText.text = data.content[0]
+        binding.expression.setText(data.content[0])
     }
 
     init {
+        toTextView(binding.expression, binding.expressionText)
+        toEditText(binding.expressionText, binding.expression, context)
+
         blockView.setBackgroundResource(R.drawable.output_block_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),

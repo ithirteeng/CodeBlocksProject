@@ -129,11 +129,12 @@
                     android:text="@string/ifButton" />
 
                 <Button
-                    style="@style/blocksButtonsStyle"
                     android:id="@+id/elseBlock"
-                    android:layout_weight="1"
+                    style="@style/blocksButtonsStyle"
                     android:layout_margin="@dimen/blocksPadding"
                     android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/if_button_background"
                     android:text="@string/elseBlockText" />
             </LinearLayout>
         </ScrollView>

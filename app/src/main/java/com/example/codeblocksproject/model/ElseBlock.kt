@@ -20,18 +20,18 @@ class ElseBlock @JvmOverloads constructor(
     override val blockType = BlockTypes.ELSE_BLOCK_TYPE
     override val pattern = "else"
     override var position = 0
-    override fun blockToCode(): String {
-        return pattern
-    }
+    override fun blockToCode() = pattern
 
-    override fun makeEditTextsDisabled() {
-    }
+    override fun makeEditTextsDisabled() {}
 
-    override fun ifTextViewEmpty(): Boolean {
-        return false
-    }
+    override fun ifTextViewEmpty() = false
 
-    override fun content(): ArrayList<String> {
-        return arrayListOf()
+    override fun content() = arrayListOf<String>()
+
+    override fun loadBlock(data: BlockData) {
+        this.id = data.id
+        this.nextId = data.nextId
+        this.previousId = data.prevId
+        this.position = data.position
     }
 }

@@ -21,10 +21,6 @@ import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
-import com.google.gson.Gson
-
-import java.io.File
-import java.io.FileOutputStream
 
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
@@ -40,7 +36,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private lateinit var binding: FragmentWorkspaceBinding
 
-    private val blockList: MutableList<CustomView> = mutableListOf()
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
     private var startBlockID = 0
     private var endBlockID = 0
@@ -56,7 +51,49 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private val ifBlockList = mutableListOf<CustomView>()
     private lateinit var prevIfBlock: CustomView
 
-    private var content=""
+    private lateinit var programFile: ProgramFile
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        programFile = ProgramFile(requireContext())
+        binding = FragmentWorkspaceBinding.inflate(inflater, container, false)
+
+        val startBlock: StartProgramBlock = binding.startProgram
+        startBlockID = binding.startProgram.blockView.id
+
+        blockMap[startBlockID] = startBlock
+        startBlock.position = 0
+        startBlock.blockView.setOnDragListener(choiceDragListener())
+
+        val endBlock = binding.endProgram
+        endBlockID = binding.endProgram.blockView.id
+
+        blockMap[endBlockID] = endBlock
+        endBlock.position = 1
+
+        startBlock.nextId = endBlockID
+        endBlock.previousId = startBlockID
+
+        try {
+            val map = programFile.loadProgram()
+            fillBlockMap(map)
+
+            if (blockMap.size > 2) {
+                fillBlockMap(programFile.loadProgram())
+                fillIfList()
+                freeId = blockMap.size - 2
+                loadToWorkfield()
+            }
+        } catch (e: Exception) {
+            Log.i("---", e.toString())
+        }
+
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
@@ -68,66 +105,75 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         binding.zoomLayout.zoomTo(4f, true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentWorkspaceBinding.inflate(inflater, container, false)
-
-        val startBlock: StartProgramBlock = binding.startProgram
-        startBlockID = binding.startProgram.blockView.id
-
-        blockList.add(startBlock)
-        blockMap[startBlockID] = startBlock
-        startBlock.position = 0
-        startBlock.blockView.setOnDragListener(choiceDragListener())
-
-        val endBlock = binding.endProgram
-        endBlockID = binding.endProgram.blockView.id
-
-        blockList.add(endBlock)
-        blockMap[endBlockID] = endBlock
-        endBlock.position = 1
-
-        startBlock.nextId = endBlockID
-        endBlock.previousId = startBlockID
-
-        return binding.root
+    fun saveData(){
+        programFile.saveProgram(blockMap, startBlockID, endBlockID)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onDestroy() {
+        Toast.makeText(requireContext(),"onDestroy",Toast.LENGTH_LONG).show()
+        try {
+            programFile.saveProgram(blockMap, startBlockID, endBlockID)
+            Log.i("ID---","true")
+        } catch (e: Exception) {
+            Log.i("onDestroy",e.toString())
+        }
+        clearWorkfield(false)
+        super.onDestroy()
+    }
 
+    private fun fillBlockMap(map: Map<Int, CustomView>) {
+        for (block in map.values) {
+            blockMap[block.blockView.id] = block
+            if (block.blockType == BlockTypes.WHILE_BLOCK_TYPE || block.blockType == BlockTypes.IF_BLOCK_TYPE)
+                cyclesCount++
+            if (block.previousId == startBlockID) {
+                blockMap[startBlockID]!!.nextId = block.blockView.id
+            }
+            if (block.nextId == endBlockID) {
+                blockMap[endBlockID]!!.previousId = block.blockView.id
+            }
+        }
+
+        refreshPositions()
+    }
+
+    private fun fillIfList() {
+        var block = blockMap[startBlockID]
+        while (block!!.nextId != endBlockID) {
+            block = blockMap[block.nextId]
+            if (block!!.blockType == BlockTypes.IF_BLOCK_TYPE && !isIfHaveElse(block)) {
+                ifBlockList.add(blockMap[block.blockView.id + 2]!!)
+            }
+        }
+    }
+
+    private fun isIfHaveElse(block: CustomView): Boolean {
+        val end = blockMap[block.blockView.id + 2]
+        if (end!!.nextId !in blockMap.keys || blockMap[end.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            return true
+        }
+        return false
+    }
+
+    private fun loadToWorkfield() {
         var block = blockMap[startBlockID]!!
         while (block.nextId != endBlockID) {
             block = blockMap[block.nextId]!!
             binding.mainWorkfield.addView(block.blockView, block.position)
+            block.blockView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE) {
+                block.blockView.setOnLongClickListener(choiceLongClickListener())
+            }
+            block.blockView.setOnDragListener(choiceDragListener())
         }
+
+        makeMarginsForBlocks()
+        alignX()
     }
-
-    override fun onPause() {
-        super.onPause()
-        clearWorkfield(false)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        try {
-            saveProgramToFile()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun saveProgramToFile(fileName: String = FILE_NAME) {
-        requireContext().openFileOutput(fileName, Context.MODE_PRIVATE).use {
-            it.write(blockMap.toString().toByteArray())
-            it.close()
-        }
-    }
-
 
     private fun setupAllDragListeners() {
         binding.mainWorkfield.setOnDragListener(choiceDragListener())
@@ -178,7 +224,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun startButtonEvent() {
         binding.startButton.setOnClickListener {
-            blockMapToJson()
             if (blocksFragment.getIsClosedBlocks()) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
@@ -229,7 +274,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         val startBlock = blockMap[startBlockID]
         val endBlock = blockMap[endBlockID]
 
-        for (block in blockList) {
+        for (block in blockMap.values) {
             if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE &&
                 block.blockType != BlockTypes.END_PROGRAM_BLOCK_TYPE
             ) {
@@ -238,14 +283,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
 
         if (isRemovingOn) {
+            freeId = 0
             blockMap.clear()
-            blockList.clear()
+            ifBlockList.clear()
 
-            blockList.add(startBlock!!)
-            blockList.add(endBlock!!)
-
-            blockMap[startBlockID] = startBlock
-            blockMap[endBlockID] = endBlock
+            blockMap[startBlockID] = startBlock!!
+            blockMap[endBlockID] = endBlock!!
 
             startBlock.nextId = endBlockID
             endBlock.previousId = startBlockID
@@ -301,13 +344,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         this.z = 1F
         this.id = freeId
         freeId++
-        if (freeId == startBlockID || freeId == endBlockID)
-            freeId++
     }
 
     private fun createBlock(block: CustomView, prevBlock: CustomView? = null) {
-        val lastBlock: CustomView = prevBlock ?: blockMap[blockMap[endBlockID]!!.previousId]!!
 
+        val lastBlock: CustomView = prevBlock ?: blockMap[blockMap[endBlockID]!!.previousId]!!
         val endBlock = blockMap[lastBlock.nextId]!!
 
         block.blockView.setDefault(lastBlock.blockView.x)
@@ -317,7 +358,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         endBlock.previousId = block.blockView.id
         block.nextId = endBlock.blockView.id
 
-        blockList.add(block)
         blockMap[block.blockView.id] = block
 
         refreshPositions()
@@ -504,7 +544,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun makeAllEditTextsDisabled() {
-        for (block in blockList) {
+        for (block in blockMap.values) {
             if (block.blockView.id != endBlockID && block.blockView.id != startBlockID)
                 block.makeEditTextsDisabled()
         }
@@ -549,7 +589,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun deleteBlock(block: CustomView) {
         binding.mainWorkfield.removeView(block.blockView)
         blockMap.remove(block.blockView.id)
-        blockList.remove(block)
     }
 
     private fun removeNestedBlocks(parentBlock: CustomView) {
@@ -582,34 +621,10 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun makeMarginsForBlocks() {
-        for (block in blockList) {
+        for (block in blockMap.values) {
             val params: LinearLayout.LayoutParams =
                 block.blockView.layoutParams as LinearLayout.LayoutParams
             params.setMargins(0, 0, cyclesCount * INDENT, 0)
         }
-    }
-
-    private fun blockMapToJson() {
-        val array: ArrayList<BlockData> = arrayListOf()
-
-        var block = blockMap[startBlockID]!!
-        while (block.nextId != endBlockID) {
-            block = blockMap[block.nextId]!!
-            array.add(blockToData(block))
-        }
-
-        val json = Gson().toJson(array)
-        Log.i("JSON",json.toString())
-    }
-
-    private fun blockToData(block: CustomView): BlockData {
-        return BlockData(
-            block.blockType,
-            block.blockView.id,
-            block.nextId,
-            block.previousId,
-            block.position,
-            block.content()
-        )
     }
 }

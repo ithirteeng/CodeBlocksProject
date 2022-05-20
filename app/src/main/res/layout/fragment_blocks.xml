@@ -81,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="6">
 
                 <Button
                     android:id="@+id/initializationBlock"
@@ -126,6 +127,14 @@
                     android:layout_weight="1"
                     android:background="@drawable/if_button_background"
                     android:text="@string/ifButton" />
+
+                <Button
+                    style="@style/blocksButtonsStyle"
+                    android:id="@+id/elseBlock"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/blocksPadding"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/elseBlockText" />
             </LinearLayout>
         </ScrollView>
 

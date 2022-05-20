@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 class WhileBlock @JvmOverloads constructor(
@@ -15,7 +14,7 @@ class WhileBlock @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : CustomView, LinearLayout(context, attrs) {
     private val view =
-        LayoutInflater.from(context).inflate(R.layout.while_block, this).apply {
+        LayoutInflater.from(context).inflate(R.layout.block_while, this).apply {
             val conditionTextView = findViewById<TextView>(R.id.conditionText)
             val conditionEditText = findViewById<EditText>(R.id.condition)
 

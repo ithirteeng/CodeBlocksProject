@@ -29,7 +29,9 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
     }
 
     fun resultsToConsole(s: String) {
-        binding.consoleTextView.text = s
+        var string = binding.consoleTextView.text
+        string = "$string$s"
+        binding.consoleTextView.text = string
     }
 
     override fun onCreateView(
@@ -52,6 +54,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             isClosedStart = true
             Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
+                    binding.consoleTextView.text = ""
                     try {
                         (parentFragment as WorkspaceFragment).displayButtons()
                     } catch (e: Exception) {
@@ -59,7 +62,6 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
                     }
                 }
             }, 350)
-
         }
     }
 

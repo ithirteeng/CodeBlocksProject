@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 class BeginBlock @JvmOverloads constructor(
@@ -17,7 +16,7 @@ class BeginBlock @JvmOverloads constructor(
     override var nextId = -1
     override val blockType = BlockTypes.BEGIN_BLOCK_TYPE
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.begin_cycle_block, this)
+        LayoutInflater.from(context).inflate(R.layout.block_begin_cycle, this)
     override val pattern = "{"
     override var position = 0
 

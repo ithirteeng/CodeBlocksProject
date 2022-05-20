@@ -128,23 +128,53 @@
 
     <Button
         android:id="@+id/backToMainButton"
+        style="@style/HeaderTextStyle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@drawable/menu_button_borders"
-        android:clickable="true"
-        android:contextClickable="true"
-        android:fontFamily="@font/courier_prime"
         android:minHeight="0dp"
         android:paddingTop="5dp"
         android:paddingBottom="10dp"
+
         android:text="@string/backToMenuText"
-        android:textSize="@dimen/smallTextSize"
-        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/menuGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/clearGuideline"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/clearAllButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/menu_button_borders"
+        android:minHeight="0dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:text="@string/clearAllText"
+
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/clearGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/themesGuideline"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="TouchTargetSizeCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/clearGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.46" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/menuGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5718194" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

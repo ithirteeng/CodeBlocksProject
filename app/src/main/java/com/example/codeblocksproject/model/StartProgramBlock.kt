@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 @SuppressLint("ViewConstructor")
@@ -19,7 +18,7 @@ class StartProgramBlock @JvmOverloads constructor(
     override var nextId = 0
     override val blockType = BlockTypes.START_PROGRAM_BLOCK_TYPE
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.start_program_block, this)
+        LayoutInflater.from(context).inflate(R.layout.block_start_program, this)
 
     override val pattern = "{"
     override var position = 0

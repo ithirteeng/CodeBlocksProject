@@ -16,7 +16,7 @@ class EndBlock @JvmOverloads constructor(
     override var nextId = -1
     override val blockType = BlockTypes.END_BLOCK_TYPE
     override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.end_cycle_block, this)
+        LayoutInflater.from(context).inflate(R.layout.block_end_cycle, this)
     override val pattern = "}"
     override var position = 0
 

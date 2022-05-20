@@ -1,7 +1,5 @@
 package com.example.codeblocksproject
 
-import Lexer
-import Parser
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.codeblocksproject.databinding.FragmentTextCodingBinding
+import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.ui.UserInterfaceClass
 
 class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
@@ -24,6 +24,7 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
         ui.setupAllUIFunctions(view)
         setupOtherFragmentsFunctions()
         backToMenuButtonEvent()
+        clearAllButtonEvent()
     }
 
     override fun onCreateView(
@@ -70,16 +71,9 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
                     val tokens = lexer.lexicalAnalysis()
 
                     tokens.forEach { x -> println(x.aboutMe()) }
-                    var answer = ""
-                    val parser = Parser(tokens, DEBUG = true)
-                    val array = parser.run()
-
-                    for (string in array) {
-                        if (string != "") {
-                            answer += "$string\n"
-                        }
-                    }
-                    consoleFragment.resultsToConsole(answer)
+                    val parser =
+                        com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
+                    parser.run(consoleFragment)
                 } catch (e: Exception) {
                     consoleFragment.resultsToConsole(e.message.toString())
                 }
@@ -92,6 +86,17 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
 
     fun displayButtons() {
         binding.startButton.visibility = View.VISIBLE
+    }
+
+    private fun clearAllButtonEvent() {
+        view?.findViewById<Button>(R.id.clearAllButton)!!.setOnClickListener {
+            binding.codingField.text.clear()
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.clearToast),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun backToMenuButtonEvent() {

@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.codeblocksproject.R
 
 class AssignmentBlock @JvmOverloads constructor(
@@ -15,7 +14,7 @@ class AssignmentBlock @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : CustomView, LinearLayout(context, attrs) {
     private val view =
-        LayoutInflater.from(context).inflate(R.layout.assignment_block, this).apply {
+        LayoutInflater.from(context).inflate(R.layout.block_assignment, this).apply {
             val valueEdit: EditText = findViewById(R.id.varValue)
             val nameEdit: EditText = findViewById(R.id.varName)
             val valueText: TextView = findViewById(R.id.valueText)

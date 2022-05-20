@@ -4,40 +4,51 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.codeblocksproject.R
 
 class IfBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : CustomView, ConstraintLayout(context, attrs) {
+) : CustomView, LinearLayout(context, attrs) {
+    private val view =
+        LayoutInflater.from(context).inflate(R.layout.block_if, this).apply {
+            val conditionTextView = findViewById<TextView>(R.id.conditionText)
+            val conditionEditText = findViewById<EditText>(R.id.condition)
+
+            toTextView(conditionEditText, conditionTextView)
+            toEditText(conditionTextView, conditionEditText, context)
+
+        }
 
     override val isNestingPossible = true
     override var previousId: Int = -1
     override var nextId: Int = -1
-    override val blockView: View =
-        LayoutInflater.from(context).inflate(R.layout.initialization_block, this)
-    //TODO: Change to if block
-
+    override val blockView: View = view
     override val blockType = BlockTypes.IF_BLOCK_TYPE
-    override val pattern = ""
-
-    //TODO: Change to if pattern
+    override val pattern = "if(<condition>)"
     override var position = 0
+
     override fun blockToCode(): String {
-        return pattern
+        val condition = view.findViewById<TextView>(R.id.conditionText).text.toString()
+        return pattern.replace("<condition>", condition)
     }
 
     override fun makeEditTextsDisabled() {
-        TODO("Not yet implemented")
+        val conditionTextView = findViewById<TextView>(R.id.conditionText)
+        val conditionEditText = findViewById<EditText>(R.id.condition)
+        convertEditTextToTextView(conditionTextView, conditionEditText)
     }
 
     override fun ifTextViewEmpty(): Boolean {
-        return false
+        val conditionTextView = findViewById<TextView>(R.id.conditionText)
+        return conditionTextView.text.isEmpty()
     }
 
     init {
-        //blockView.setBackgroundResource(R.drawable.)
+        blockView.setBackgroundResource(R.drawable.if_block_background)
         blockView.setPadding(
             context.resources.getDimensionPixelOffset(R.dimen.startAndEndBlockPadding),
             context.resources.getDimensionPixelOffset(R.dimen.topAndBottomBlockPadding),

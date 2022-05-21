@@ -1,6 +1,7 @@
 package com.example.codeblocksproject
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,6 +26,7 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
         closeSlidingFragment()
         changeStopButtonIcon(isProgramStopped)
         stopProgramButtonEvent()
+        keymapObserver()
     }
 
     fun getStopProgramFlag() = isProgramStopped
@@ -186,6 +188,19 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
     private fun getColor(id: Int, context: Context): Int {
         return ContextCompat.getColor(context, id)
+    }
+
+    private fun keymapObserver() {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            binding.root.getWindowVisibleDisplayFrame(r)
+            val screenHeight: Int = binding.root.rootView.height
+
+            val keypadHeight = screenHeight - r.bottom
+            if (keypadHeight > screenHeight * 0.15) {
+                binding.closeButton.performClick()
+            }
+        }
     }
 
 }

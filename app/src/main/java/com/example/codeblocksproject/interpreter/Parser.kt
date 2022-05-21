@@ -103,7 +103,7 @@ class Parser(private val tokens: List<Token>, private val DEBUG: Boolean = false
             println("")
         } else {
 
-            consoleFragment.resultsToConsole("♫ $expression\n")
+            consoleFragment.resultsToConsole("» $expression\n")
             println(">> $expression")
         }
     }

@@ -299,6 +299,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun backToMenuButtonEvent() {
         view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
+            makeKeymapHidden()
             findNavController().navigate(R.id.mainFragment)
             saveData()
         }
@@ -306,6 +307,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun openFileButtonEvent() {
         view?.findViewById<Button>(R.id.openFileButton)?.setOnClickListener {
+            makeKeymapHidden()
             if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
                 fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
             clearWorkfield()
@@ -315,6 +317,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun saveFileButtonEvent() {
         view?.findViewById<Button>(R.id.saveFileButton)?.setOnClickListener {
+            makeKeymapHidden()
             if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
                 fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
             saveData()
@@ -323,6 +326,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun deleteFileButtonEvent() {
         view?.findViewById<Button>(R.id.removeFileButton)?.setOnClickListener {
+            makeKeymapHidden()
             if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
                 fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
                 requireContext().deleteFile(fileName)

@@ -15,7 +15,9 @@ import com.example.codeblocksproject.BlocksFragment
 import com.example.codeblocksproject.ConsoleFragment
 import com.example.codeblocksproject.R
 import com.example.codeblocksproject.WorkspaceFragment
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class UserInterfaceClass(
     private val context: Context,
     private val consoleFragment: ConsoleFragment,
@@ -56,8 +58,11 @@ class UserInterfaceClass(
         val button = view.findViewById<ImageButton>(R.id.drawerButton)
         button.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN ->
+                MotionEvent.ACTION_DOWN -> {
+                    makeKeymapHidden(view)
                     view.findViewById<DrawerLayout>(R.id.codingContainer).closeDrawer(Gravity.LEFT)
+                }
+
             }
             false
         }
@@ -67,6 +72,7 @@ class UserInterfaceClass(
         val radioGroup = view.findViewById<RadioGroup>(R.id.themesGroup)
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val button = view.findViewById<RadioButton>(checkedId)
+            makeKeymapHidden(view)
             button?.apply {
                 when (checkedId) {
                     R.id.spaceTheme -> {

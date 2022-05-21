@@ -167,7 +167,8 @@
         android:fitsSystemWindows="true"
         android:padding="0dp">
 
-        <include layout="@layout/drawer_layout" />
+        <include android:id="@+id/drawer"
+            layout="@layout/drawer_layout" />
 
 
     </com.google.android.material.navigation.NavigationView>

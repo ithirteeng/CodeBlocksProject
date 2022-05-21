@@ -12,13 +12,9 @@ import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.codeblocksproject.databinding.DrawerLayoutBinding
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
@@ -40,7 +36,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private lateinit var binding: FragmentWorkspaceBinding
-    private lateinit var drawerLayoutBinding: DrawerLayoutBinding
 
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
     private var startBlockID = 0
@@ -67,7 +62,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     ): View {
         programFile = ProgramFile(requireContext())
         binding = FragmentWorkspaceBinding.inflate(inflater, container, false)
-        drawerLayoutBinding = DrawerLayoutBinding.inflate(inflater, container, false)
 
         val startBlock: StartProgramBlock = binding.startProgram
         startBlockID = binding.startProgram.blockView.id
@@ -86,6 +80,14 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         endBlock.previousId = startBlockID
 
         uploadData()
+
+        binding.drawer.fileNameEdit.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                requireContext().fileList()
+            )
+        )
 
         return binding.root
     }
@@ -298,39 +300,51 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun backToMenuButtonEvent() {
-        view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
+        binding.drawer.backToMainButton.setOnClickListener {
             makeKeymapHidden()
             findNavController().navigate(R.id.mainFragment)
-            saveData()
         }
     }
 
     private fun openFileButtonEvent() {
-        view?.findViewById<Button>(R.id.openFileButton)?.setOnClickListener {
+        binding.drawer.openFileButton.setOnClickListener {
             makeKeymapHidden()
-            if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
-                fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            if (binding.drawer.fileNameEdit.text.isNotEmpty())
+                fileName = binding.drawer.fileNameEdit.text.toString()
             clearWorkfield()
             uploadData()
         }
     }
 
     private fun saveFileButtonEvent() {
-        view?.findViewById<Button>(R.id.saveFileButton)?.setOnClickListener {
+        binding.drawer.saveFileButton.setOnClickListener {
             makeKeymapHidden()
-            if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
-                fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            if (binding.drawer.fileNameEdit.text.isNotEmpty())
+                fileName = binding.drawer.fileNameEdit.text.toString()
             saveData()
+            fileNamesAdapter()
         }
     }
 
     private fun deleteFileButtonEvent() {
-        view?.findViewById<Button>(R.id.removeFileButton)?.setOnClickListener {
+        binding.drawer.removeFileButton.setOnClickListener {
             makeKeymapHidden()
-            if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
-                fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
-                requireContext().deleteFile(fileName)
+            if (binding.drawer.fileNameEdit.text.isNotEmpty())
+                fileName = binding.drawer.fileNameEdit.text.toString()
+            requireContext().deleteFile(fileName)
+            fileNamesAdapter()
+            binding.drawer.fileNameEdit.setText("")
         }
+    }
+
+    private fun fileNamesAdapter(){
+        binding.drawer.fileNameEdit.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                requireContext().fileList()
+            )
+        )
     }
 
     private fun clearWorkfield(isRemovingOn: Boolean = true) {

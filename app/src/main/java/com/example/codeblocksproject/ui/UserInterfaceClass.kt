@@ -136,7 +136,7 @@ class UserInterfaceClass(
     }
 
     private fun changeDrawerBackgroundColor(view: View, color: String) {
-        val background = view.findViewById<ConstraintLayout>(R.id.drawerInsidesLayout)
+        val background = view.findViewById<ConstraintLayout>(R.id.drawer)
         val shrekView = view.findViewById<ImageView>(R.id.shrekImage)
         shrekView.visibility = View.GONE
         when (color) {

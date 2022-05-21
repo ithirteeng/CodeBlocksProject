@@ -26,7 +26,6 @@ import com.example.codeblocksproject.ui.UserInterfaceClass
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.File
 
 @DelicateCoroutinesApi
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
@@ -59,7 +58,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private lateinit var prevIfBlock: CustomView
 
     private lateinit var programFile: ProgramFile
-    var fileName = FILE_NAME
+    private var fileName = FILE_NAME
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,24 +96,20 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         ui.setupAllUIFunctions(view)
         setupOtherFragmentsFunctions()
         setupAllDragListeners()
+        setupButtonsEvent()
+        binding.zoomLayout.zoomTo(4f, true)
+    }
+
+    private fun setupButtonsEvent() {
+        deleteFileButtonEvent()
         backToMenuButtonEvent()
         clearAllButtonEvent()
         openFileButtonEvent()
         saveFileButtonEvent()
-        binding.zoomLayout.zoomTo(4f, true)
     }
 
-    /*override fun onPause() {
-        saveData()
-        super.onPause()
-    }*/
 
-    override fun onDestroy() {
-        //saveData()
-        super.onDestroy()
-    }
-
-    fun saveData() {
+    private fun saveData() {
         try {
             if (fileName.isEmpty())
                 fileName = FILE_NAME
@@ -172,13 +167,13 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         var block = blockMap[startBlockID]
         while (block!!.nextId != endBlockID) {
             block = blockMap[block.nextId]
-            if (block!!.blockType == BlockTypes.IF_BLOCK_TYPE && !isIfHaveElse(block)) {
+            if (block!!.blockType == BlockTypes.IF_BLOCK_TYPE && !ifHasElse(block)) {
                 ifBlockList.add(blockMap[block.blockView.id + 2]!!)
             }
         }
     }
 
-    private fun isIfHaveElse(block: CustomView): Boolean {
+    private fun ifHasElse(block: CustomView): Boolean {
         val end = blockMap[block.blockView.id + 2]
         if (end!!.nextId !in blockMap.keys || blockMap[end.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
             return true
@@ -311,9 +306,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun openFileButtonEvent() {
         view?.findViewById<Button>(R.id.openFileButton)?.setOnClickListener {
-            val lastFileName=fileName
-            if(view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
-                fileName=view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
+                fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
             clearWorkfield()
             uploadData()
         }
@@ -321,18 +315,17 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
     private fun saveFileButtonEvent() {
         view?.findViewById<Button>(R.id.saveFileButton)?.setOnClickListener {
-            if(view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
-                fileName=view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+            if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
+                fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
             saveData()
         }
     }
 
     private fun deleteFileButtonEvent() {
-        view?.findViewById<Button>(R.id.saveFileButton)?.setOnClickListener {
-            if(view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
-                fileName=view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
-            saveData()
-
+        view?.findViewById<Button>(R.id.removeFileButton)?.setOnClickListener {
+            if (view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.isNotEmpty())
+                fileName = view?.findViewById<EditText>(R.id.fileNameEditText)!!.text.toString()
+                requireContext().deleteFile(fileName)
         }
     }
 

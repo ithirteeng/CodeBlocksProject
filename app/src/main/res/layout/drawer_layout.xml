@@ -167,14 +167,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46" />
+        app:layout_constraintGuide_percent="0.44" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/menuGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5718194" />
+        app:layout_constraintGuide_percent="0.53" />
 
     <EditText
         android:id="@+id/fileNameEditText"
@@ -196,7 +196,7 @@
         android:textColorHighlight="#2C2C2C"
         android:textColorLink="#090909"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintBottom_toTopOf="@+id/fileNameGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
@@ -211,12 +211,12 @@
         android:background="@drawable/button_open_file_background"
         android:text="@string/openFileText"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintBottom_toTopOf="@+id/saveOpenButtonsGuideline"
         app:layout_constraintEnd_toStartOf="@+id/saveFileButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline7"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        app:layout_constraintTop_toTopOf="@+id/fileNameGuideline"
+        tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/saveFileButton"
@@ -226,29 +226,50 @@
         android:background="@drawable/button_save_file_background"
         android:text="@string/saveFileText"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintBottom_toTopOf="@+id/saveOpenButtonsGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/openFileButton"
-        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+        app:layout_constraintTop_toTopOf="@+id/fileNameGuideline"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
+        android:id="@+id/fileNameGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.68262655" />
+        app:layout_constraintGuide_percent="0.63064295" />
 
     <ImageView
         android:id="@+id/fileNameBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/contentDescription"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintBottom_toTopOf="@+id/fileNameGuideline"
         app:layout_constraintEnd_toStartOf="@+id/drawerButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/menuGuideline"
         app:srcCompat="@drawable/button_menu_border" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/saveOpenButtonsGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.72" />
+
+    <Button
+        android:id="@+id/removeFileButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_menu_border"
+        android:text="@string/removeFileText"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/saveOpenButtonsGuideline" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

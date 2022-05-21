@@ -1,6 +1,7 @@
 package com.example.codeblocksproject
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +21,7 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
+        keymapObserver()
         addingBlocks()
     }
 
@@ -76,6 +78,19 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
                     (parentFragment as WorkspaceFragment).displayButtons()
                 }
             }, 350)
+        }
+    }
+
+    private fun keymapObserver() {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            binding.root.getWindowVisibleDisplayFrame(r)
+            val screenHeight: Int = binding.root.rootView.height
+
+            val keypadHeight = screenHeight - r.bottom
+            if (keypadHeight > screenHeight * 0.15) {
+                binding.closeButton.performClick()
+            }
         }
     }
 

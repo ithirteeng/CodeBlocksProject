@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.codeblocksproject.databinding.FragmentMainBinding
 
 
@@ -29,13 +30,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun toBlocksButtonEvent() {
         binding.buttonToWorkspace.setOnClickListener {
-            findNavController().navigate(R.id.workspaceFragment)
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_in_right
+                    exit = R.anim.slide_out_left
+                    popEnter = R.anim.slide_in_left
+                    popExit = R.anim.slide_out_right
+                }
+            }
+            findNavController().navigate(R.id.workspaceFragment, null, options)
         }
     }
 
     private fun toTextWorkspaceButtonEvent() {
         binding.buttonToTextWorkspace.setOnClickListener {
-            findNavController().navigate(R.id.textCodingFragment)
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_in_right
+                    exit = R.anim.slide_out_left
+                    popEnter = R.anim.slide_in_left
+                    popExit = R.anim.slide_out_right
+                }
+            }
+            findNavController().navigate(R.id.textCodingFragment, null, options)
         }
     }
 }

@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.codeblocksproject.databinding.DrawerLayoutBinding
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
@@ -300,7 +301,15 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun backToMenuButtonEvent() {
         view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
             makeKeymapHidden()
-            findNavController().navigate(R.id.mainFragment)
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_in_left
+                    exit = R.anim.slide_out_right
+                    popEnter = R.anim.slide_in_right
+                    popExit = R.anim.slide_out_left
+                }
+            }
+            findNavController().navigate(R.id.mainFragment, null, options)
             saveData()
         }
     }

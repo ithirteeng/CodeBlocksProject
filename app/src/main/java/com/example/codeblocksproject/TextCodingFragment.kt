@@ -10,10 +10,13 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.codeblocksproject.databinding.FragmentTextCodingBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.ui.UserInterfaceClass
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @DelicateCoroutinesApi
 class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
@@ -69,13 +72,9 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
                     }
                 }, 350)
                 try {
-                    val lexer = Lexer(binding.codingField.text.toString(), DEBUG = true)
-                    val tokens = lexer.lexicalAnalysis()
-
-                    tokens.forEach { x -> println(x.aboutMe()) }
-                    val parser =
-                        com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
-                    parser.run(consoleFragment)
+                    startProgram()
+                    consoleFragment.setStopProgramFlag(false)
+                    consoleFragment.changeStopButtonIcon(false)
                 } catch (e: Exception) {
                     consoleFragment.resultsToConsole(e.message.toString())
                 }
@@ -83,6 +82,25 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
 
             }
 
+        }
+    }
+
+    fun startProgram() {
+        GlobalScope.launch {
+            try {
+                val lexer = Lexer(binding.codingField.text.toString(), DEBUG = false)
+                val tokens = lexer.lexicalAnalysis()
+
+                tokens.forEach { x -> println(x.aboutMe()) }
+                val parser =
+                    com.example.codeblocksproject.interpreter.Parser(
+                        tokens,
+                        DEBUG = false
+                    )
+                parser.run(consoleFragment)
+            } catch (e: Exception) {
+                consoleFragment.resultsToConsole(e.message.toString())
+            }
         }
     }
 
@@ -103,6 +121,15 @@ class TextCodingFragment : Fragment(R.layout.fragment_text_coding) {
 
     private fun backToMenuButtonEvent() {
         view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_in_right
+                    exit = R.anim.slide_out_left
+                    popEnter = R.anim.slide_in_left
+                    popExit = R.anim.slide_out_right
+                }
+            }
+            findNavController().navigate(R.id.mainFragment, null, options)
             findNavController().navigate(R.id.mainFragment)
         }
     }

@@ -6,20 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import com.example.codeblocksproject.R
-import com.example.codeblocksproject.databinding.BlockOutputBinding
+import com.example.codeblocksproject.databinding.BlockInputBinding
 
-class OutputBlock @JvmOverloads constructor(
+class InputBlock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : CustomView, LinearLayout(context, attrs) {
-    private val binding = BlockOutputBinding.inflate(LayoutInflater.from(context), this)
+    private val binding = BlockInputBinding.inflate(LayoutInflater.from(context), this)
 
     override val isNestingPossible = false
     override var previousId: Int = -1
     override var nextId: Int = -1
     override val blockView: View = binding.root
-    override val blockType = BlockTypes.OUTPUT_BLOCK_TYPE
-    override val pattern = "print(<expression>);"
+    override val blockType = BlockTypes.INPUT_BLOCK_TYPE
+    override val pattern = "input(<expression>);"
     override var position = 0
 
     override fun blockToCode() = pattern.replace("<expression>", binding.expression.text.toString())

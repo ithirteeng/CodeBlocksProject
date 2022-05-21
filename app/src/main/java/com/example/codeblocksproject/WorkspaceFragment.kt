@@ -5,23 +5,29 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
 import com.example.codeblocksproject.ui.UserInterfaceClass
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-
+@DelicateCoroutinesApi
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     companion object {
         const val PINK_COLOR = "pink"
@@ -30,10 +36,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         const val MONOCHROME_COLOR = "monochrome"
         const val SHREK_COLOR = "shrek"
         const val INDENT = 100
+        const val FILE_NAME = "blockProgram"
     }
+
     private lateinit var binding: FragmentWorkspaceBinding
 
-    private val blockList: MutableList<CustomView> = mutableListOf()
     private val blockMap: MutableMap<Int, CustomView> = mutableMapOf()
     private var startBlockID = 0
     private var endBlockID = 0
@@ -49,28 +56,20 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private val ifBlockList = mutableListOf<CustomView>()
     private lateinit var prevIfBlock: CustomView
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
-        ui.setupAllUIFunctions(view)
-        setupOtherFragmentsFunctions()
-        setupAllDragListeners()
-        backToMenuButtonEvent()
-        clearAllButtonEvent()
-        binding.zoomLayout.zoomTo(4f, true)
-    }
+    private lateinit var programFile: ProgramFile
+    private var fileName = FILE_NAME
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        programFile = ProgramFile(requireContext())
         binding = FragmentWorkspaceBinding.inflate(inflater, container, false)
 
         val startBlock: StartProgramBlock = binding.startProgram
         startBlockID = binding.startProgram.blockView.id
 
-        blockList.add(startBlock)
         blockMap[startBlockID] = startBlock
         startBlock.position = 0
         startBlock.blockView.setOnDragListener(choiceDragListener())
@@ -78,29 +77,128 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         val endBlock = binding.endProgram
         endBlockID = binding.endProgram.blockView.id
 
-        blockList.add(endBlock)
         blockMap[endBlockID] = endBlock
         endBlock.position = 1
 
         startBlock.nextId = endBlockID
         endBlock.previousId = startBlockID
 
+        uploadData()
+
+        fileNamesAdapter()
+
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val ui = UserInterfaceClass(view.context, consoleFragment, blocksFragment)
+        ui.setupAllUIFunctions(view)
+        setupOtherFragmentsFunctions()
+        setupAllDragListeners()
+        setupButtonsEvent()
+        binding.zoomLayout.zoomTo(4f, true)
+    }
 
+    private fun setupButtonsEvent() {
+        deleteFileButtonEvent()
+        backToMenuButtonEvent()
+        clearAllButtonEvent()
+        openFileButtonEvent()
+        saveFileButtonEvent()
+    }
+
+
+    private fun saveData() {
+        try {
+            if (fileName.isEmpty())
+                fileName = FILE_NAME
+            programFile.saveProgram(blockMap, startBlockID, endBlockID, fileName)
+            Log.i("onDestroy", "Completed")
+        } catch (e: Exception) {
+            Log.i("onDestroy", e.toString())
+        }
+    }
+
+    private fun uploadData() {
+        try {
+            if (fileName.isEmpty())
+                fileName = FILE_NAME
+            val map = programFile.loadProgram(fileName)
+            fillBlockMap(map)
+            fillIfList()
+            freeId = 0
+            loadToWorkfield()
+
+            var block = blockMap[startBlockID]!!
+            Log.i("ID---", block.blockType)
+            while (block.blockView.id != endBlockID) {
+                block = blockMap[block.nextId]!!
+                if (block.blockView.id > freeId) {
+                    freeId = block.blockView.id
+                }
+                Log.i("ID---", block.blockType)
+            }
+            freeId++
+        } catch (e: Exception) {
+            Log.i("---", e.toString())
+        }
+    }
+
+    private fun fillBlockMap(map: Map<Int, CustomView>) {
+
+        for (block in map.values) {
+            blockMap[block.blockView.id] = block
+            if (block.blockType == BlockTypes.WHILE_BLOCK_TYPE || block.blockType == BlockTypes.IF_BLOCK_TYPE)
+                cyclesCount++
+
+            if (block.previousId == startBlockID) {
+                blockMap[startBlockID]!!.nextId = block.blockView.id
+            }
+            if (block.nextId == endBlockID) {
+                blockMap[endBlockID]!!.previousId = block.blockView.id
+            }
+        }
+
+        refreshPositions()
+    }
+
+    private fun fillIfList() {
+        var block = blockMap[startBlockID]
+        while (block!!.nextId != endBlockID) {
+            block = blockMap[block.nextId]
+            if (block!!.blockType == BlockTypes.IF_BLOCK_TYPE && !ifHasElse(block)) {
+                ifBlockList.add(blockMap[block.blockView.id + 2]!!)
+            }
+        }
+    }
+
+    private fun ifHasElse(block: CustomView): Boolean {
+        val end = blockMap[block.blockView.id + 2]
+        if (end!!.nextId !in blockMap.keys || blockMap[end.nextId]!!.blockType == BlockTypes.ELSE_BLOCK_TYPE) {
+            return true
+        }
+        return false
+    }
+
+    private fun loadToWorkfield() {
         var block = blockMap[startBlockID]!!
         while (block.nextId != endBlockID) {
             block = blockMap[block.nextId]!!
             binding.mainWorkfield.addView(block.blockView, block.position)
-        }
-    }
+            block.blockView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
 
-    override fun onPause() {
-        super.onPause()
-        clearWorkfield(false)
+            if (block.blockType != BlockTypes.BEGIN_BLOCK_TYPE && block.blockType != BlockTypes.END_BLOCK_TYPE) {
+                block.blockView.setOnLongClickListener(choiceLongClickListener())
+            }
+            block.blockView.setOnDragListener(choiceDragListener())
+        }
+
+        makeMarginsForBlocks()
+        alignX()
     }
 
     private fun setupAllDragListeners() {
@@ -127,24 +225,27 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         transaction.commit()
     }
 
+    private fun openFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
+        fragment.onCreateAnimation(0, true, 1)
+        transaction.show(fragment)
+        transaction.commit()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            kotlin.run {
+                bottomMenuVisibility(View.GONE)
+            }
+        }, 350)
+    }
+
     private fun blocksButtonEvent() {
         binding.blocksButton.setOnClickListener {
             if (consoleFragment.getIsClosedStart()) {
                 if (blocksFragment.getIsClosedBlocks()) {
-                    blocksFragment.setISClosedBlocks(false)
-                    val fragmentManager = childFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
-                    blocksFragment.onCreateAnimation(0, true, 1)
-                    transaction.show(blocksFragment)
-                    transaction.commit()
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        kotlin.run {
-                            binding.blocksButton.visibility = View.GONE
-                            binding.startButton.visibility = View.GONE
-                        }
-                    }, 350)
+                    blocksFragment.setIsClosedBlocks(false)
+                    openFragment(blocksFragment)
                 }
             }
         }
@@ -155,54 +256,112 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             if (blocksFragment.getIsClosedBlocks()) {
                 if (consoleFragment.getIsClosedStart()) {
                     consoleFragment.setISClosedStart(false)
-                    val fragmentManager = childFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.setCustomAnimations(R.anim.bottom_panel_slide_out, 0)
-                    consoleFragment.onCreateAnimation(0, true, 1)
-                    transaction.show(consoleFragment)
-                    transaction.commit()
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        kotlin.run {
-                            binding.startButton.visibility = View.GONE
-                            binding.blocksButton.visibility = View.GONE
-                        }
-                    }, 350)
-                    try {
-                        checkIfBlocksNull()
-
-                        val lexer = Lexer(blocksToCode(), DEBUG = true)
-                        val tokens = lexer.lexicalAnalysis()
-
-                        tokens.forEach { x -> println(x.aboutMe()) }
-                        val parser =
-                            com.example.codeblocksproject.interpreter.Parser(tokens, DEBUG = true)
-                        parser.run(consoleFragment)
-                    } catch (e: Exception) {
-                        consoleFragment.resultsToConsole(e.message.toString())
-                    }
+                    openFragment(consoleFragment)
+                    startProgram()
+                    consoleFragment.setStopProgramFlag(false)
+                    consoleFragment.changeStopButtonIcon(false)
                 }
+            }
+        }
+    }
+
+    private fun bottomMenuVisibility(visibility: Int) {
+        binding.startButton.visibility = visibility
+        binding.blocksButton.visibility = visibility
+    }
+
+
+    fun startProgram() {
+        GlobalScope.launch {
+            try {
+                checkIfBlocksNull()
+
+                val lexer = Lexer(blocksToCode(), DEBUG = false)
+                val tokens = lexer.lexicalAnalysis()
+
+                tokens.forEach { x -> println(x.aboutMe()) }
+                val parser =
+                    com.example.codeblocksproject.interpreter.Parser(
+                        tokens,
+                        DEBUG = false
+                    )
+                parser.run(consoleFragment)
+            } catch (e: Exception) {
+                consoleFragment.resultsToConsole(e.message.toString())
             }
         }
     }
 
 
     fun displayButtons() {
-        binding.startButton.visibility = View.VISIBLE
-        binding.blocksButton.visibility = View.VISIBLE
+        bottomMenuVisibility(View.VISIBLE)
     }
 
     private fun backToMenuButtonEvent() {
-        view?.findViewById<Button>(R.id.backToMainButton)?.setOnClickListener {
-            findNavController().navigate(R.id.mainFragment)
+        binding.drawer.backToMainButton.setOnClickListener {
+            makeKeymapHidden()
+            val options = navOptions {
+                anim {
+                    enter = R.anim.slide_in_left
+                    exit = R.anim.slide_out_right
+                    popEnter = R.anim.slide_in_right
+                    popExit = R.anim.slide_out_left
+                }
+            }
+            findNavController().navigate(R.id.mainFragment, null, options)
+            saveData()
         }
+    }
+
+    private fun openFileButtonEvent() {
+        binding.drawer.openFileButton.setOnClickListener {
+            makeKeymapHidden()
+            if (binding.drawer.fileNameEdit.text.isNotEmpty())
+                fileName = binding.drawer.fileNameEdit.text.toString()
+            clearWorkfield()
+            makeToast(resources.getString(R.string.openFileToast))
+            uploadData()
+        }
+    }
+
+    private fun saveFileButtonEvent() {
+        binding.drawer.saveFileButton.setOnClickListener {
+            makeKeymapHidden()
+            if (binding.drawer.fileNameEdit.text.isNotEmpty())
+                fileName = binding.drawer.fileNameEdit.text.toString()
+            saveData()
+            makeToast(resources.getString(R.string.saveFileToast))
+            fileNamesAdapter()
+        }
+    }
+
+    private fun deleteFileButtonEvent() {
+        binding.drawer.removeFileButton.setOnClickListener {
+            makeKeymapHidden()
+            if (binding.drawer.fileNameEdit.text.isNotEmpty())
+                fileName = binding.drawer.fileNameEdit.text.toString()
+            requireContext().deleteFile(fileName)
+            fileNamesAdapter()
+            binding.drawer.fileNameEdit.setText("")
+            makeToast(resources.getString(R.string.removedFileToast))
+        }
+    }
+
+    private fun fileNamesAdapter() {
+        binding.drawer.fileNameEdit.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                requireContext().fileList()
+            )
+        )
     }
 
     private fun clearWorkfield(isRemovingOn: Boolean = true) {
         val startBlock = blockMap[startBlockID]
         val endBlock = blockMap[endBlockID]
 
-        for (block in blockList) {
+        for (block in blockMap.values) {
             if (block.blockType != BlockTypes.START_PROGRAM_BLOCK_TYPE &&
                 block.blockType != BlockTypes.END_PROGRAM_BLOCK_TYPE
             ) {
@@ -211,14 +370,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
 
         if (isRemovingOn) {
+            freeId = 0
             blockMap.clear()
-            blockList.clear()
+            ifBlockList.clear()
 
-            blockList.add(startBlock!!)
-            blockList.add(endBlock!!)
-
-            blockMap[startBlockID] = startBlock
-            blockMap[endBlockID] = endBlock
+            blockMap[startBlockID] = startBlock!!
+            blockMap[endBlockID] = endBlock!!
 
             startBlock.nextId = endBlockID
             endBlock.previousId = startBlockID
@@ -228,11 +385,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun clearAllButtonEvent() {
         view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
             clearWorkfield()
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.clearToast),
-                Toast.LENGTH_SHORT
-            ).show()
+            makeToast(resources.getString(R.string.clearToast))
         }
 
     }
@@ -242,6 +395,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         when (type) {
             BlockTypes.INIT_BLOCK_TYPE -> createBlock(InitializationBlock(requireContext()))
             BlockTypes.ASSIGN_BLOCK_TYPE -> createBlock(AssignmentBlock(requireContext()))
+            BlockTypes.ARRAY_INIT_BLOCK_TYPE -> createBlock(ArrayInitBlock(requireContext()))
             BlockTypes.OUTPUT_BLOCK_TYPE -> createBlock(OutputBlock(requireContext()))
             BlockTypes.WHILE_BLOCK_TYPE -> {
                 cyclesCount++
@@ -274,13 +428,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         this.z = 1F
         this.id = freeId
         freeId++
-        if (freeId == startBlockID || freeId == endBlockID)
-            freeId++
     }
 
     private fun createBlock(block: CustomView, prevBlock: CustomView? = null) {
-        val lastBlock: CustomView = prevBlock ?: blockMap[blockMap[endBlockID]!!.previousId]!!
 
+        val lastBlock: CustomView = prevBlock ?: blockMap[blockMap[endBlockID]!!.previousId]!!
         val endBlock = blockMap[lastBlock.nextId]!!
 
         block.blockView.setDefault(lastBlock.blockView.x)
@@ -290,7 +442,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         endBlock.previousId = block.blockView.id
         block.nextId = endBlock.blockView.id
 
-        blockList.add(block)
         blockMap[block.blockView.id] = block
 
         refreshPositions()
@@ -415,7 +566,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         true
     }
 
-
     private fun endOfElse(elseBlock: CustomView): CustomView {
         var brackets = 1
         var block = blockMap[elseBlock.nextId]
@@ -478,7 +628,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun makeAllEditTextsDisabled() {
-        for (block in blockList) {
+        for (block in blockMap.values) {
             if (block.blockView.id != endBlockID && block.blockView.id != startBlockID)
                 block.makeEditTextsDisabled()
         }
@@ -491,16 +641,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun blocksToCode(): String {
-        var code = ""
+        var code = "{"
         var currentBlock = blockMap[startBlockID]
 
         while (currentBlock!!.blockView.id != endBlockID) {
-            if (currentBlock.blockView.id != startBlockID) {
-                code += "\n" + currentBlock.blockToCode()
-            }
             currentBlock = blockMap[currentBlock.nextId]!!
-
-
+            code += "\n" + currentBlock.blockToCode()
         }
         return code
     }
@@ -527,7 +673,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun deleteBlock(block: CustomView) {
         binding.mainWorkfield.removeView(block.blockView)
         blockMap.remove(block.blockView.id)
-        blockList.remove(block)
     }
 
     private fun removeNestedBlocks(parentBlock: CustomView) {
@@ -560,10 +705,14 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun makeMarginsForBlocks() {
-        for (block in blockList) {
+        for (block in blockMap.values) {
             val params: LinearLayout.LayoutParams =
                 block.blockView.layoutParams as LinearLayout.LayoutParams
             params.setMargins(0, 0, cyclesCount * INDENT, 0)
         }
+    }
+
+    private fun makeToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

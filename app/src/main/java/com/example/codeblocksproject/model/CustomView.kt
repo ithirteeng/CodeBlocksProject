@@ -68,4 +68,8 @@ interface CustomView {
 
     fun ifTextViewEmpty(): Boolean
 
+    fun content(): ArrayList<String>
+
+    fun loadBlock(data: BlockData)
+
 }

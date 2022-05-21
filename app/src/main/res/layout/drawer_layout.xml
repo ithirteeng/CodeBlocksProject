@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerInsidesLayout"
+    android:id="@+id/drawer"
     android:layout_width="300dp"
     android:layout_height="match_parent"
     android:background="@color/chocolateMainColor"
@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/chocolate_drawer_button_image"
+        app:srcCompat="@drawable/drawer_chocolate_button_image"
         tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:id="@+id/themesGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/background_with_bottom_border"
+        android:background="@drawable/view_with_bottom_border_background"
         android:checkedButton="@id/chocolateTheme"
         android:weightSum="50"
         app:layout_constraintBottom_toTopOf="@+id/themesGuideline"
@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.3515732" />
 
     <ImageView
         android:id="@+id/shrekImage"
@@ -117,7 +117,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/shrekGuideline"
         app:layout_constraintVertical_bias="0.333"
-        app:srcCompat="@drawable/shrek_image" />
+        app:srcCompat="@drawable/image_shrek" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/shrekGuideline"
@@ -131,7 +131,7 @@
         style="@style/HeaderTextStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/menu_button_borders"
+        android:background="@drawable/button_menu_border"
         android:minHeight="0dp"
         android:paddingTop="5dp"
         android:paddingBottom="10dp"
@@ -149,7 +149,7 @@
         style="@style/HeaderTextStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/menu_button_borders"
+        android:background="@drawable/button_menu_border"
         android:minHeight="0dp"
         android:paddingTop="5dp"
         android:paddingBottom="10dp"
@@ -167,14 +167,110 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46" />
+        app:layout_constraintGuide_percent="0.44" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/menuGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5718194" />
+        app:layout_constraintGuide_percent="0.53" />
+
+    <AutoCompleteTextView
+        android:id="@+id/fileNameEdit"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints="@string/autoFillFileName"
+        android:completionThreshold="1"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/fileNameHint"
+        android:inputType="textNoSuggestions"
+        android:maxEms="30"
+        android:singleLine="true"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textColorHighlight="#2C2C2C"
+        android:textColorLink="#090909"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/fileNameGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/menuGuideline"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    <Button
+        android:id="@+id/openFileButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_open_file_background"
+        android:text="@string/openFileText"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/saveOpenButtonsGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/saveFileButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fileNameGuideline"
+        tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/saveFileButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_save_file_background"
+        android:text="@string/saveFileText"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/saveOpenButtonsGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/openFileButton"
+        app:layout_constraintTop_toTopOf="@+id/fileNameGuideline"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fileNameGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.63064295" />
+
+    <ImageView
+        android:id="@+id/fileNameBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/contentDescription"
+        app:layout_constraintBottom_toTopOf="@+id/fileNameGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/menuGuideline"
+        app:srcCompat="@drawable/button_menu_border" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/saveOpenButtonsGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.72" />
+
+    <Button
+        android:id="@+id/removeFileButton"
+        style="@style/HeaderTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_menu_border"
+        android:text="@string/removeFileText"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/shrekGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/drawerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/saveOpenButtonsGuideline" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,16 +33,21 @@
     <string name="beginCycleText">begin</string>
     <string name="endCycleText">end</string>
     <string name="conditionHint">condition</string>
+    <string name="expressionHint">expression</string>
     <string name="whileBlockText">while</string>
     <string name="ifBlockText">if</string>
     <string name="printBlockText">print</string>
+    <string name="inputBlockText">input</string>
     <string name="elseBlockText">else</string>
+    <string name="arrayInit">:  array of</string>
+    <string name="arrayLengthHint">length</string>
 
     <string name="initializationButton">INITIALIZATION</string>
     <string name="whileButton">WHILE</string>
     <string name="ifButton">IF</string>
     <string name="outputButton">OUTPUT</string>
     <string name="assignmentButton">ASSIGNMENT</string>
+    <string name="arrayButton">ARRAY</string>
 
     <string name="codingText">coding…</string>
     <string name="backToMenuText">to menu</string>
@@ -53,4 +58,22 @@
     <string name="sixDoubleOne">611</string>
 
     <string name="clearToast">everything is deleted</string>
+    <string name="JSON_error">file is empty!</string>
+    <string name="hz">хуй знает че не работет, ебись сам</string>
+
+    <string name="correctSymbols">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/,(=!)&gt;&lt;[]</string>
+    <string name="correctSymbolsForName">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ][+-</string>
+    <string name="correctSymbolsForFile">0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-</string>
+
+    <string name="autoFillFileName">NewFile</string>
+    <string name="fileNameHint">file name</string>
+    <string name="saveFileText">save</string>
+    <string name="openFileText">open</string>
+    <string name="removeFileText">remove</string>
+
+    <string name="stopButton">stop</string>
+
+    <string name="openFileToast">file is opened</string>
+    <string name="saveFileToast">file is saved</string>
+    <string name="removedFileToast">file is removed</string>
 </resources>

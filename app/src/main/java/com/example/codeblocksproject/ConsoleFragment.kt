@@ -1,6 +1,7 @@
 package com.example.codeblocksproject
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,30 +9,48 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentConsoleBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class ConsoleFragment : Fragment(R.layout.fragment_console) {
+
     private var isClosedStart = true
     private lateinit var binding: FragmentConsoleBinding
+    private var isProgramStopped = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
+        changeStopButtonIcon(isProgramStopped)
+        stopProgramButtonEvent()
+        keymapObserver()
     }
 
-    fun getIsClosedStart(): Boolean {
-        return isClosedStart
+    fun getStopProgramFlag() = isProgramStopped
+
+    fun setStopProgramFlag(flag: Boolean) {
+        isProgramStopped = flag
     }
+
+    fun getIsClosedStart() = isClosedStart
 
     fun setISClosedStart(meaning: Boolean) {
         isClosedStart = meaning
     }
 
     fun resultsToConsole(s: String) {
-        var string = binding.consoleTextView.text
-        string = "$string$s"
-        binding.consoleTextView.text = string
+        activity?.runOnUiThread {
+            var string = binding.consoleTextView.text
+            string = "$string$s"
+            binding.consoleTextView.text = string
+            binding.scroll.post {
+                binding.scroll.fullScroll(View.FOCUS_DOWN)
+            }
+        }
+
     }
 
     override fun onCreateView(
@@ -45,6 +64,8 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
     private fun closeSlidingFragment() {
         binding.closeButton.setOnClickListener {
+            isProgramStopped = true
+            changeStopButtonIcon(isProgramStopped)
             val fragmentManager = parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(0, R.anim.bottom_panel_slide_in)
@@ -55,15 +76,54 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
             Handler(Looper.getMainLooper()).postDelayed({
                 kotlin.run {
                     binding.consoleTextView.text = ""
+
                     try {
                         (parentFragment as WorkspaceFragment).displayButtons()
                     } catch (e: Exception) {
                         (parentFragment as TextCodingFragment).displayButtons()
                     }
                 }
+
             }, 350)
         }
     }
+
+    @DelicateCoroutinesApi
+    private fun stopProgramButtonEvent() {
+        binding.stopButton.setOnClickListener {
+            if (!isProgramStopped) {
+                isProgramStopped = true
+                changeStopButtonIcon(true)
+            } else {
+                isProgramStopped = false
+                binding.consoleTextView.text = ""
+                changeStopButtonIcon(false)
+                (parentFragment as WorkspaceFragment).startProgram()
+
+            }
+        }
+    }
+
+    fun changeStopButtonIcon(flag: Boolean) {
+        if (flag) {
+            binding.buttonIcon.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.button_continue_image,
+                    requireContext().theme
+                )
+            )
+        } else {
+            binding.buttonIcon.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.button_stop_image,
+                    requireContext().theme
+                )
+            )
+        }
+    }
+
 
     fun changeTheme(color: String, context: Context) {
         binding.closeButton.setTextColor(getColor(R.color.chocolateMainColor, context))
@@ -128,6 +188,19 @@ class ConsoleFragment : Fragment(R.layout.fragment_console) {
 
     private fun getColor(id: Int, context: Context): Int {
         return ContextCompat.getColor(context, id)
+    }
+
+    private fun keymapObserver() {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            binding.root.getWindowVisibleDisplayFrame(r)
+            val screenHeight: Int = binding.root.rootView.height
+
+            val keypadHeight = screenHeight - r.bottom
+            if (keypadHeight > screenHeight * 0.15) {
+                binding.closeButton.performClick()
+            }
+        }
     }
 
 }

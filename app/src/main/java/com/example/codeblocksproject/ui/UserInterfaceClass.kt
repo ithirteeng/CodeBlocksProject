@@ -15,7 +15,9 @@ import com.example.codeblocksproject.BlocksFragment
 import com.example.codeblocksproject.ConsoleFragment
 import com.example.codeblocksproject.R
 import com.example.codeblocksproject.WorkspaceFragment
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class UserInterfaceClass(
     private val context: Context,
     private val consoleFragment: ConsoleFragment,
@@ -56,8 +58,11 @@ class UserInterfaceClass(
         val button = view.findViewById<ImageButton>(R.id.drawerButton)
         button.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN ->
+                MotionEvent.ACTION_DOWN -> {
+                    makeKeymapHidden(view)
                     view.findViewById<DrawerLayout>(R.id.codingContainer).closeDrawer(Gravity.LEFT)
+                }
+
             }
             false
         }
@@ -67,6 +72,7 @@ class UserInterfaceClass(
         val radioGroup = view.findViewById<RadioGroup>(R.id.themesGroup)
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val button = view.findViewById<RadioButton>(checkedId)
+            makeKeymapHidden(view)
             button?.apply {
                 when (checkedId) {
                     R.id.spaceTheme -> {
@@ -130,7 +136,7 @@ class UserInterfaceClass(
     }
 
     private fun changeDrawerBackgroundColor(view: View, color: String) {
-        val background = view.findViewById<ConstraintLayout>(R.id.drawerInsidesLayout)
+        val background = view.findViewById<ConstraintLayout>(R.id.drawer)
         val shrekView = view.findViewById<ImageView>(R.id.shrekImage)
         shrekView.visibility = View.GONE
         when (color) {
@@ -229,37 +235,37 @@ class UserInterfaceClass(
         var button = view.findViewById<ImageButton>(R.id.drawerButton)
         when (color) {
             WorkspaceFragment.PINK_COLOR -> {
-                changeDrawerImage(button, R.drawable.pink_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_pink_button_image)
             }
             WorkspaceFragment.CHOCOLATE_COLOR -> {
-                changeDrawerImage(button, R.drawable.chocolate_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_chocolate_button_image)
             }
             WorkspaceFragment.SPACE_COLOR -> {
-                changeDrawerImage(button, R.drawable.space_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_space_button_image)
             }
             WorkspaceFragment.MONOCHROME_COLOR -> {
-                changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_sepia_button_image)
             }
             WorkspaceFragment.SHREK_COLOR -> {
-                changeDrawerImage(button, R.drawable.shrek_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_shrek_button_image)
             }
         }
         button = view.findViewById(R.id.drawerOutsideButton)
         when (color) {
             WorkspaceFragment.PINK_COLOR -> {
-                changeDrawerImage(button, R.drawable.pink_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_pink_button_image)
             }
             WorkspaceFragment.CHOCOLATE_COLOR -> {
-                changeDrawerImage(button, R.drawable.chocolate_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_chocolate_button_image)
             }
             WorkspaceFragment.SPACE_COLOR -> {
-                changeDrawerImage(button, R.drawable.space_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_space_button_image)
             }
             WorkspaceFragment.MONOCHROME_COLOR -> {
-                changeDrawerImage(button, R.drawable.sepia_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_sepia_button_image)
             }
             WorkspaceFragment.SHREK_COLOR -> {
-                changeDrawerImage(button, R.drawable.shrek_drawer_button_image)
+                changeDrawerImage(button, R.drawable.drawer_shrek_button_image)
             }
         }
     }

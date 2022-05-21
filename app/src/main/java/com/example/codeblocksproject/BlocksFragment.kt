@@ -1,6 +1,7 @@
 package com.example.codeblocksproject
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,21 +12,22 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.codeblocksproject.databinding.FragmentBlocksBinding
 import com.example.codeblocksproject.model.BlockTypes
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class BlocksFragment : Fragment(R.layout.fragment_blocks) {
     private var isClosedBlocks = true
     private lateinit var binding: FragmentBlocksBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         closeSlidingFragment()
+        keymapObserver()
         addingBlocks()
     }
 
-    fun getIsClosedBlocks(): Boolean {
-        return isClosedBlocks
-    }
+    fun getIsClosedBlocks() = isClosedBlocks
 
-    fun setISClosedBlocks(meaning: Boolean) {
+    fun setIsClosedBlocks(meaning: Boolean) {
         isClosedBlocks = meaning
     }
 
@@ -47,6 +49,9 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
         }
         binding.elseBlock.setOnClickListener {
             (parentFragment as WorkspaceFragment).addBlock(BlockTypes.ELSE_BLOCK_TYPE)
+        }
+        binding.arrayInitBlock.setOnClickListener {
+            (parentFragment as WorkspaceFragment).addBlock(BlockTypes.ARRAY_INIT_BLOCK_TYPE)
         }
     }
 
@@ -73,6 +78,19 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
                     (parentFragment as WorkspaceFragment).displayButtons()
                 }
             }, 350)
+        }
+    }
+
+    private fun keymapObserver() {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            binding.root.getWindowVisibleDisplayFrame(r)
+            val screenHeight: Int = binding.root.rootView.height
+
+            val keypadHeight = screenHeight - r.bottom
+            if (keypadHeight > screenHeight * 0.15) {
+                binding.closeButton.performClick()
+            }
         }
     }
 

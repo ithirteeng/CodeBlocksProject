@@ -12,11 +12,13 @@ import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
-import com.example.codeblocksproject.databinding.DrawerLayoutBinding
 import com.example.codeblocksproject.databinding.FragmentWorkspaceBinding
 import com.example.codeblocksproject.interpreter.Lexer
 import com.example.codeblocksproject.model.*
@@ -83,13 +85,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
         uploadData()
 
-        binding.drawer.fileNameEdit.setAdapter(
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                requireContext().fileList()
-            )
-        )
+        fileNamesAdapter()
 
         return binding.root
     }
@@ -348,7 +344,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
     }
 
-    private fun fileNamesAdapter(){
+    private fun fileNamesAdapter() {
         binding.drawer.fileNameEdit.setAdapter(
             ArrayAdapter(
                 requireContext(),

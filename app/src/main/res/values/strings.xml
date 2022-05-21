@@ -72,4 +72,8 @@
     <string name="removeFileText">remove</string>
 
     <string name="stopButton">stop</string>
+
+    <string name="openFileToast">file is opened</string>
+    <string name="saveFileToast">file is saved</string>
+    <string name="removedFileToast">file is removed</string>
 </resources>

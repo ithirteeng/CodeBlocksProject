@@ -319,6 +319,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             if (binding.drawer.fileNameEdit.text.isNotEmpty())
                 fileName = binding.drawer.fileNameEdit.text.toString()
             clearWorkfield()
+            makeToast(resources.getString(R.string.openFileToast))
             uploadData()
         }
     }
@@ -329,6 +330,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             if (binding.drawer.fileNameEdit.text.isNotEmpty())
                 fileName = binding.drawer.fileNameEdit.text.toString()
             saveData()
+            makeToast(resources.getString(R.string.saveFileToast))
             fileNamesAdapter()
         }
     }
@@ -341,6 +343,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             requireContext().deleteFile(fileName)
             fileNamesAdapter()
             binding.drawer.fileNameEdit.setText("")
+            makeToast(resources.getString(R.string.removedFileToast))
         }
     }
 
@@ -382,11 +385,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private fun clearAllButtonEvent() {
         view?.findViewById<Button>(R.id.clearAllButton)?.setOnClickListener {
             clearWorkfield()
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.clearToast),
-                Toast.LENGTH_SHORT
-            ).show()
+            makeToast(resources.getString(R.string.clearToast))
         }
 
     }
@@ -711,5 +710,9 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                 block.blockView.layoutParams as LinearLayout.LayoutParams
             params.setMargins(0, 0, cyclesCount * INDENT, 0)
         }
+    }
+
+    private fun makeToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

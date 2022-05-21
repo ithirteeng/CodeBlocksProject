@@ -7,7 +7,7 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <TextView
-        android:id="@+id/whileText"
+        android:id="@+id/ifText"
         style="@style/blocksTextStyle"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
@@ -35,7 +35,7 @@
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toEndOf="@id/whileText"
+        app:layout_constraintStart_toEndOf="@id/ifText"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 

@@ -2,7 +2,9 @@
 
 *HITS Project*
 <br/>
-Realization of block programming language for android devices with a self-written interpreter
+<br/>
+Mobile IDE for a block programming language with self-written interpreter, or in short MIFBPLWSWI xD <br/>
+It's an application where you can write code in blocks by choosing and dragging them
 <br/>
 ## Features
 - 5 different themes

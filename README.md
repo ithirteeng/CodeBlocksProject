@@ -11,9 +11,13 @@ It's an application where you can write code in blocks by choosing and dragging 
 - Ability to write code in usual way
 - Different blocks selection
 - Comfortable user interface
-- Possibility of saving programs
-<br/>
-
+- Possibility of saving programs<br/>
+## Tech-stack
+- Drag and drop framework
+- CustomView
+- Kotlin Coroutines
+- Jetpack Navigation
+- Jetpack Fragment<br/>
 ## Screenshots
 <p>
 <img src="https://user-images.githubusercontent.com/98749008/191178405-e5b08ca1-c314-4782-b0b9-52842a830297.jpg" alt="blocksScreenShot" width="200"/> 

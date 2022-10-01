@@ -12,7 +12,7 @@ It's an application where you can write code in blocks by choosing and dragging 
 - Different blocks selection
 - Comfortable user interface
 - Possibility of saving programs<br/>
-## Tech-stack
+## Technology stack
 - Drag and drop framework
 - CustomView
 - Kotlin Coroutines
